@@ -1455,13 +1455,13 @@
 /* Responsive Design for Guardian Section */
 @media (max-width: 1023px) {
   .guardianSection {
-    padding-top: 40px;
-    padding-bottom: 40px;
+    /* padding-top: 40px;
+    padding-bottom: 40px; */
   }
 
   .guardianContent {
-    padding-top: 20px;
-    padding-bottom: clamp(20px, 3vh, 40px);
+    /* padding-top: 20px; */
+    /* padding-bottom: clamp(20px, 3vh, 40px); */
     align-items: flex-end;
   }
 
@@ -2896,18 +2896,18 @@
   .guardianSection {
     min-height: 100vh;
     height: auto;
-    padding-top: 40px;
-    padding-bottom: 40px;
+    /* padding-top: 40px;
+    padding-bottom: 40px; */
   }
 
   .guardianContent {
-    padding-top: 20px;
-    padding-bottom: 20px;
+    /* padding-top: 20px;
+    padding-bottom: 20px; */
   }
 
   .guardianLayout {
     gap: 25px;
-    padding-bottom: 30px;
+    /* padding-bottom: 30px; */
   }
 
   .soccerCard {
@@ -2982,6 +2982,10 @@
   .businessJoinButton {
     margin-bottom: 20px;
   }
+
+  .desktopContent{
+    height: 110vh;
+  }
 }
 
 /* ============================================ */
@@ -3048,7 +3052,7 @@
   .guardianSection {
     min-height: 100vh;
     height: auto;
-    padding: 30px 0;
+    /* padding: 30px 0; */
   }
 
   .guardianContent {
@@ -4559,7 +4563,7 @@
 
   .guardianSection {
     min-height: auto;
-    padding: 40px 0;
+    /* padding: 40px 0; */
   }
 
   .guardianLayout {
@@ -4616,6 +4620,16 @@
   .businessImage {
     max-height: 70vh;
   }
+    .soccerIcon {
+    width: 55%;
+    margin: auto;
+  }
+  .soccerNumber {
+    text-align: center;
+  }
+  .guardianMiddle {
+    margin-top: -3rem
+  }
 }
 @media (min-width: 1401px) and (max-width: 1440px) {
   .habitatMapWrapper {
@@ -4666,3 +4680,4 @@
    
   }
 }
+

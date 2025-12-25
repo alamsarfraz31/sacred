@@ -8,7 +8,7 @@
 .container {
   height: 100vh;
   min-height: 100vh;
-  max-height: 100vh;
+  /* max-height: 100vh; */
   padding: clamp(40px, 5vh, 80px) 20px clamp(40px, 5vh, 80px) 20px;
   background-color: #ffffff;
   overflow-y: auto;
@@ -23,8 +23,8 @@
 
 @media (min-width: 1441px) {
   .container {
-    height: 100vh;
-    min-height: 100vh;
+    /* height: 100vh; */
+    /* min-height: 100vh; */
     max-height: 100vh;
     padding: clamp(60px, 6vh, 100px) 20px clamp(60px, 6vh, 100px) 20px;
     /* Maintain 100vh with equal spacing */
@@ -127,6 +127,16 @@
     margin-bottom: clamp(20px, 3vh, 40px);
     flex-shrink: 0;
   }
+  .sealTitle {
+    inline-size: max-content;
+    padding-bottom: 5rem;
+  }
+
+  .guardianMiddle {
+    margin-top: -4rem;
+  }
+
+
 }
 
 /* Fix spacing for short height screens */
@@ -173,6 +183,8 @@
     margin-bottom: clamp(20px, 3vh, 40px);
     flex-shrink: 0;
   }
+  
+
 }
 
 /* Specific fix for 1536x960 and similar screens */
@@ -254,7 +266,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 30px 20px;
+  padding: 5px 20px;
   position: relative;
   justify-content: flex-start;
   min-height: 400px;
@@ -354,7 +366,7 @@
   display: flex;
   gap: 20px;
   justify-content: space-between;
-  margin-top: clamp(60px, 8vh, 131px);
+  margin-top: clamp(5px, 2vh, 131px);
   padding-right: 20px;
   width: 100%;
   margin-bottom: 0;
@@ -649,7 +661,7 @@
   max-width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 70px;
+  gap: 50px;
   align-items: flex-end;
 }
 
@@ -1986,7 +1998,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 75px;
+  gap: 10px;
 }
 
 .actionCard {
@@ -3077,7 +3089,7 @@
 
   .heading {
     font-size: 32px;
-    margin-bottom: 60px;
+    margin-bottom: 10px;
   }
 
   .recognitionCards {
@@ -3644,7 +3656,7 @@
 
   .heading {
     font-size: 32px;
-    margin-bottom: 60px;
+    margin-bottom: 10px;
   }
 
   .sealOfTrustSection {
@@ -3694,5 +3706,38 @@
 
   .postCard {
     min-height: 220px;
+  }
+}
+
+@media (min-width: 1200px) and (max-width: 1440px) {
+
+  /* 1️⃣ Lock section to viewport */
+  .wildTechSection {
+    height: 100vh;
+    max-height: 100vh;
+    overflow: hidden; /* safe here */
+  }
+
+  .detailCard{
+    width: 60%;
+    height: 50%;
+    min-height: 90%;
+  }
+  .cardSubtitle{
+    margin-bottom: -2rem;
+  }
+
+  .cardDescription {
+    margin-top: -5rem;
+    max-width: 100%;
+    font-size: 16px;
+  }
+
+  .wildTechTitle {
+    margin-bottom: -1rem;
+  }
+
+  .wildTechItem {
+    margin-top: -1rem;
   }
 }
