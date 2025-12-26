@@ -1376,3 +1376,110 @@
     height: 30px;
   }
 }
+
+@media (min-width: 1200px) and (max-width: 1400px) {
+
+  .heroSection {
+    min-height: 90vh;
+    background-size: cover;      
+    background-position: center;  
+  }
+  .heroSection {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    min-height: 80vh;
+  }
+
+  .heroSection {
+    padding-top: 80px;
+    padding-bottom: 80px;
+    min-height: auto;
+  }
+
+  .heroSection {
+  width: 100%;
+  min-height: 100dvh;
+  background-size: cover;
+  background-position: center;
+}
+
+.heroContainer {
+  height: 145%;
+}
+
+.section2Para{
+  font-size: 16px;
+}
+
+.section2Right {
+  width: 65%;
+}
+
+.section3Container {
+  width: 60%;
+}
+
+.section3Text{
+  font-size: 14px;
+}
+
+.section3TextSmall {
+  font-size: 12px;
+}
+
+.section3BottomText {
+  font-size: 14px;
+}
+
+.section3CardImage {
+  width: 12%;
+}
+
+.section3Bottom {
+  height: 100px;
+  min-height: 100%;
+  padding: 0px 1rem;
+}
+
+.section3TopText {
+  margin-bottom: -4rem;
+}
+
+.section3Middle {
+  margin-top: -2rem;
+  margin-bottom: 1rem;
+}
+
+.section4Container {
+  row-gap: 5%;
+}
+
+.gridImage {
+  width: 40%;
+}
+
+.gridLabel {
+  font-size: 20px;
+}
+
+.gridTextRight{
+  font-size: 20px;
+}
+
+.gridTextLeft {
+  font-size: 20px;
+}
+
+.section5RightText {
+  font-size: 20px;
+}
+
+.section5LeftImageLabel {
+  font-size: 22px;
+}
+.section5Container{
+  gap: 1rem;
+}
+
+}
