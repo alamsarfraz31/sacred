@@ -27,6 +27,7 @@
     /* min-height: 100vh; */
     max-height: 100vh;
     padding: clamp(60px, 6vh, 100px) 20px clamp(60px, 6vh, 100px) 20px;
+    overflow: hidden;
     /* Maintain 100vh with equal spacing */
   }
 }
@@ -3728,7 +3729,7 @@
   }
 
   .cardDescription {
-    margin-top: -5rem;
+    margin-top: -1rem;
     max-width: 100%;
     font-size: 16px;
   }

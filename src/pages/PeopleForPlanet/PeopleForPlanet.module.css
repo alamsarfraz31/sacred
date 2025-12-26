@@ -1310,8 +1310,10 @@
   /* Guardian Section */
   .guardianGrid {
     grid-template-columns: 1fr;
-    padding: 0 40px;
+    padding-left: 0px;
+    padding-right: 0px;
     gap: 40px;
+    width: 30%;
   }
 
   .guardianLeft {
@@ -1794,4 +1796,84 @@
     justify-content: center;
     order: 5;
   }
+}
+
+@media (min-width:1200px)and (max-width:1400px) {
+  .guardianGrid{
+    padding: 0px;
+  }
+  .mainImg{
+    width: 80%;
+    margin: auto;
+  }
+
+  .guardianLogo{
+    width: 50%;
+    margin-bottom: 10px;
+  }
+  .guardianTitle{
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+
+  .guardianText{
+    font-size: 16px;
+  }
+
+  .btnGroup{
+    gap: 50%;
+  }
+
+  .iconTop{
+    width: 15%;
+    top: 20px;
+  }
+
+  .iconBottom{
+    width: 15%;
+    bottom: 30px;
+  }
+
+  .sacredCardImage{
+    width: 70%
+  }
+
+  .virtualScreen {
+    width: 70%;
+  }
+
+  .virtualLabel{
+    margin-top: -2rem;
+  }
+  
+  .braceLeft, .braceRight{
+    width: 15%;
+  }
+
+  .braceLeft {
+    left: 0px;
+  }
+
+  .braceRight {
+    right: 0px;
+  }
+
+  .sacredCardIcon{
+    width: 12%;
+    margin-top: -2rem;
+  }
+
+  .sacredGrid {
+    gap: 10%;
+  }
+
+  .sacredLogo {
+    width: 25%;
+    margin-bottom: 1%;
+  }
+
+  .sacredSubtitle {
+    margin-bottom: 10%;
+  }
+
 }
