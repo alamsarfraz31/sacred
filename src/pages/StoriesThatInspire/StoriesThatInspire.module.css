@@ -282,12 +282,21 @@
   border-radius: 24px;
   padding: 16px 40px;
   display: flex;
+  flex-direction: column;
   align-items: flex-end;
-  justify-content: center;
-  gap: 40px;
+  justify-content: flex-start;
+  gap: 20px;
   z-index: 100;
   box-sizing: border-box;
   margin: 0 auto 40px auto;
+}
+
+.searchBubbleRow {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 40px;
+  width: 100%;
 }
 
 .searchCloseButton {
@@ -311,6 +320,14 @@
 
 .searchCloseButton:hover {
   background-color: #03303D;
+}
+
+.searchBubbleRow {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 40px;
+  width: 100%;
 }
 
 .searchColumn {
@@ -393,7 +410,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  cursor: pointer !important;
   transition: all 0.3s ease;
   flex-shrink: 0;
 }
@@ -406,6 +423,58 @@
   width: 24px;
   height: 24px;
   object-fit: contain;
+}
+
+/* Search Buttons Row */
+.searchButtonsRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+/* Clear Filters Button - Icon only, same row as search */
+.clearFiltersButtonIcon {
+  width: 52px;
+  height: 52px;
+  border-radius: 10px;
+  border: 1px solid #44D09F;
+  background-color: #FFFFFF;
+  color: #03303D;
+  font-size: 24px;
+  font-weight: 700;
+  cursor: pointer !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.clearFiltersButtonIcon:hover {
+  background-color: #44D09F;
+  color: #FFFFFF;
+}
+
+/* Inline Loader for Listing Section */
+.inlineLoader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  width: 100%;
+}
+
+.loaderGif {
+  width: 150px;
+  height: auto;
+  max-width: 200px;
+}
+
+@media (max-width: 768px) {
+  .loaderGif {
+    width: 120px;
+  }
 }
 
 .storiesGrid {

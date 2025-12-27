@@ -167,6 +167,40 @@
   filter: none;
 }
 
+/* Download button loading state */
+.downloadButtonLoading {
+  cursor: not-allowed;
+  opacity: 0.9;
+  background-color: #4a9d7d;
+}
+
+.downloadButtonLoading:hover {
+  background-color: #4a9d7d;
+  transform: none;
+  color: #03303D;
+}
+
+.downloadSpinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #03303D;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: downloadSpin 0.8s linear infinite;
+  margin-right: 8px;
+}
+
+@keyframes downloadSpin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* Article Content Section */
 .articleContentSection {
   width: 100%;
@@ -697,6 +731,7 @@
 }
 
 @media (max-width: 968px) {
+
   .articleHeaderContainer,
   .articleContentContainer {
     padding: 0 40px;
@@ -795,4 +830,3 @@
     font-size: 16px;
   }
 }
-

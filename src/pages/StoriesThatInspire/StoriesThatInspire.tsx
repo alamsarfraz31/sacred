@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 import { SEO } from '@/components/common/SEO'
 import { PAGE_SEO, BREADCRUMBS } from '@/constants'
 import styles from './StoriesThatInspire.module.css'
@@ -22,19 +22,30 @@ import storyCenterImage from '@/assets/story_center_image.svg'
 import storyRightArrow from '@/assets/story_right_arrow.svg'
 import storyRightIcon from '@/assets/story_right_icon.svg'
 import { AlignedWithUNSDGs } from '@/components/common/CommonSections'
-
-interface StoryCard {
-    id: number
-    title: string
-    imageId: number
-}
+import { 
+    fetchAllBlogs, 
+    fetchTags,
+    getFeaturedImageUrl,
+    type BlogPost,
+    type BlogTag
+} from '@/utils/blogApi'
 
 export const StoriesThatInspire: React.FC = () => {
+    const [searchParams, setSearchParams] = useSearchParams()
     const [visibleRows, setVisibleRows] = useState(1) // Start with 1 page (3 rows)
-    const [searchQuery, setSearchQuery] = useState('')
+    const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '')
     const [isSearchOpen, setIsSearchOpen] = useState(false)
-    const [selectedTag, setSelectedTag] = useState('All tags')
+    const [selectedTag, setSelectedTag] = useState(searchParams.get('tag') || 'All tags')
     const [selectedFilter, setSelectedFilter] = useState('Most recent')
+    const [blogs, setBlogs] = useState<BlogPost[]>([])
+    const [allTags, setAllTags] = useState<BlogTag[]>([])
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState<string | null>(null)
+    
+    // Local state for filters (not applied until search button is clicked)
+    const [localSearchQuery, setLocalSearchQuery] = useState(searchParams.get('search') || '')
+    const [localSelectedTag, setLocalSelectedTag] = useState(searchParams.get('tag') || 'All tags')
+    const [localSelectedFilter, setLocalSelectedFilter] = useState('Most recent')
 
     // Array of story icons
     const storyIcons = [storyIcon1, storyIcon2, storyIcon3, storyIcon4, storyIcon5, storyIcon6, storyIcon7]
@@ -44,94 +55,121 @@ export const StoriesThatInspire: React.FC = () => {
         return storyIcons[(cardId - 1) % 7]
     }
 
-    // Mock data for ~70 blogs
-    const mockStories: StoryCard[] = [
-        { id: 1, title: 'Local Efforts to Save Endangered Animals in UK: What Can You Learn From Them', imageId: 201 },
-        { id: 2, title: 'Found in the Woods - short story inspired by Coed Rhyal', imageId: 202 },
-        { id: 3, title: 'Basics of Environmental Volunteering: How Can You Get Started?', imageId: 203 },
-        { id: 4, title: 'Efforts You Can Make to Help in Wildlife Protection in Your Area', imageId: 204 },
-        { id: 5, title: '4 Changes You Can Make in Everyday Life to Save Forests in Canada', imageId: 205 },
-        { id: 6, title: 'Why Planet-Positive Gifting Is The Future', imageId: 206 },
-        { id: 7, title: '5 ways How Traditional Agroforestry Systems Help in Nature Conservation', imageId: 207 },
-        { id: 8, title: '10 Tips About Environmental Volunteering to Teach Your Children', imageId: 208 },
-        { id: 9, title: 'Here, Money Does Grow On Trees!', imageId: 209 },
-        { id: 10, title: 'Forest Bathing at Coed Rhyal', imageId: 210 },
-        { id: 11, title: 'The Return of the King', imageId: 211 },
-        { id: 12, title: 'Community Radio to the Rescue!', imageId: 212 },
-        { id: 13, title: 'Sustainable Living: A Guide to Reducing Your Carbon Footprint', imageId: 213 },
-        { id: 14, title: 'Protecting Marine Life: Stories from Ocean Conservation', imageId: 214 },
-        { id: 15, title: 'How Communities Are Restoring Degraded Landscapes', imageId: 215 },
-        { id: 16, title: 'Youth-Led Climate Action: Inspiring the Next Generation', imageId: 216 },
-        { id: 17, title: 'Indigenous Knowledge and Modern Conservation', imageId: 217 },
-        { id: 18, title: 'Urban Forests: Bringing Nature Back to Cities', imageId: 218 },
-        { id: 19, title: 'The Power of Collective Action in Environmental Protection', imageId: 219 },
-        { id: 20, title: 'Renewable Energy and Habitat Conservation: A Perfect Match', imageId: 220 },
-        { id: 21, title: 'Eco-Tourism: Balancing Travel and Conservation', imageId: 221 },
-        { id: 22, title: 'The Role of Technology in Wildlife Monitoring', imageId: 222 },
-        { id: 23, title: 'Seed Banks: Preserving Plant Diversity for Future Generations', imageId: 223 },
-        { id: 24, title: 'Coral Reef Restoration: Success Stories from Around the World', imageId: 224 },
-        { id: 25, title: 'Urban Beekeeping: Supporting Pollinators in Cities', imageId: 225 },
-        { id: 26, title: 'Wetland Conservation: Why Every Acre Matters', imageId: 226 },
-        { id: 27, title: 'The Hidden World of Soil Biodiversity', imageId: 227 },
-        { id: 28, title: 'Rewilding Europe: Lessons from Large-Scale Restoration', imageId: 228 },
-        { id: 29, title: 'Climate Refugees: Stories of Displacement and Hope', imageId: 229 },
-        { id: 30, title: 'Green Architecture: Building with Nature in Mind', imageId: 230 },
-        { id: 31, title: 'The Future of Sustainable Fashion', imageId: 231 },
-        { id: 32, title: 'Ocean Plastic: Solutions from Communities Worldwide', imageId: 232 },
-        { id: 33, title: 'Bird Migration Corridors: Protecting Sky Highways', imageId: 233 },
-        { id: 34, title: 'Forest Firefighters: Heroes on the Front Lines', imageId: 234 },
-        { id: 35, title: 'Children and Nature: Building Environmental Awareness Early', imageId: 235 },
-        { id: 36, title: 'Sacred Groves Around the World: Cultural Conservation', imageId: 236 },
-        { id: 37, title: 'The Economics of Ecosystem Services', imageId: 237 },
-        { id: 38, title: 'Wildlife Corridors: Connecting Fragmented Habitats', imageId: 238 },
-        { id: 39, title: 'Mangrove Forests: Coastal Guardians Under Threat', imageId: 239 },
-        { id: 40, title: 'Zero Waste Communities: Inspiring Examples', imageId: 240 },
-        { id: 41, title: 'The Science of Carbon Sequestration in Forests', imageId: 241 },
-        { id: 42, title: 'Traditional Fishing Practices and Marine Conservation', imageId: 242 },
-        { id: 43, title: 'Climate-Smart Agriculture: Feeding the World Sustainably', imageId: 243 },
-        { id: 44, title: 'Invasive Species: Managing Ecological Threats', imageId: 244 },
-        { id: 45, title: 'Water Conservation: Stories from Drought-Prone Regions', imageId: 245 },
-        { id: 46, title: 'The Psychology of Environmental Action', imageId: 246 },
-        { id: 47, title: 'Mushroom Networks: The Underground Internet of Forests', imageId: 247 },
-        { id: 48, title: 'Solar-Powered Communities: Energy Independence Stories', imageId: 248 },
-        { id: 49, title: 'Plastic-Free Living: Practical Tips and Inspiration', imageId: 249 },
-        { id: 50, title: 'The Art of Environmental Storytelling', imageId: 250 },
-        { id: 51, title: 'Mountain Ecosystems: Fragile Beauty Under Pressure', imageId: 251 },
-        { id: 52, title: 'Community Gardens: Growing Food and Connection', imageId: 252 },
-        { id: 53, title: 'The Role of Women in Conservation Leadership', imageId: 253 },
-        { id: 54, title: 'Night Skies: Dark Sky Preservation Efforts', imageId: 254 },
-        { id: 55, title: 'Electric Vehicles and Environmental Impact', imageId: 255 },
-        { id: 56, title: 'River Restoration: Bringing Waterways Back to Life', imageId: 256 },
-        { id: 57, title: 'Permaculture Principles for Sustainable Living', imageId: 257 },
-        { id: 58, title: 'The Great Green Wall of Africa: Progress Report', imageId: 258 },
-        { id: 59, title: 'Citizen Science: How You Can Contribute to Research', imageId: 259 },
-        { id: 60, title: 'The Circular Economy: Redesigning How We Use Resources', imageId: 260 },
-        { id: 61, title: 'Ancient Trees: Living Monuments of Natural History', imageId: 261 },
-        { id: 62, title: 'Green Jobs: Career Paths in Environmental Sectors', imageId: 262 },
-        { id: 63, title: 'The Philosophy of Deep Ecology', imageId: 263 },
-        { id: 64, title: 'Butterfly Gardens: Creating Habitats for Pollinators', imageId: 264 },
-        { id: 65, title: 'Environmental Law: Landmark Cases and Their Impact', imageId: 265 },
-        { id: 66, title: 'The Healing Power of Nature: Ecotherapy Explained', imageId: 266 },
-        { id: 67, title: 'Sustainable Transportation: Beyond Electric Cars', imageId: 267 },
-        { id: 68, title: 'The Future of Food: Lab-Grown Meat and Plant-Based Diets', imageId: 268 },
-        { id: 69, title: 'Environmental Refugees: A Growing Global Challenge', imageId: 269 },
-        { id: 70, title: 'Hope for the Planet: Success Stories in Conservation', imageId: 270 }
-    ]
+    // Fetch tags on mount
+    useEffect(() => {
+        const loadTags = async () => {
+            try {
+                const tagsData = await fetchTags().catch(() => [])
+                setAllTags(tagsData)
+            } catch (err) {
+                console.error('Error loading tags:', err)
+            }
+        }
+        loadTags()
+    }, [])
 
-    // Filter stories based on search query
-    const filteredStories = mockStories.filter(story =>
-        story.title.toLowerCase().includes(searchQuery.toLowerCase())
-    )
+    // Fetch blogs when filters are applied (from URL params or initial load)
+    useEffect(() => {
+        const loadData = async () => {
+            try {
+                setLoading(true)
+                setError(null)
+
+                // Build query parameters
+                const params: any = {
+                    per_page: 100
+                }
+
+                // Add search query
+                if (searchQuery.trim()) {
+                    params.search = searchQuery.trim()
+                }
+
+                // Add tag filter
+                if (selectedTag !== 'All tags') {
+                    const tag = allTags.find(t => t.name === selectedTag || t.slug === selectedTag)
+                    if (tag) {
+                        params.tags = tag.id
+                    }
+                }
+
+                // Add order and orderby based on selected filter
+                switch (selectedFilter) {
+                    case 'Most recent':
+                        params.order = 'desc'
+                        params.orderby = 'date'
+                        break
+                    case 'Oldest first':
+                        params.order = 'asc'
+                        params.orderby = 'date'
+                        break
+                    case 'A-Z':
+                        params.order = 'asc'
+                        params.orderby = 'title'
+                        break
+                    case 'Z-A':
+                        params.order = 'desc'
+                        params.orderby = 'title'
+                        break
+                }
+
+                // Fetch blogs
+                const blogsData = await fetchAllBlogs(params)
+                setBlogs(blogsData)
+            } catch (err) {
+                console.error('Error loading blogs:', err)
+                setError('Failed to load blogs. Please try again later.')
+            } finally {
+                setLoading(false)
+            }
+        }
+
+        loadData()
+    }, [searchQuery, selectedTag, selectedFilter, allTags])
+
+    // Handle search submit - apply filters
+    const handleSearch = () => {
+        setSearchQuery(localSearchQuery)
+        setSelectedTag(localSelectedTag)
+        setSelectedFilter(localSelectedFilter)
+        setVisibleRows(1)
+        setIsSearchOpen(false)
+        
+        // Update URL params
+        const params = new URLSearchParams()
+        if (localSearchQuery.trim()) {
+            params.set('search', localSearchQuery.trim())
+        }
+        if (localSelectedTag !== 'All tags') {
+            params.set('tag', localSelectedTag)
+        }
+        setSearchParams(params, { replace: true })
+    }
+
+    // Handle clear filters
+    const handleClearFilters = () => {
+        setLocalSearchQuery('')
+        setLocalSelectedTag('All tags')
+        setLocalSelectedFilter('Most recent')
+        setSearchQuery('')
+        setSelectedTag('All tags')
+        setSelectedFilter('Most recent')
+        setVisibleRows(1)
+        setSearchParams(new URLSearchParams(), { replace: true })
+    }
+
+    // Check if any filters are active
+    const hasActiveFilters = searchQuery.trim() !== '' || selectedTag !== 'All tags' || selectedFilter !== 'Most recent'
 
     // Cards per page: 4 columns × 3 rows = 12 cards
     const cardsPerPage = 12
-    const totalPages = Math.ceil(filteredStories.length / cardsPerPage)
+    const totalPages = Math.ceil(blogs.length / cardsPerPage)
     const currentPage = visibleRows
-    const visibleCards = filteredStories.slice(0, currentPage * cardsPerPage)
+    const visibleCards = blogs.slice(0, currentPage * cardsPerPage)
 
     const handleLoadMore = () => {
         if (visibleRows < totalPages) {
-            setVisibleRows(prev => prev + 1)
+            setVisibleRows((prev: number) => prev + 1)
         }
     }
 
@@ -205,6 +243,7 @@ export const StoriesThatInspire: React.FC = () => {
                                 ×
                             </button>
 
+                            <div className={styles.searchBubbleRow}>
                             {/* Search our journal */}
                             <div className={styles.searchColumn}>
                                 <label className={styles.searchLabel}>Search our journal</label>
@@ -212,10 +251,14 @@ export const StoriesThatInspire: React.FC = () => {
                                     <input
                                         type="text"
                                         placeholder="Search by keyword"
-                                        value={searchQuery}
+                                        value={localSearchQuery}
                                         onChange={(e) => {
-                                            setSearchQuery(e.target.value)
-                                            setVisibleRows(1)
+                                            setLocalSearchQuery(e.target.value)
+                                        }}
+                                        onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                                            if (e.key === 'Enter') {
+                                                handleSearch()
+                                            }
                                         }}
                                         className={styles.searchInput}
                                     />
@@ -228,14 +271,17 @@ export const StoriesThatInspire: React.FC = () => {
                                 <label className={styles.searchLabel}>Tags</label>
                                 <select
                                     className={styles.searchSelect}
-                                    value={selectedTag}
-                                    onChange={(e) => setSelectedTag(e.target.value)}
+                                    value={localSelectedTag}
+                                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                                        setLocalSelectedTag(e.target.value)
+                                    }}
                                 >
                                     <option value="All tags">All tags</option>
-                                    <option value="Conservation">Conservation</option>
-                                    <option value="Wildlife">Wildlife</option>
-                                    <option value="Climate">Climate</option>
-                                    <option value="Community">Community</option>
+                                    {allTags.map((tag) => (
+                                        <option key={tag.id} value={tag.name}>
+                                            {tag.name} ({tag.count})
+                                        </option>
+                                    ))}
                                 </select>
                             </div>
 
@@ -244,8 +290,10 @@ export const StoriesThatInspire: React.FC = () => {
                                 <label className={styles.searchLabel}>Filter by</label>
                                 <select
                                     className={styles.searchSelect}
-                                    value={selectedFilter}
-                                    onChange={(e) => setSelectedFilter(e.target.value)}
+                                    value={localSelectedFilter}
+                                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                                        setLocalSelectedFilter(e.target.value)
+                                    }}
                                 >
                                     <option value="Most recent">Most recent</option>
                                     <option value="Oldest first">Oldest first</option>
@@ -254,37 +302,78 @@ export const StoriesThatInspire: React.FC = () => {
                                 </select>
                             </div>
 
-                            {/* Search Button */}
-                            <button
-                                className={styles.searchSubmitButton}
-                                onClick={() => setIsSearchOpen(false)}
-                                aria-label="Search"
-                            >
-                                <img src={searchIcon} alt="Search" className={styles.searchSubmitIcon} />
-                            </button>
+                            {/* Search Button and Clear Button Row */}
+                            <div className={styles.searchButtonsRow}>
+                                <button
+                                    className={styles.searchSubmitButton}
+                                    onClick={handleSearch}
+                                    aria-label="Search"
+                                >
+                                    <img src={searchIcon} alt="Search" className={styles.searchSubmitIcon} />
+                                </button>
+                                {/* Clear Filters Button - Icon only, same row */}
+                                {hasActiveFilters && (
+                                    <button
+                                        className={styles.clearFiltersButtonIcon}
+                                        onClick={handleClearFilters}
+                                        aria-label="Clear filters"
+                                    >
+                                        ×
+                                    </button>
+                                )}
+                            </div>
+                            </div>
                         </div>
                     )}
 
+                    {/* Loading State - Inline in listing section */}
+                    {loading && (
+                        <div className={styles.inlineLoader}>
+                            <img 
+                                src="/assets/img/elephantgif.gif" 
+                                alt="Loading..." 
+                                className={styles.loaderGif}
+                            />
+                        </div>
+                    )}
+
+                    {error && (
+                        <div style={{ textAlign: 'center', padding: '2rem', color: 'red' }}>
+                            <p>{error}</p>
+                        </div>
+                    )}
+
+                    {!loading && !error && blogs.length === 0 && (
+                        <div style={{ textAlign: 'center', padding: '2rem' }}>
+                            <p>No blogs found. Try adjusting your search or filters.</p>
+                        </div>
+                    )}
+
+                    {!loading && !error && blogs.length > 0 && (
                     <div className={styles.storiesGrid}>
-                        {visibleCards.map((story) => (
+                            {visibleCards.map((blog) => {
+                                const featuredImage = getFeaturedImageUrl(blog)
+                                const imageUrl = featuredImage || `https://picsum.photos/204/257?random=${blog.id}`
+                                
+                                return (
                             <Link
-                                key={story.id}
-                                to={`/stories-that-inspire/${story.id}`}
+                                        key={blog.id}
+                                        to={`/stories-that-inspire/${blog.id}`}
                                 className={styles.storyCard}
                             >
                                 <div className={styles.storyCardImageWrapper}>
                                     <img
-                                        src={`https://picsum.photos/204/257?random=${story.imageId}`}
-                                        alt={story.title}
+                                                src={imageUrl}
+                                                alt={blog.title.rendered}
                                         className={styles.storyCardImage}
                                     />
                                 </div>
                                 <div className={styles.storyCardContent}>
                                     <div className={styles.storyCardTitleWrapper}>
-                                        <h3 className={styles.storyCardTitle}>{story.title}</h3>
+                                                <h3 className={styles.storyCardTitle}>{blog.title.rendered}</h3>
                                         <div className={styles.storyCardIcon}>
                                             <img
-                                                src={getStoryIcon(story.id)}
+                                                        src={getStoryIcon(blog.id)}
                                                 alt="Story icon"
                                                 className={styles.storyCardIconImage}
                                             />
@@ -292,8 +381,10 @@ export const StoriesThatInspire: React.FC = () => {
                                     </div>
                                 </div>
                             </Link>
-                        ))}
+                                )
+                            })}
                     </div>
+                    )}
 
                     {/* Load More Arrow */}
                     {hasMore && (
