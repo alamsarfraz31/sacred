@@ -4681,3 +4681,120 @@
   }
 }
 
+
+@media (min-width: 1441px) and (max-width: 1700px) {
+
+
+  .habitatMapContainer {
+    left: 66%;
+  }
+
+  .habitatMapWrapper {
+    width: clamp(450px, 42vw, 650px);
+    aspect-ratio: 741 / 564;
+  }
+
+  .habitatMapFull {
+    width: 100%;
+    height: 100%;
+    max-width: 650px;
+    aspect-ratio: 741 / 564;
+    object-fit: contain;
+  }
+
+  
+  .mapArrowOcean {
+    left: calc(33.33% - 27.26px);
+  }
+
+  .mapArrowCoed {
+    left: calc(66.66% - 27.26px);
+  }
+
+  .mapArrowGigrin {
+    left: calc(100% - 27.26px);
+  }
+
+
+  .splitSection {
+    min-height: 100vh;
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+
+  .greenSection {
+    padding-top: 40px;
+    padding-bottom: 40px;
+    gap: 25px;
+  }
+
+  .iconRow {
+    margin-bottom: 15px;
+    padding-top: 20px;
+  }
+
+  .darkSection {
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+
+  .forestDescription {
+    margin-top: 15px;
+    padding-bottom: 20px;
+  }
+
+  .guardianSection {
+    min-height: 90vh;
+
+  }
+
+  .guardianLayout {
+    gap: 10px;
+    margin-top: -8rem;
+
+  }
+
+  .soccerCard {
+    width: 16vw;
+    padding: 2vw;
+    margin-left: 60px;
+  }
+
+  .soccerNumber {
+    font-size: 2rem;
+  }
+
+  .guardianMiddle {
+    gap: 2vw;
+    margin-top: 2vw;
+  }
+
+  .guardianHeading {
+    font-size: 1.5vw;
+  }
+
+  .guardianBtn {
+    width: 28vw;
+    height: auto;
+    min-height: 50px;
+    font-size: 1.1vw;
+    padding: 1vw 3vw;
+    gap: 2.5vw;
+  }
+
+  .locationText {
+    margin-bottom: 2vw;
+    padding-bottom: 20px;
+  }
+
+
+
+  .businessJoinButton {
+    margin-bottom: 20px;
+  }
+
+  .desktopContent{
+    height: 110vh;
+  }
+}
+
