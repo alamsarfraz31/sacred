@@ -7,6 +7,49 @@
   overflow-x: hidden;
 }
 
+/* Leaflet Popup Styles - Fix for map popup sizing and positioning */
+:global(.leaflet-popup-content-wrapper) {
+  max-width: 300px !important;
+  width: auto !important;
+  padding: 8px 12px !important;
+  border-radius: 8px !important;
+}
+
+:global(.leaflet-popup-content) {
+  margin: 8px 12px !important;
+  font-size: 12px !important;
+  line-height: 1.4 !important;
+  max-width: 280px !important;
+  word-wrap: break-word !important;
+}
+
+:global(.leaflet-popup-content h3) {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  margin: 0 0 8px 0 !important;
+  line-height: 1.3 !important;
+}
+
+:global(.leaflet-popup-content p) {
+  font-size: 11px !important;
+  margin: 4px 0 !important;
+  line-height: 1.4 !important;
+}
+
+:global(.leaflet-popup) {
+  max-width: 320px !important;
+}
+
+:global(.leaflet-popup-tip-container) {
+  width: 20px !important;
+  height: 10px !important;
+}
+
+:global(.leaflet-popup-tip) {
+  width: 10px !important;
+  height: 10px !important;
+}
+
 .heroSection {
   width: 100%;
   height: calc(100vh - 136px);
@@ -174,7 +217,7 @@
 }
 
 .section2Container {
-  max-width: 1380px;
+  max-width: 1440px; /* Increased to accommodate wider map */
   width: 100%;
   margin: 0 auto;
   padding: 0 80px;
@@ -255,12 +298,21 @@
 
 .section2Map {
   width: 100%;
-  max-width: 708px;
+  max-width: 900px; /* Increased to give more room for popup */
   height: 820px;
   /* Keep fixed height for map usability */
   max-height: 80vh;
   border-radius: 20px;
   border: none;
+  position: relative;
+}
+
+/* Ensure map container allows popup visibility */
+.section2Right {
+  overflow: visible; /* Allow popup to extend if needed */
+  position: relative;
+  max-width: 900px; /* Match iframe max-width */
+  width: 100%;
 }
 
 @media (max-width: 1200px) {

@@ -424,7 +424,7 @@ export const CoedRhyal: React.FC = () => {
                             {/* Right Section - Map */}
                             <div className={styles.section2Right}>
                                 <iframe
-                                    src={`${(import.meta.env.VITE_API_URL || 'https://outshade.sacredgroves.earth').replace(/\/$/, '')}/api/sutra/map/forest?forest_id=UNI_COED_00002&iframe_height=820&iframe_width=708&zoom_start=3`}
+                                    src={`${(import.meta.env.VITE_API_URL || 'https://outshade.sacredgroves.earth').replace(/\/$/, '')}/api/sutra/map/forest?forest_id=UNI_COED_00002&iframe_height=820&iframe_width=708&zoom_start=3&font_size_head=13&font_size_body=9&font_weight_head=600&font_weight_body=400`}
                                     frameBorder="0"
                                     className={styles.section2Map}
                                     allowFullScreen
