@@ -1668,3 +1668,228 @@
     display: none;
   }
 }
+
+@media (min-width: 1200px) and (max-width: 1440px) {
+
+  .logoImage {
+    width: 70%;
+    margin-bottom: -2rem;
+  }
+
+  .secondHeading {
+    font-size: 50px;
+    margin-bottom: 1rem;
+  }
+
+  .secondText {
+    font-size: 1.3rem;
+  }
+
+  .thirdSection {
+    min-height: 100vh;
+  }
+
+  .slide {
+    height: 40vh;
+    margin-top: 8rem;
+  }
+
+  .slideTitle {
+    font-size: 30px;
+  }
+  .slideSubtitle {
+    font-size: 22px;
+    margin-bottom: 5px;
+  }
+
+  .slideText{
+    font-size: 16px;
+  }
+
+  .sliderDots{
+    margin-bottom: 10rem;
+  }
+
+  .slideLeft{
+    flex: 0.7;
+  }
+
+  .thirdSectionHeading {
+    font-size: 40px;
+    margin-bottom: 1rem;
+  }
+
+  .slideImage {
+    width: 68%;
+    height: 68%;
+    margin-top: 4rem;
+  }
+
+  .slideIcon {
+    width: 50%;
+    margin-top: -4rem;
+    margin-bottom: -1rem;
+  }
+
+  .accordionItem {
+    margin-bottom: -1rem;
+  }
+  .cardBox {
+    width: 80%;
+    height: 80%;
+  }
+
+  .recognizedTopDecoration {
+    margin-bottom: 1rem;
+  }
+
+  .recognizedTreeIcon {
+    width: 25%;
+  }
+
+  .recognizedHeading {
+    margin-bottom: 3rem;
+  }
+
+  .recognizedCardDescription{
+    font-size: 16px;
+  }
+
+  .recognizedCarouselNavigation {
+    margin-top: -1rem;
+  }
+
+  .sec7Logo{
+    max-width: 50%;
+  }
+
+  .section7 {
+    height: 70vh;
+  }
+
+  .sec7Heading {
+    font-size: 20px;
+  }
+
+  .sec7Content {
+    width: 80%;
+  }
+
+  .sec7Para {
+
+    font-size: 16px;
+  }
+
+}
+@media (min-width: 1441px) and (max-width: 1700px) {
+
+  
+  .logoImage {
+    width: 70%;
+    margin-bottom: -2rem;
+  }
+
+  .secondHeading {
+    font-size: 50px;
+    margin-bottom: 1rem;
+  }
+
+  .secondText {
+    font-size: 1.3rem;
+  }
+
+  .thirdSection {
+    min-height: 100vh;
+  }
+
+  .slide {
+    height: 40vh;
+    margin-top: 8rem;
+  }
+
+  .slideTitle {
+    font-size: 30px;
+  }
+  .slideSubtitle {
+    font-size: 22px;
+    margin-bottom: 5px;
+  }
+
+  .slideText{
+    font-size: 16px;
+  }
+
+  .sliderDots{
+    margin-bottom: 10rem;
+  }
+
+  .slideLeft{
+    flex: 0.7;
+  }
+
+  .thirdSectionHeading {
+    font-size: 40px;
+    margin-bottom: 1rem;
+  }
+
+  .slideImage {
+    width: 68%;
+    height: 68%;
+    margin-top: 4rem;
+  }
+
+  .slideIcon {
+    width: 50%;
+    margin-top: -4rem;
+    margin-bottom: -1rem;
+  }
+
+  .accordionItem {
+    margin-bottom: -1rem;
+  }
+  .cardBox {
+    width: 80%;
+    height: 80%;
+  }
+
+  .recognizedTopDecoration {
+    margin-bottom: 1rem;
+  }
+
+  .recognizedTreeIcon {
+    width: 25%;
+  }
+
+  .recognizedHeading {
+    margin-bottom: 3rem;
+  }
+
+  .recognizedCardDescription{
+    font-size: 16px;
+  }
+
+  .recognizedCarouselNavigation {
+    margin-top: -1rem;
+  }
+
+  .sec7Logo{
+    max-width: 50%;
+  }
+
+  .section7 {
+    height: 70vh;
+  }
+
+  .sec7Heading {
+    font-size: 20px;
+  }
+
+  .sec7Content {
+    width: 80%;
+  }
+
+  .sec7Para {
+
+    font-size: 16px;
+  }
+}
