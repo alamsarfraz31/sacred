@@ -264,7 +264,7 @@ export const BusinessForPlanet: React.FC = () => {
             What is<br />
             <span>good for nature</span><br />
             can be<br />
-            <span>good for your business</span>
+            <span>good for your <br/> business</span>
           </h2>
         </div>
 

@@ -278,9 +278,9 @@
   line-height: 130%;
   color: #03303D;
   margin-bottom: 55px;
-  margin-top: 61px;
+  margin-top: 12rem;
   margin-right: 325px;
-  margin-left: auto;
+  margin-left: 1rem;
   line-height: 100%;
   text-align: center;
   white-space: pre-line;
@@ -2262,4 +2262,362 @@
   .sec7Para br {
     display: none;
   }
+}
+
+
+@media (min-width: 1200px) and (max-width:1440px) {
+
+  .textBlock h2 {
+    font-size: 36px;
+    margin-top: -7rem;
+  }
+
+  .ringBox {
+    width: 35%;
+  }
+
+  .dronLogo {
+    margin-top: -15rem;
+    width: 4%;
+  }
+
+  .flyLogo {
+    width: 4%;
+    margin-top: -19rem;
+  }
+
+  .sec2TopIcon {
+    width: 80%;
+  }
+
+  .sec2IconsContainer {
+    gap: 20px;
+  }
+
+  .sec2CenterIcon {
+    width: 80%;
+  }
+
+  .sec2FirstImage{
+    width: 80%;
+    margin-top: -2rem;
+    margin-right: 15rem;
+  }
+
+  .sec2SecondImage {
+    width: 75%;
+    margin-top: -4rem;
+  }
+
+  .sec2SmallTitle {
+    margin-top: 8rem;
+    margin-left: 7rem;
+    margin-bottom: 0px;
+    font-size: 24px;
+  }
+
+  .sec2MainHeading {
+    font-size: 40px;
+    margin-top: 3rem;
+  }
+
+  .sec2Para {
+    margin-top: -2rem;
+    font-size: 15px;
+    line-height: 120%;
+  }
+
+  .tabBtn {
+    font-size: 16px;
+  }
+  .seedsIcon {
+    width: 40%;
+    margin-bottom: 0rem;
+  }
+
+  .seedsHeading {
+    margin-top: 1rem;
+    font-size: 24px;
+    margin-bottom: 2rem;
+  }
+
+  .seedsText{
+    font-size: 15px;
+  }
+
+  .seedsLeft {
+    margin-top: 10rem;
+  }
+
+  .contactBtn {
+    width: 35%;
+  }
+
+  .sec4Heading span{
+    font-size: 45px;
+  }
+
+  .sec4List li {
+    font-size: 18px;
+    line-height: 300%;
+  }
+
+  .sec5BraceWrapper {
+    margin-bottom: -2rem;
+  }
+
+  .sec5Logo {
+    width: 15%;
+    margin-bottom: 1rem;
+  }
+
+  .sec5Heading {
+    margin-bottom: -4rem;
+    font-size: 24px;
+  }
+
+  .sec5Grid {
+    margin-right: -6rem;
+    margin-left: -6rem;
+  }
+
+  .sec5Row{
+    width: 70%;
+    margin-left: -3rem;
+    margin-right: -3rem;
+  }
+
+  .sec5Row:first-child .sec5Card,.sec5Row .sec5Card:nth-child(1){
+    /* width: 153.29px; */
+    height: 71%;
+}
+  .sec5Row:first-child .sec5Card,.sec5Row .sec5Card:nth-child(2){
+    /* width: 153.29px; */
+    height: 70%;
+}
+  .sec5Row:first-child .sec5Card,.sec5Row .sec5Card:nth-child(3){
+    /* width: 153.29px; */
+    height: 70%;
+}
+  .sec5Row:first-child .sec5Card,.sec5Row .sec5Card:nth-child(4){
+    /* width: 153.29px; */
+    height: 70%;
+}
+
+.sec5BraceLeft {
+  width: 6%;
+}
+
+.sec5BraceRight {
+  width: 6%;
+}
+
+.sec5BraceWrapper {
+  width: 80%;
+}
+
+.sec5Button {
+  width: 30%;
+  font-size: 14px;
+}
+
+  .recognizedTopDecoration {
+    margin-bottom: 1rem;
+  }
+
+  .recognizedTreeIcon {
+    width: 25%;
+  }
+
+  .recognizedHeading {
+    margin-bottom: 3rem;
+  }
+
+  .recognizedCardDescription{
+    font-size: 16px;
+  }
+
+  .recognizedCarouselNavigation {
+    margin-top: -3rem;
+  }
+
+
+}
+@media (min-width: 1441px) and (max-width:1700px) {
+
+  .textBlock h2 {
+    font-size: 36px;
+    margin-top: -7rem;
+  }
+
+  .ringBox {
+    width: 35%;
+  }
+
+  .dronLogo {
+    margin-top: -15rem;
+    width: 4%;
+  }
+
+  .flyLogo {
+    width: 4%;
+    margin-top: -19rem;
+  }
+
+  .sec2TopIcon {
+    width: 80%;
+  }
+
+  .sec2IconsContainer {
+    gap: 20px;
+  }
+
+  .sec2CenterIcon {
+    width: 80%;
+  }
+
+  .sec2FirstImage{
+    width: 80%;
+    margin-top: -2rem;
+    margin-right: 15rem;
+  }
+
+  .sec2SecondImage {
+    width: 75%;
+    margin-top: -4rem;
+  }
+
+  .sec2SmallTitle {
+    margin-top: 8rem;
+    margin-left: 7rem;
+    margin-bottom: 0px;
+    font-size: 24px;
+  }
+
+  .sec2MainHeading {
+    font-size: 40px;
+    margin-top: 3rem;
+  }
+
+  .sec2Para {
+    margin-top: -2rem;
+    font-size: 15px;
+    line-height: 120%;
+  }
+
+  .tabBtn {
+    font-size: 16px;
+  }
+  .seedsIcon {
+    width: 40%;
+    margin-bottom: 0rem;
+  }
+
+  .seedsHeading {
+    margin-top: 1rem;
+    font-size: 24px;
+    margin-bottom: 2rem;
+  }
+
+  .seedsText{
+    font-size: 15px;
+  }
+
+  .seedsLeft {
+    margin-top: 10rem;
+  }
+
+  .contactBtn {
+    width: 35%;
+  }
+
+  .sec4Heading span{
+    font-size: 45px;
+  }
+
+  .sec4List li {
+    font-size: 18px;
+    line-height: 300%;
+  }
+
+  .sec5BraceWrapper {
+    margin-bottom: -2rem;
+  }
+
+  .sec5Logo {
+    width: 15%;
+    margin-bottom: 1rem;
+  }
+
+  .sec5Heading {
+    margin-bottom: -4rem;
+    font-size: 24px;
+  }
+
+  .sec5Grid {
+    margin-right: -6rem;
+    margin-left: -6rem;
+  }
+
+  .sec5Row{
+    width: 70%;
+    margin-left: -3rem;
+    margin-right: -3rem;
+  }
+
+  .sec5Row:first-child .sec5Card,.sec5Row .sec5Card:nth-child(1){
+    /* width: 153.29px; */
+    height: 71%;
+}
+  .sec5Row:first-child .sec5Card,.sec5Row .sec5Card:nth-child(2){
+    /* width: 153.29px; */
+    height: 70%;
+}
+  .sec5Row:first-child .sec5Card,.sec5Row .sec5Card:nth-child(3){
+    /* width: 153.29px; */
+    height: 70%;
+}
+  .sec5Row:first-child .sec5Card,.sec5Row .sec5Card:nth-child(4){
+    /* width: 153.29px; */
+    height: 70%;
+}
+
+.sec5BraceLeft {
+  width: 6%;
+}
+
+.sec5BraceRight {
+  width: 6%;
+}
+
+.sec5BraceWrapper {
+  width: 80%;
+}
+
+.sec5Button {
+  width: 30%;
+  font-size: 14px;
+}
+
+  .recognizedTopDecoration {
+    margin-bottom: 1rem;
+  }
+
+  .recognizedTreeIcon {
+    width: 25%;
+  }
+
+  .recognizedHeading {
+    margin-bottom: 3rem;
+  }
+
+  .recognizedCardDescription{
+    font-size: 16px;
+  }
+
+  .recognizedCarouselNavigation {
+    margin-top: -3rem;
+  }
+
+
 }
