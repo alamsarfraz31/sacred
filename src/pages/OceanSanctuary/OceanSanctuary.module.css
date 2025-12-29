@@ -899,7 +899,7 @@
   color: #44D09F;
 }
 
-.yearTabActive {
+/* .yearTabActive {
   font-weight: 700;
   color: #44D09F;
 }
@@ -912,7 +912,7 @@
   right: 0;
   height: 2px;
   background-color: #44D09F;
-}
+} */
 
 /* Carousel */
 .carouselWrapper {
@@ -1529,7 +1529,7 @@
 }
 
 .section4Container {
-  row-gap: 5%;
+  row-gap: 20%;
 }
 
 .gridImage {
@@ -1557,7 +1557,7 @@
   font-size: 22px;
 }
 .section4Container{
-  gap: 1rem;
+  gap: 5rem;
 }
 
 .carouselWrapper {
@@ -1655,7 +1655,7 @@
 }
 
 .section4Container {
-  row-gap: 5%;
+  row-gap: 30%;
 }
 
 .gridImage {
@@ -1683,7 +1683,7 @@
   font-size: 22px;
 }
 .section4Container{
-  gap: 1rem;
+  gap: 5rem;
 }
 
 .carouselWrapper {

@@ -957,13 +957,13 @@
   color: #44D09F;
 }
 
-.yearTabActive {
+/* .yearTabActive {
   font-weight: 700;
   color: #44D09F;
   font-size: 32px;
-}
+} */
 
-.yearTabActive::after {
+/* .yearTabActive::after {
   content: '';
   position: absolute;
   bottom: 0;
@@ -971,7 +971,7 @@
   right: 0;
   height: 2px;
   background-color: #44D09F;
-}
+} */
 
 /* Carousel */
 .carouselWrapper {
@@ -1522,6 +1522,7 @@
 
 .section4Container {
   row-gap: 5%;
+  min-height: 70vh;
 }
 
 .gridImage {
@@ -1549,6 +1550,7 @@
 }
 .section5Container{
   gap: 1rem;
+  margin-top: -4rem;
 }
 
 }
@@ -1630,6 +1632,7 @@
 
 .section4Container {
   row-gap: 5%;
+  min-height: 70vh;
 }
 
 .gridImage {
@@ -1657,6 +1660,7 @@
 }
 .section5Container{
   gap: 1rem;
+  margin-top: -4rem;
 }
 
 }
