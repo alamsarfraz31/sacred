@@ -1318,6 +1318,10 @@
   color: #ffffff;
 }
 
+.wildTechItem.active .techLabel:hover {
+  color: #44D09F;
+}
+
 .wildTechItem:last-child {
   border-bottom: none;
   margin-bottom: 0;
@@ -3661,8 +3665,10 @@
   }
 
   .sealOfTrustSection {
-    min-height: auto;
+    height: 100vh;
+    /* min-height: auto; */
     padding: 40px 40px;
+
   }
 
   .wildTechSection {
@@ -3724,6 +3730,16 @@
     height: 50%;
     min-height: 90%;
   }
+
+  .cardTitle {
+    margin-top: -2rem;
+  }
+
+  .cardMainIcon {
+    height: 70%;
+    margin-bottom: -5rem;
+  }
+  
   .cardSubtitle{
     margin-bottom: -2rem;
   }
@@ -3755,15 +3771,31 @@
 
   .detailCard {
     width: 50%;
-    min-height: 40%;
+    min-height: 50%;
+    margin-bottom: 0;
   }
 
+  
+  .cardTitle {
+    margin-top: -2rem;
+  }
+
+  .cardMainIcon {
+    height: 70%;
+    margin-bottom: -5rem;
+  }
+  
+
   .cardDescription {
-    margin-top: -10rem;
+    margin-top: -5rem;
   }
 
   .cardMainIcon {
     margin-top: -10rem;
+  }
+
+  .sealOfTrustSection {
+    height: 100vh;
   }
   
 }

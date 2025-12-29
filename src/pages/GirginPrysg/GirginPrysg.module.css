@@ -893,7 +893,7 @@
   color: #44D09F;
 }
 
-.yearTabActive {
+/* .yearTabActive {
   font-weight: 700;
   color: #44D09F;
 }
@@ -906,7 +906,7 @@
   right: 0;
   height: 2px;
   background-color: #44D09F;
-}
+} */
 
 /* Carousel */
 .carouselWrapper {
@@ -1473,6 +1473,7 @@
 
 .section4Container {
   row-gap: 5%;
+  min-height: 70vh;
 }
 
 .gridImage {
@@ -1500,9 +1501,11 @@
 }
 .section5Container{
   gap: 1rem;
+  margin-top: -4rem;
 }
 
 }
+
 
 @media (min-width: 1441px) and (max-width: 1700px) {
 
@@ -1580,6 +1583,7 @@
 
 .section4Container {
   row-gap: 5%;
+  min-height: 70vh;
 }
 
 .gridImage {
@@ -1607,6 +1611,7 @@
 }
 .section5Container{
   gap: 1rem;
+  margin-top: -4rem;
 }
 
 }

@@ -1254,8 +1254,12 @@
 }
 
 @media (min-width: 1501px) {
+.soccerIco {
+  padding-top: 50rem;
+}
   .soccerCard {
     width: 268px;
+    text-align: center;
     /* Keep same fixed width as base style */
     padding: 50px;
     /* Keep same padding as base style */
@@ -2004,6 +2008,7 @@
   height: 79.43px;
   width: 306px;
   object-fit: contain;
+  transform: scaleX(-1);
 }
 
 .businessHeading {
@@ -2917,7 +2922,7 @@
   }
 
   .soccerNumber {
-    font-size: 4.5vw;
+    font-size: 2rem;
   }
 
   .guardianMiddle {
@@ -3188,7 +3193,7 @@
 
   .guardianContent {
     height: 100%;
-    padding-top: 10vh;
+    /* padding-top: 10vh; */
     padding-bottom: 5vh;
     /* More top spacing to maintain exact layout */
     display: flex;
@@ -3219,7 +3224,7 @@
     /* Responsive padding, scales between 30px and 50px */
     border-radius: clamp(30px, 2.84vw, 41px);
     /* Responsive border radius */
-    margin-top: 0;
+    margin-top: 10rem;
     /* Remove any top margin */
     box-sizing: border-box;
   }
@@ -4473,14 +4478,13 @@
 
   /* Fix Guardian section */
   .guardianSection {
-    min-height: 100vh;
+    /* min-height: 100vh; */
     padding-top: 50px;
     padding-bottom: 50px;
   }
 
   .guardianContent {
-    padding-top: 30px;
-    padding-bottom: 30px;
+    min-height: 80vh;
   }
 
   .guardianLayout {
@@ -4733,6 +4737,18 @@
     padding-top: 20px;
   }
 
+  div.habitatMapWrapper a.mapArrowOcean img {
+    margin-right: 3rem;
+  }
+
+  div.habitatMapWrapper a.mapArrowCoed img {
+    margin-right: -1.5rem;
+  }
+
+  div.habitatMapWrapper a.mapArrowGigrin img {
+    margin-right: -5rem;
+  }
+
   .darkSection {
     padding-top: 40px;
     padding-bottom: 40px;
@@ -4750,7 +4766,7 @@
 
   .guardianLayout {
     gap: 10px;
-    margin-top: -8rem;
+    margin-top: 0rem;
 
   }
 
@@ -4758,6 +4774,7 @@
     width: 16vw;
     padding: 2vw;
     margin-left: 60px;
+    margin-top: 0;
   }
 
   .soccerNumber {

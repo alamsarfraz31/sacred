@@ -1820,6 +1820,10 @@
     font-size: 16px;
   }
 
+  .guardianBtn {
+    margin-bottom: 1rem;
+  }
+
   .btnGroup{
     gap: 50%;
   }
@@ -1899,6 +1903,11 @@
   .guardianText{
     font-size: 16px;
   }
+
+   .guardianBtn {
+    margin-bottom: 1rem;
+  }
+
 
   .btnGroup{
     gap: 50%;

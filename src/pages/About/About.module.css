@@ -1226,3 +1226,26 @@
     height: 125px;
   }
 }
+
+@media (min-width: 1200px) and (max-width: 1440px) {
+  .heading {
+    font-size: 36px;
+    margin-bottom: 0.3rem;
+  }
+
+  .heading2 {
+    font-size: 30px;
+    margin-bottom: 0.5rem;
+  }
+
+  .textBlock{
+    font-size: 16px;
+    gap: 5px;
+    margin-bottom: -1rem;
+  }
+
+  .signature {
+    max-width: 25%;
+  }
+
+}
