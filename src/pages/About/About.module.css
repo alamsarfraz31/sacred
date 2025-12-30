@@ -1248,4 +1248,55 @@
     max-width: 25%;
   }
 
+  .card {
+    min-height: 75vh;
+  }
+
+  .teamHeading {
+    margin-bottom: 0px;
+  }
+
+  .cardsRow {
+    padding-left: 0rem;
+    padding-right: 0rem;
+  }
+
+  .roundImageWrap {
+    margin-top: -2rem;
+  }
+
+  .roundImage {
+    width: 70%;
+    height: 70%;
+  }
+
+  .name {
+    font-size: 18px;
+    margin-top: -2rem;
+  }
+
+  .cardText {
+    font-size: 16px;
+  }
+
+  .iconWrap {
+    margin-top: -1rem;
+  }
+
+  .cicHeading {
+    font-size: 24px;
+  }
+
+  .cicTextBlock {
+    font-size: 18px;
+  }
+
+  .sacredGrovesText {
+    font-size: 24px;
+  }
+
+  .desktopContent {
+    height: 130vh;
+  }
+
 }
