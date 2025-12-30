@@ -815,7 +815,7 @@
 
 @media (min-width: 1441px) {
   .aboutLeftText {
-    left: -200px !important;
+    left: -100px !important;
   }
 
   .aboutLeftLogo {
@@ -1063,7 +1063,7 @@
   }
 }
 
-@media (min-width: 1200px) and (max-width: 1441px) {
+@media (min-width: 1200px) and (max-width: 1440px) {
 
   .heroSection{
     height: 120vh;
