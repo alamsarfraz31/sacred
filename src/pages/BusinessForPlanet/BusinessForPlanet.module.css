@@ -2286,6 +2286,10 @@
     margin-top: -19rem;
   }
 
+  .section2 {
+    margin-bottom: -5rem;
+  }
+
   .sec2TopIcon {
     width: 80%;
   }
@@ -2443,6 +2447,7 @@
 
 
 }
+
 @media (min-width: 1441px) and (max-width:1700px) {
 
   .textBlock h2 {
@@ -2462,6 +2467,14 @@
   .flyLogo {
     width: 4%;
     margin-top: -19rem;
+  }
+
+    .section2 {
+    margin-bottom: -10rem;
+  }
+
+  .section2{
+    height: 100vh;
   }
 
   .sec2TopIcon {
