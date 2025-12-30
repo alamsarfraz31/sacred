@@ -1256,7 +1256,7 @@
 }
 
 .virtualLabel {
-  margin-top: 15px;
+  margin-top: 5rem;
 }
 
 .sacredBtnWrapper {
@@ -1869,7 +1869,7 @@
   }
 
   .virtualLabel{
-    margin-top: -2rem;
+    margin-top: 1rem;
   }
   
   .braceLeft, .braceRight{
@@ -1958,7 +1958,7 @@
   }
 
   .virtualLabel{
-    margin-top: -2rem;
+    margin-top: 1rem;
   }
   
   .braceLeft, .braceRight{

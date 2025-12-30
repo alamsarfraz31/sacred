@@ -119,12 +119,12 @@
   align-items: center;
   justify-content: center;
 }
-
+/* 
 .sliderArrow img {
   width: 32px;
   height: 32px;
   display: block;
-}
+} */
 
 .sliderArrow:hover {
   opacity: 0.7;
