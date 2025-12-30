@@ -1013,3 +1013,14 @@
     height: 30px;
   }
 }
+
+@media (min-width: 1200px) and (max-width: 1441px) {
+
+  .heroImage {
+    width: 90%;
+  }
+
+  .desktopContent {
+    height: 125vh;
+  }
+}

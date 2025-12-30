@@ -1070,11 +1070,12 @@
   }
 
   .heroText {
-    font-size: 22px;
+    font-size: 38px;
   }
 
   .aboutCenterImage {
     width: 90%;
+    margin-left: -20rem;
   }
 
   .aboutLeftLogo {
