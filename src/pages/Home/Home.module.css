@@ -4543,6 +4543,7 @@
   .businessJoinButton {
     margin-bottom: 25px;
   }
+  
 }
 
 /* ============================================ */
@@ -4633,6 +4634,14 @@
   }
   .guardianMiddle {
     margin-top: -3rem
+  }
+
+  .splitSection {
+    min-height: 100vh;
+  }
+
+  .desktopContent{
+    height: 110vh;
   }
 }
 @media (min-width: 1401px) and (max-width: 1440px) {
@@ -4808,6 +4817,10 @@
 
   .businessJoinButton {
     margin-bottom: 20px;
+  }
+
+  .splitSection {
+    min-height: 100vh;
   }
 
   .desktopContent{

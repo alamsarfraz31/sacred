@@ -2286,6 +2286,10 @@
     margin-top: -19rem;
   }
 
+  .section2 {
+    margin-bottom: -5rem;
+  }
+
   .sec2TopIcon {
     width: 80%;
   }
@@ -2327,6 +2331,11 @@
     line-height: 120%;
   }
 
+  .headingBold {
+    font-size: 30px;
+    line-height: 1rem;
+  }
+
   .tabBtn {
     font-size: 16px;
   }
@@ -2350,11 +2359,39 @@
   }
 
   .contactBtn {
-    width: 35%;
+    width: 50%;
+  }
+
+  .sliderTrack {
+    max-height: 60vh;
+  }
+
+  .sliderImg {
+    max-height: 60vh;
+  }
+
+  .rightList li {
+    margin-bottom: 0.5rem;
+    font-size: 18px;
+  }
+
+
+  .myEarthImageSpecific {
+    width: 70%;
+    height: 70%;
+  }
+
+  .brandImageSpecific {
+    width: 70%;
+    height: 70%;
   }
 
   .sec4Heading span{
-    font-size: 45px;
+    font-size: 40px;
+  }
+
+  .sec4Image {
+    margin-top: -2rem;
   }
 
   .sec4List li {
@@ -2441,8 +2478,13 @@
     margin-top: -3rem;
   }
 
+  .sec7Heading {
+    font-size: 20px;
+  }
+
 
 }
+
 @media (min-width: 1441px) and (max-width:1700px) {
 
   .textBlock h2 {
@@ -2462,6 +2504,14 @@
   .flyLogo {
     width: 4%;
     margin-top: -19rem;
+  }
+
+    .section2 {
+    margin-bottom: -10rem;
+  }
+
+  .section2{
+    height: 100vh;
   }
 
   .sec2TopIcon {
@@ -2508,6 +2558,7 @@
   .tabBtn {
     font-size: 16px;
   }
+
   .seedsIcon {
     width: 40%;
     margin-bottom: 0rem;
@@ -2530,6 +2581,11 @@
   .contactBtn {
     width: 35%;
   }
+
+  .section3Container .sliderImg {
+    width: 200%;
+  }
+
 
   .sec4Heading span{
     font-size: 45px;

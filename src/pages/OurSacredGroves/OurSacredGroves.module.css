@@ -1013,3 +1013,66 @@
     height: 30px;
   }
 }
+
+@media (min-width: 1200px) and (max-width: 1441px) {
+
+  .heroImage {
+    width: 90%;
+  }
+
+  .desktopContent {
+    height: 125vh;
+  }
+
+  .artScienceLeft {
+    padding: 1rem;
+  }
+
+  .artScienceIcon {
+    margin-top: -1rem;
+    margin-bottom: 0rem;
+  }
+
+  .artScienceHeading {
+    font-size: 20px;
+    margin-bottom: 1rem;
+  }
+
+  .artScienceParagraph {
+    font-size: 16px;
+    margin-bottom: 0rem;
+  }
+
+  .artScienceMiddle {
+    margin-top: -3rem;
+    margin-bottom: -3rem;
+  }
+
+  .continuumItem {
+    margin-bottom: -1rem;
+    font-size: 18px;
+    line-height: 90%;
+  }
+
+  .advisorSection {
+    margin-top: -2rem;
+  }
+
+  .advisorImage {
+    width: 50%;
+    height: 50%;
+  }
+
+  .advisorText {
+    font-size: 14px;
+  }
+
+  .unLeftImage {
+    width: 90%;
+    height: 90%;
+  }
+
+  .sec7Heading {
+    font-size: 24px;
+  }
+}

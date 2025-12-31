@@ -917,9 +917,13 @@
 
 @media (min-width: 1441px) {
   .aboutLeftText {
+<<<<<<< HEAD
     margin-left: 117px;
     left: -200px;
     position: relative;
+=======
+    left: -100px !important;
+>>>>>>> a8730debe7d77eff039cbaac35a524de9b1b52c4
   }
 
   .aboutLeftLogo {
@@ -1193,5 +1197,25 @@
   .aboutRightText p {
     font-size: 16px;
     text-align: left;
+  }
+}
+
+@media (min-width: 1200px) and (max-width: 1440px) {
+
+  .heroSection{
+    height: 120vh;
+  }
+
+  .heroText {
+    font-size: 38px;
+  }
+
+  .aboutCenterImage {
+    width: 90%;
+    margin-left: -20rem;
+  }
+
+  .aboutLeftLogo {
+    left: 7rem;
   }
 }

@@ -1734,6 +1734,11 @@
     margin-top: -19rem;
   }
 
+  .section2 {
+    height: 110vh;
+    overflow: hidden;
+  }
+
   .sec2TopIcon {
     width: 80%;
   }
@@ -1778,6 +1783,23 @@
   .tabBtn {
     font-size: 16px;
   }
+
+  .myEarthBg {
+    height: 80%;
+  }
+
+  .myEarthIcon {
+    width: 70%;
+  }
+
+  .myEarthHeading {
+    font-size: 24px;
+  }
+
+  .myEarthText {
+    font-size: 16px;
+  }
+
   .seedsIcon {
     width: 40%;
     margin-bottom: 0rem;
@@ -1798,8 +1820,12 @@
   }
 
   .contactBtn {
-    width: 35%;
+    width: 100%;
   }
+
+    .sec4Image {
+      margin-top: -1rem;
+    }
 
   .sec4Heading span{
     font-size: 45px;
@@ -2013,7 +2039,7 @@
   }
 
   .contactBtn {
-    width: 35%;
+    width: 100%;
   }
 
   .sec4Heading span{
@@ -2111,7 +2137,7 @@
   .section3Content {
     width: 60%;
     margin: auto;
-    margin-top: -2rem;
+    margin-top: 2rem;
   }
 
   .sliderImg {
@@ -2138,6 +2164,10 @@
 
   .exploreBtn {
     margin-top: 0rem;
+  }
+
+  .recognizedSection {
+    min-height: 100vh;
   }
 
 
