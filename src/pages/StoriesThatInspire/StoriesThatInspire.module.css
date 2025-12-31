@@ -917,13 +917,7 @@
 
 @media (min-width: 1441px) {
   .aboutLeftText {
-<<<<<<< HEAD
-    margin-left: 117px;
-    left: -200px;
-    position: relative;
-=======
     left: -100px !important;
->>>>>>> a8730debe7d77eff039cbaac35a524de9b1b52c4
   }
 
   .aboutLeftLogo {
