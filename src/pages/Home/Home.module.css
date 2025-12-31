@@ -3204,7 +3204,7 @@
 
   /* Fix Guardian Section Top Spacing */
   .guardianLayout {
-    gap: 2.5vh;
+    gap:0.5vh;
     /* Consistent gap between elements */
     height: 100%;
     display: grid;
