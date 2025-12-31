@@ -72,8 +72,7 @@
   /* Wild Tech Section - Right Side for Large Screens */
   .wildTechRight {
     padding: clamp(60px, 6vh, 100px) 50px clamp(60px, 6vh, 100px) 50px;
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: hidden;
   }
 
   .wildTechIcons {
@@ -110,8 +109,7 @@
   /* Wild Tech Section - Right Side */
   .wildTechRight {
     padding: clamp(30px, 4vh, 60px) 50px clamp(30px, 4vh, 60px) 50px;
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: hidden;
   }
 
   .wildTechIcons {
@@ -166,8 +164,7 @@
   /* Wild Tech Section - Right Side */
   .wildTechRight {
     padding: clamp(25px, 3.5vh, 50px) 50px clamp(25px, 3.5vh, 50px) 50px;
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: hidden;
   }
 
   .wildTechIcons {
@@ -213,8 +210,7 @@
   /* Wild Tech Section - Right Side */
   .wildTechRight {
     padding: clamp(40px, 4.5vh, 70px) 50px clamp(40px, 4.5vh, 70px) 50px;
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: hidden;
   }
 
   .wildTechIcons {
@@ -940,6 +936,7 @@
   box-sizing: border-box;
   display: flex;
   align-items: center;
+  overflow: hidden;
 }
 
 .wildTechContent {
@@ -1205,8 +1202,7 @@
   color: white;
   position: relative;
   z-index: 2;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden;
   height: 100%;
   box-sizing: border-box;
 }
@@ -1533,6 +1529,7 @@
     min-height: auto;
     /* Remove fixed height on mobile */
     padding: 0;
+    overflow: hidden;
   }
 
   .mobileWildTechWrapper {
@@ -2833,6 +2830,7 @@
   .wildTechLeft,
   .wildTechRight {
     width: 100%;
+    overflow: hidden;
   }
 
   .wildTechLeft {
@@ -2841,8 +2839,7 @@
 
   .wildTechRight {
     padding: clamp(30px, 4vh, 50px) 20px clamp(30px, 4vh, 50px) 20px;
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: hidden;
   }
 
   .wildTechIcons {
@@ -3171,6 +3168,7 @@
   .wildTechSection {
     height: auto;
     min-height: 100vh;
+    overflow: hidden;
   }
 
   .wildTechContent {
@@ -3199,8 +3197,7 @@
     width: 100%;
     padding: clamp(30px, 4vh, 50px) 30px clamp(30px, 4vh, 50px) 30px;
     height: auto;
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: hidden;
   }
 
   .wildTechIcons {
@@ -3674,12 +3671,12 @@
   .wildTechSection {
     height: auto;
     min-height: auto;
+    overflow: hidden;
   }
 
   .wildTechRight {
     padding: clamp(25px, 3.5vh, 45px) 40px clamp(25px, 3.5vh, 45px) 40px;
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: hidden;
   }
 
   .wildTechIcons {
