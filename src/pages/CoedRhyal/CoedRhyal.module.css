@@ -957,21 +957,21 @@
   color: #44D09F;
 }
 
-/* .yearTabActive {
+.yearTabActive {
   font-weight: 700;
   color: #44D09F;
   font-size: 32px;
-} */
+} 
 
-/* .yearTabActive::after {
+.yearTabActive::after {
   content: '';
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 2px;
+  /* height: 2px; */
   background-color: #44D09F;
-} */
+}
 
 /* Carousel */
 .carouselWrapper {
@@ -1482,7 +1482,7 @@
 }
 
 .section2Right {
-  width: 65%;
+  width: 100%;
 }
 
 .section3Container {
@@ -1592,7 +1592,7 @@
 }
 
 .section2Right {
-  width: 65%;
+  width: 100%;
 }
 
 .section3Container {

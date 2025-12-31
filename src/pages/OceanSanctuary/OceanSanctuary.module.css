@@ -899,7 +899,7 @@
   color: #44D09F;
 }
 
-/* .yearTabActive {
+.yearTabActive {
   font-weight: 700;
   color: #44D09F;
 }
@@ -910,9 +910,9 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 2px;
+  /* height: 2px; */
   background-color: #44D09F;
-} */
+}
 
 /* Carousel */
 .carouselWrapper {
