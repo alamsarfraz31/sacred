@@ -4,7 +4,7 @@
  * logs those errors, and displays a fallback UI matching the site theme
  */
 
-import React, { Component, type ReactNode, type ErrorInfo } from 'react'
+import { Component, type ReactNode, type ErrorInfo } from 'react'
 import { Link } from 'react-router-dom'
 import styles from './ErrorBoundary.module.css'
 
