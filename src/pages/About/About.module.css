@@ -1295,6 +1295,101 @@
     font-size: 24px;
   }
 
+  .forestLogoTitle {
+    font-size: 16px;
+  }
+
+  .mapArrow {
+    margin-top: 6rem;
+  }
+
+  .centerImage {
+    height: 60%;
+    margin-right: 6rem;
+  }
+
+  a[href="/code-rhyal"] {
+    left: calc(352.74px);
+  }
+
+  .forestText {
+    font-size: 16px;
+  }
+
+  .desktopContent {
+    height: 95vh;
+  }
+
+}
+
+@media (min-width: 1441px) and (max-width: 1700px) {
+  .heading {
+    font-size: 36px;
+    margin-bottom: 0.3rem;
+  }
+
+  .heading2 {
+    font-size: 30px;
+    margin-bottom: 0.5rem;
+  }
+
+  .textBlock{
+    font-size: 16px;
+    gap: 5px;
+    margin-bottom: -1rem;
+  }
+
+  .signature {
+    max-width: 25%;
+  }
+
+  .card {
+    min-height: 75vh;
+  }
+
+  .teamHeading {
+    margin-bottom: 0px;
+  }
+
+  .cardsRow {
+    padding-left: 0rem;
+    padding-right: 0rem;
+  }
+
+  .roundImageWrap {
+    margin-top: -1rem;
+  }
+
+  .roundImage {
+    width: 80%;
+    height: 80%;
+  }
+
+  .name {
+    font-size: 18px;
+    margin-top: 0rem;
+  }
+
+  .cardText {
+    font-size: 18px;
+  }
+
+  .iconWrap {
+    margin-top: -1rem;
+  }
+
+  .cicHeading {
+    font-size: 24px;
+  }
+
+  .cicTextBlock {
+    font-size: 18px;
+  }
+
+  .sacredGrovesText {
+    font-size: 24px;
+  }
+
   .desktopContent {
     height: 130vh;
   }

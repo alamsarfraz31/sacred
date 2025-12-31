@@ -401,7 +401,7 @@
 
 .section3Container {
   width: 100%;
-  max-width: 1440px;
+  max-width: 100%;
   margin: 0 auto;
   padding: 80px 80px;
   padding-bottom: 80px;
@@ -2584,6 +2584,14 @@
 
   .section3Container .sliderImg {
     width: 200%;
+  }
+
+    .sliderTrack {
+    max-height: 60vh;
+  }
+
+  .sliderImg {
+    max-height: 60vh;
   }
 
 

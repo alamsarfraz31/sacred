@@ -542,7 +542,7 @@
   padding: 0 80px;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 60px;
+  gap: 10rem;
   align-items: start;
   padding-top: 80px;
   padding-bottom: 80px;
@@ -1557,7 +1557,7 @@
   font-size: 22px;
 }
 .section4Container{
-  gap: 5rem;
+  gap: 10rem;
 }
 
 .carouselWrapper {
@@ -1654,10 +1654,6 @@
   margin-bottom: 1rem;
 }
 
-.section4Container {
-  row-gap: 30%;
-}
-
 .gridImage {
   width: 100%;
 }
@@ -1683,7 +1679,7 @@
   font-size: 22px;
 }
 .section4Container{
-  gap: 5rem;
+  gap: 10rem;
 }
 
 .carouselWrapper {

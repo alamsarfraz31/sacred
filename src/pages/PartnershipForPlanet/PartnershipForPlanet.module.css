@@ -66,6 +66,7 @@
   position: relative;
   padding: 80px 0;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 .secondSectionContainer {
@@ -1689,6 +1690,10 @@
     min-height: 100vh;
   }
 
+  .fourthSection {
+    min-height: 100vh;
+  }
+
   .slide {
     height: 40vh;
     margin-top: 8rem;
@@ -1802,6 +1807,10 @@
     min-height: 100vh;
   }
 
+  .fourthSection {
+    min-height: 100vh;
+  }
+
   .slide {
     height: 40vh;
     margin-top: 8rem;
@@ -1820,7 +1829,7 @@
   }
 
   .sliderDots{
-    margin-bottom: 10rem;
+    margin-bottom: 8rem;
   }
 
   .slideLeft{
@@ -1840,8 +1849,8 @@
 
   .slideIcon {
     width: 50%;
-    margin-top: -4rem;
-    margin-bottom: -1rem;
+    margin-top: -2rem;
+    margin-bottom: 1rem;
   }
 
   .accordionItem {
