@@ -3728,7 +3728,7 @@
   .detailCard{
     width: 60%;
     height: 50%;
-    min-height: 90%;
+    min-height: 85%;
   }
 
   .cardTitle {
@@ -3745,7 +3745,7 @@
   }
 
   .cardDescription {
-    margin-top: -1rem;
+    margin-top: -2rem;
     max-width: 100%;
     font-size: 16px;
   }
@@ -3787,7 +3787,7 @@
   
 
   .wildTechContent .cardDescription {
-    margin-top: -5rem;
+    margin-top: -6rem;
   }
 
   .cardMainIcon {
