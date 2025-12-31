@@ -359,6 +359,31 @@ section {
     display: block;
 }
 
+/* Section 2 - Left Side Logo Responsive */
+@media (min-width: 1920px) {
+    .left-side-logo {
+        width: 20.8vw;
+        max-width: 350px;
+        height: auto;
+    }
+}
+
+@media (min-width: 1441px) and (max-width: 1919px) {
+    .left-side-logo {
+        width: 20.8vw;
+        max-width: 300px;
+        height: auto;
+    }
+}
+
+@media (min-width: 1200px) and (max-width: 1440px) {
+    .left-side-logo {
+        width: 22vw;
+        max-width: 280px;
+        height: auto;
+    }
+}
+
 .introducing-title {
     font-family: 'Montserrat';
     color: #ffffff;
@@ -1482,6 +1507,34 @@ section {
     object-fit: contain;
 }
 
+/* Section 4 - Persona Icon Responsive */
+@media (min-width: 1920px) {
+    .persona-icon {
+        width: 7.6vw;
+        max-width: 130px;
+        height: auto;
+        min-height: 17.9vh;
+    }
+}
+
+@media (min-width: 1441px) and (max-width: 1919px) {
+    .persona-icon {
+        width: 7.6vw;
+        max-width: 110px;
+        height: auto;
+        min-height: 17.9vh;
+    }
+}
+
+@media (min-width: 1200px) and (max-width: 1440px) {
+    .persona-icon {
+        width: 8vw;
+        max-width: 100px;
+        height: auto;
+        min-height: 16vh;
+    }
+}
+
 /* Shop Card */
 .shop-card {
     position: absolute;
@@ -2308,6 +2361,34 @@ section {
     max-width: 100vh !important;
 }
 
+/* Section 5 - Climate Act Logo Responsive */
+@media (min-width: 1920px) {
+    .climate-act-logo {
+        width: 20.8vw;
+        max-width: 350px;
+        height: auto;
+        top: -11.3vh;
+    }
+}
+
+@media (min-width: 1441px) and (max-width: 1919px) {
+    .climate-act-logo {
+        width: 20.8vw;
+        max-width: 300px;
+        height: auto;
+        top: -11.3vh;
+    }
+}
+
+@media (min-width: 1200px) and (max-width: 1440px) {
+    .climate-act-logo {
+        width: 22vw;
+        max-width: 280px;
+        height: auto;
+        top: -11vh;
+    }
+}
+
 .climate-act-heading {
     font-family: 'Montserrat';
     font-weight: 700;
@@ -2334,6 +2415,37 @@ section {
     height: auto;
     opacity: 1;
     margin-bottom: 40px;
+}
+
+/* Section 5 - Earth Bottom Image Responsive */
+@media (min-width: 1920px) {
+    .earth-bottom-image {
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: auto;
+        margin-bottom: 3.9vh;
+    }
+}
+
+@media (min-width: 1441px) and (max-width: 1919px) {
+    .earth-bottom-image {
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: auto;
+        margin-bottom: 3.9vh;
+    }
+}
+
+@media (min-width: 1200px) and (max-width: 1440px) {
+    .earth-bottom-image {
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: auto;
+        margin-bottom: 3.5vh;
+    }
 }
 
 .bottom-nature-left {
@@ -2641,6 +2753,34 @@ section {
     transition: all 0.3s ease;
 }
 
+/* Section 6 - Nudge Item Text Responsive */
+@media (min-width: 1920px) {
+    .nudge-item {
+        width: 86vw;
+        max-width: 1400px;
+        min-height: 2.6vh;
+        font-size: clamp(18px, 1.5vw, 24px);
+    }
+}
+
+@media (min-width: 1441px) and (max-width: 1919px) {
+    .nudge-item {
+        width: 86vw;
+        max-width: 1239px;
+        min-height: 2.6vh;
+        font-size: clamp(18px, 1.5vw, 22px);
+    }
+}
+
+@media (min-width: 1200px) and (max-width: 1440px) {
+    .nudge-item {
+        width: 90vw;
+        max-width: 1150px;
+        min-height: 2.5vh;
+        font-size: clamp(16px, 1.3vw, 20px);
+    }
+}
+
 .nudge-item-text {
     display: inline-block;
 }
@@ -2660,6 +2800,91 @@ section {
     box-sizing: border-box;
     margin-top: 0;
     margin-bottom: 0;
+}
+
+/* Section 6 - Nudge Hover Banner Responsive */
+@media (min-width: 1920px) {
+    .nudge-hover-banner {
+        width: 86vw;
+        max-width: 1400px;
+        height: auto;
+        min-height: 7.3vh;
+        border-width: 0.13vw;
+        border-radius: 3.9vh;
+        padding: 0 2.8vw;
+    }
+
+    .hover-banner-text {
+        font-size: clamp(18px, 1.5vw, 24px);
+    }
+
+    .hover-banner-image {
+        width: 20.8vw;
+        max-width: 350px;
+        height: auto;
+    }
+
+    .nude-arrow-icon {
+        width: 2.4vw;
+        max-width: 40px;
+        height: auto;
+    }
+}
+
+@media (min-width: 1441px) and (max-width: 1919px) {
+    .nudge-hover-banner {
+        width: 86vw;
+        max-width: 1239px;
+        height: auto;
+        min-height: 7.3vh;
+        border-width: 0.13vw;
+        border-radius: 3.9vh;
+        padding: 0 2.8vw;
+    }
+
+    .hover-banner-text {
+        font-size: clamp(18px, 1.5vw, 22px);
+    }
+
+    .hover-banner-image {
+        width: 20.8vw;
+        max-width: 300px;
+        height: auto;
+    }
+
+    .nude-arrow-icon {
+        width: 2.4vw;
+        max-width: 35px;
+        height: auto;
+    }
+}
+
+@media (min-width: 1200px) and (max-width: 1440px) {
+    .nudge-hover-banner {
+        width: 90vw;
+        max-width: 1150px;
+        height: auto;
+        min-height: 7vh;
+        border-width: 0.15vw;
+        border-radius: 3.7vh;
+        padding: 0 2.5vw;
+    }
+
+    .hover-banner-text {
+        font-size: clamp(16px, 1.3vw, 20px);
+    }
+
+    .hover-banner-image {
+        width: 22vw;
+        max-width: 280px;
+        height: auto;
+    }
+
+    .nude-arrow-icon {
+        width: 2.5vw;
+        max-width: 32px;
+        height: auto;
+    }
 }
 
 .hover-banner-left {
@@ -2793,6 +3018,43 @@ section {
     transition: all 0.3s ease;
     opacity: 1;
     text-decoration: none;
+}
+
+/* Section 6 - Contact Us Button Responsive */
+@media (min-width: 1920px) {
+    .contact-us-button {
+        width: 20.6vw;
+        max-width: 350px;
+        height: auto;
+        min-height: 5.7vh;
+        font-size: clamp(14px, 1.1vw, 18px);
+        border-radius: 2.8vh;
+        gap: 0.7vw;
+    }
+}
+
+@media (min-width: 1441px) and (max-width: 1919px) {
+    .contact-us-button {
+        width: 20.6vw;
+        max-width: 297px;
+        height: auto;
+        min-height: 5.7vh;
+        font-size: clamp(14px, 1.1vw, 16px);
+        border-radius: 2.8vh;
+        gap: 0.7vw;
+    }
+}
+
+@media (min-width: 1200px) and (max-width: 1440px) {
+    .contact-us-button {
+        width: 22vw;
+        max-width: 280px;
+        height: auto;
+        min-height: 5.5vh;
+        font-size: clamp(13px, 1vw, 15px);
+        border-radius: 2.7vh;
+        gap: 0.7vw;
+    }
 }
 
 .contact-us-button:hover,
@@ -3037,11 +3299,88 @@ section {
     margin-left: 60px;
 }
 
+/* Section 7 - Right Section Responsive */
+@media (min-width: 1920px) {
+    .section-seven-about-right {
+        gap: 1.95vh;
+        margin-left: 4.2vw;
+    }
+
+    .section-seven-about-right-content {
+        gap: 1.95vh;
+    }
+
+    .section-seven-about-right-text {
+        gap: 1.17vh;
+        max-width: 20.8vw;
+    }
+}
+
+@media (min-width: 1441px) and (max-width: 1919px) {
+    .section-seven-about-right {
+        gap: 1.95vh;
+        margin-left: 4.2vw;
+    }
+
+    .section-seven-about-right-content {
+        gap: 1.95vh;
+    }
+
+    .section-seven-about-right-text {
+        gap: 1.17vh;
+        max-width: 20.8vw;
+    }
+}
+
+@media (min-width: 1200px) and (max-width: 1440px) {
+    .section-seven-about-right {
+        gap: 1.85vh;
+        margin-left: 3.8vw;
+    }
+
+    .section-seven-about-right-content {
+        gap: 1.85vh;
+    }
+
+    .section-seven-about-right-text {
+        gap: 1.1vh;
+        max-width: 22vw;
+    }
+}
+
 .section-seven-about-right-icons {
     width: 300px;
     height: 87.47px;
     object-fit: contain;
     margin-bottom: 10px;
+}
+
+/* Section 7 - Right Icons Responsive */
+@media (min-width: 1920px) {
+    .section-seven-about-right-icons {
+        width: 20.8vw;
+        max-width: 350px;
+        height: auto;
+        margin-bottom: 1vh;
+    }
+}
+
+@media (min-width: 1441px) and (max-width: 1919px) {
+    .section-seven-about-right-icons {
+        width: 20.8vw;
+        max-width: 300px;
+        height: auto;
+        margin-bottom: 1vh;
+    }
+}
+
+@media (min-width: 1200px) and (max-width: 1440px) {
+    .section-seven-about-right-icons {
+        width: 22vw;
+        max-width: 280px;
+        height: auto;
+        margin-bottom: 0.9vh;
+    }
 }
 
 .section-seven-about-right-content {
@@ -3102,6 +3441,28 @@ section {
     width: auto;
     height: 20px;
     object-fit: contain;
+}
+
+/* Section 7 - Right Arrow Responsive */
+@media (min-width: 1920px) {
+    .section-seven-about-right-arrow {
+        height: 1.95vh;
+        max-height: 25px;
+    }
+}
+
+@media (min-width: 1441px) and (max-width: 1919px) {
+    .section-seven-about-right-arrow {
+        height: 1.95vh;
+        max-height: 20px;
+    }
+}
+
+@media (min-width: 1200px) and (max-width: 1440px) {
+    .section-seven-about-right-arrow {
+        height: 1.85vh;
+        max-height: 18px;
+    }
 }
 
 .section-seven-about-right-text {
@@ -3286,10 +3647,31 @@ section {
     border: none;
 }
 
-@media (min-width: 1441px) {
+/* Section 8 - Green Section Responsive */
+@media (min-width: 1920px) {
     .section-eight-green-section {
         flex: 0 0 60%;
-        padding-left: 120px;
+        padding-left: 8.3vw;
+        padding-right: 6.9vw;
+        gap: 3.4vh;
+    }
+}
+
+@media (min-width: 1441px) and (max-width: 1919px) {
+    .section-eight-green-section {
+        flex: 0 0 60%;
+        padding-left: 8.3vw;
+        padding-right: 6.9vw;
+        gap: 3.4vh;
+    }
+}
+
+@media (min-width: 1200px) and (max-width: 1440px) {
+    .section-eight-green-section {
+        flex: 0 0 60%;
+        padding-left: 5vw;
+        padding-right: 5vw;
+        gap: 3.2vh;
     }
 }
 
@@ -3301,6 +3683,70 @@ section {
     width: 299px;
     height: 80px;
     object-fit: contain;
+}
+
+/* Section 8 - Technology Icons Responsive */
+@media (min-width: 1920px) {
+    .section-eight-technology-icons {
+        width: 20.8vw;
+        max-width: 350px;
+        height: auto;
+    }
+
+    .section-eight-icon-row {
+        margin-bottom: 1vh;
+    }
+
+    .section-eight-content-block {
+        margin-bottom: 1.5vh;
+    }
+
+    .section-eight-text-block {
+        gap: 1.95vh;
+        max-width: 31.3vw;
+    }
+}
+
+@media (min-width: 1441px) and (max-width: 1919px) {
+    .section-eight-technology-icons {
+        width: 20.8vw;
+        max-width: 299px;
+        height: auto;
+    }
+
+    .section-eight-icon-row {
+        margin-bottom: 1vh;
+    }
+
+    .section-eight-content-block {
+        margin-bottom: 1.5vh;
+    }
+
+    .section-eight-text-block {
+        gap: 1.95vh;
+        max-width: 31.3vw;
+    }
+}
+
+@media (min-width: 1200px) and (max-width: 1440px) {
+    .section-eight-technology-icons {
+        width: 22vw;
+        max-width: 280px;
+        height: auto;
+    }
+
+    .section-eight-icon-row {
+        margin-bottom: 0.9vh;
+    }
+
+    .section-eight-content-block {
+        margin-bottom: 1.4vh;
+    }
+
+    .section-eight-text-block {
+        gap: 1.85vh;
+        max-width: 35vw;
+    }
 }
 
 .section-eight-content-block {
@@ -3389,9 +3835,25 @@ section {
     border: none;
 }
 
-@media (min-width: 1441px) {
+/* Section 8 - Dark Section Responsive */
+@media (min-width: 1920px) {
     .section-eight-dark-section {
         flex: 0 0 40%;
+        padding: 5.9vh 2.8vw;
+    }
+}
+
+@media (min-width: 1441px) and (max-width: 1919px) {
+    .section-eight-dark-section {
+        flex: 0 0 40%;
+        padding: 5.9vh 2.8vw;
+    }
+}
+
+@media (min-width: 1200px) and (max-width: 1440px) {
+    .section-eight-dark-section {
+        flex: 0 0 40%;
+        padding: 5.5vh 2.5vw;
     }
 }
 
@@ -3442,6 +3904,100 @@ section {
     margin: 0;
     line-height: 1.2;
     font-family: 'Montserrat';
+}
+
+/* Section 8 - Forest Logo Responsive */
+@media (min-width: 1920px) {
+    .section-eight-forest-logo {
+        width: 5vw;
+        max-width: 90px;
+        height: auto;
+    }
+
+    .section-eight-forest-logo-wrapper {
+        margin-bottom: 4.9vh;
+        margin-top: 2vh;
+        gap: 1.5vh;
+    }
+
+    .section-eight-forest-logo-title {
+        font-size: clamp(16px, 1.25vw, 20px);
+        margin-right: 4.5vw;
+    }
+
+    .section-eight-forest-logo-subtitle {
+        font-size: clamp(14px, 1.1vw, 18px);
+    }
+
+    .section-eight-forest-description {
+        margin-top: -2vh;
+    }
+
+    .section-eight-forest-text {
+        font-size: clamp(16px, 1.25vw, 20px);
+    }
+}
+
+@media (min-width: 1441px) and (max-width: 1919px) {
+    .section-eight-forest-logo {
+        width: 5vw;
+        max-width: 72px;
+        height: auto;
+    }
+
+    .section-eight-forest-logo-wrapper {
+        margin-bottom: 4.9vh;
+        margin-top: 2vh;
+        gap: 1.5vh;
+    }
+
+    .section-eight-forest-logo-title {
+        font-size: clamp(16px, 1.25vw, 18px);
+        margin-right: 4.5vw;
+    }
+
+    .section-eight-forest-logo-subtitle {
+        font-size: clamp(14px, 1.1vw, 16px);
+    }
+
+    .section-eight-forest-description {
+        margin-top: -2vh;
+    }
+
+    .section-eight-forest-text {
+        font-size: clamp(16px, 1.25vw, 18px);
+    }
+}
+
+@media (min-width: 1200px) and (max-width: 1440px) {
+    .section-eight-forest-logo {
+        width: 5.5vw;
+        max-width: 65px;
+        height: auto;
+    }
+
+    .section-eight-forest-logo-wrapper {
+        margin-bottom: 4.5vh;
+        margin-top: 1.8vh;
+        gap: 1.4vh;
+    }
+
+    .section-eight-forest-logo-title {
+        font-size: clamp(15px, 1.2vw, 17px);
+        margin-right: 4vw;
+    }
+
+    .section-eight-forest-logo-subtitle {
+        font-size: clamp(13px, 1vw, 15px);
+    }
+
+    .section-eight-forest-description {
+        margin-top: -1.8vh;
+    }
+
+    .section-eight-forest-text {
+        font-size: clamp(15px, 1.2vw, 17px);
+    }
 }
 
 .section-eight-forest-description {
