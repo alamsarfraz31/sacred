@@ -1725,9 +1725,10 @@
   }
 
   .slideImage {
-    width: 68%;
+    width: 75%;
     height: 68%;
     margin-top: 4rem;
+    margin-left: 8rem;
   }
 
   .slideIcon {
@@ -1764,6 +1765,10 @@
     margin-top: -1rem;
   }
 
+  .sec7Left {
+    margin-left: -10rem;
+  }
+
   .sec7Logo{
     max-width: 50%;
   }
@@ -1782,7 +1787,7 @@
 
   .sec7Para {
 
-    font-size: 16px;
+    font-size: 14px;
   }
 
 }
@@ -1845,6 +1850,7 @@
     width: 68%;
     height: 68%;
     margin-top: 4rem;
+    margin-left: 10rem;
   }
 
   .slideIcon {
@@ -1879,6 +1885,10 @@
 
   .recognizedCarouselNavigation {
     margin-top: -1rem;
+  }
+
+  .sec7Left {
+    margin-left: -10rem;
   }
 
   .sec7Logo{

@@ -1254,6 +1254,7 @@
 
   .teamHeading {
     margin-bottom: 0px;
+    margin-top: -2rem;
   }
 
   .cardsRow {
@@ -1276,7 +1277,8 @@
   }
 
   .cardText {
-    font-size: 16px;
+    font-size: 14px;
+    line-height: 1.2rem;
   }
 
   .iconWrap {
@@ -1354,6 +1356,7 @@
 
   .teamHeading {
     margin-bottom: 0px;
+    margin-top: -2rem;
   }
 
   .cardsRow {
@@ -1376,7 +1379,8 @@
   }
 
   .cardText {
-    font-size: 18px;
+    font-size: 14px;
+    line-height: 1.3rem;
   }
 
   .iconWrap {

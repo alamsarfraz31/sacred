@@ -1484,10 +1484,11 @@
   }
 
   .cableTopImage {
-    width: 80%;
+    margin-top: 10rem;
+    width: 70%;
   }
   .cableBottomImage {
-    width:80%;
+    width:70%;
   }
 
   .section3Left {

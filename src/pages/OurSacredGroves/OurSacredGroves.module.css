@@ -1071,7 +1071,7 @@
   .continuumItem {
     margin-bottom: -1rem;
     font-size: 18px;
-    line-height: 90%;
+    line-height: 105%;
   }
 
   .advisorSection {
@@ -1092,8 +1092,16 @@
     height: 90%;
   }
 
+  .sec7Left {
+    margin-left: -4rem;
+  }
+
   .sec7Heading {
-    font-size: 24px;
+    font-size: 20px;
+  }
+
+  .sec7Para {
+    font-size: 15px;
   }
 }
 
@@ -1138,7 +1146,7 @@
   .continuumItem {
     margin-bottom: -1rem;
     font-size: 18px;
-    line-height: 90%;
+    line-height: 110%;
   }
 
   .advisorSection {

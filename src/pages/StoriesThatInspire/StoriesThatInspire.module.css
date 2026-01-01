@@ -1197,7 +1197,7 @@
 @media (min-width: 1200px) and (max-width: 1440px) {
 
   .heroSection{
-    height: 120vh;
+    height: 100vh;
   }
 
   .heroText {
@@ -1213,3 +1213,24 @@
     left: 7rem;
   }
 }
+
+@media (min-width: 1441px) and (max-width: 1700px) {
+
+  .heroSection{
+    height: 105vh;
+  }
+
+  .heroText {
+    font-size: 38px;
+  }
+
+  .aboutCenterImage {
+    width: 90%;
+    margin-left: -20rem;
+  }
+
+  .aboutLeftLogo {
+    left: 7rem;
+  }
+}
+
