@@ -1326,7 +1326,7 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  padding: 0 120px;
+  padding: 0 20px;
 }
 
 .sec7Left {
@@ -2487,6 +2487,15 @@
     font-size: 20px;
   }
 
+  .sec7Content {
+    padding: 0 3rem;
+  }
+
+  .sec7Left { 
+    width: 25%;
+    margin-left: 0rem;
+  }
+
 
 }
 
@@ -2686,6 +2695,15 @@
 
   .recognizedCarouselNavigation {
     margin-top: -3rem;
+  }
+
+  .sec7Content {
+    padding: 0 3rem;
+  }
+
+  .sec7Left { 
+    width: 40%;
+    margin-left: 0rem;
   }
 
 

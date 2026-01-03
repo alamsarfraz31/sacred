@@ -5,7 +5,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { SEO } from '@/components/common/SEO'
-import { Loading } from '@/components/common/Loading/Loading'
 import { AlignedWithUNSDGs } from '@/components/common/CommonSections'
 import { fetchDocBySlug, fetchCategories, fetchAllDocs } from '@/utils/knowledgeBaseApi'
 import type { KnowledgeBaseCategoryType, KnowledgeBaseDoc } from '@/utils/knowledgeBaseApi'
@@ -142,11 +141,7 @@ export const KnowledgeBaseDetail = () => {
     return <img src={group1Icon} alt={categoryName} />
   }
 
-  if (loading) {
-    return <Loading />
-  }
-
-  if (!doc) {
+  if (!loading && !doc) {
     return (
       <div className={styles.errorContainer}>
         <h1>Article not found</h1>
@@ -158,15 +153,15 @@ export const KnowledgeBaseDetail = () => {
   }
 
   // Get current category
-  const currentCategory = allCategories.find((cat) => 
+  const currentCategory = doc ? allCategories.find((cat) => 
     doc.doc_category && doc.doc_category.includes(cat.id)
-  )
+  ) : null
 
   return (
     <>
       <SEO
-        title={`${doc.title.rendered} - Sacred Groves Knowledge Centre`}
-        description={doc.excerpt.rendered.replace(/<[^>]*>/g, '').substring(0, 160)}
+        title={doc ? `${doc.title.rendered} - Sacred Groves Knowledge Centre` : 'Knowledge Centre - Sacred Groves'}
+        description={doc ? doc.excerpt.rendered.replace(/<[^>]*>/g, '').substring(0, 160) : 'Knowledge Centre'}
       />
       <div className={styles.detailPageContainer}>
         {/* Header Section */}
@@ -270,7 +265,7 @@ export const KnowledgeBaseDetail = () => {
             {/* Sidebar */}
             <div className={styles.sidebar}>
               <div className={styles.sidebarSection}>
-                {allCategories.map((cat) => {
+                {allCategories.filter(cat => cat.count > 0).map((cat) => {
                   const isActive = currentCategory?.id === cat.id
                   const categorySlug = cat.slug || cat.name.toLowerCase().replace(/\s+/g, '-')
                   return (
@@ -288,7 +283,7 @@ export const KnowledgeBaseDetail = () => {
               </div>
               
               {/* Related Articles in Sidebar */}
-              {relatedDocs.length > 0 && (
+              {relatedDocs.length > 0 && doc && (
                 <div className={styles.relatedSection}>
                   <h3 className={styles.relatedTitle}>Related Articles</h3>
                   <div className={styles.relatedList}>
@@ -314,40 +309,55 @@ export const KnowledgeBaseDetail = () => {
 
             {/* Main Content */}
             <div className={styles.mainContent}>
-              <h1 className={styles.articleTitle}>{doc.title.rendered}</h1>
-              
-              {/* Article Content */}
-              <div 
-                className={styles.articleContent}
-                dangerouslySetInnerHTML={{ __html: doc.content.rendered }}
-              />
-
-              {/* Update Date */}
-              {doc.modified && (
-                <div className={styles.updateDate}>
-                  Updated on {new Date(doc.modified).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  })}
+              {loading ? (
+                <div className={styles.loadingContainer}>
+                  <div className={styles.loaderWrapper}>
+                    <img 
+                      src="/assets/img/elephantgif.gif" 
+                      className={styles.elephantGif} 
+                      alt="Loading..." 
+                    />
+                    <p className={styles.loadingText}>Please wait...</p>
+                  </div>
                 </div>
-              )}
+              ) : doc ? (
+                <>
+                  <h1 className={styles.articleTitle}>{doc.title.rendered}</h1>
+                  
+                  {/* Article Content */}
+                  <div 
+                    className={styles.articleContent}
+                    dangerouslySetInnerHTML={{ __html: doc.content.rendered }}
+                  />
 
-              {/* Navigation */}
-              <div className={styles.navigation}>
-                {prevDoc && (
-                  <Link to={`/knowledgebase/docs/${prevDoc.slug}`} className={styles.navLink}>
-                    <span className={styles.navArrow}>←</span>
-                    <span>{prevDoc.title.rendered}</span>
-                  </Link>
-                )}
-                {nextDoc && (
-                  <Link to={`/knowledgebase/docs/${nextDoc.slug}`} className={`${styles.navLink} ${styles.navLinkRight}`}>
-                    <span>{nextDoc.title.rendered}</span>
-                    <span className={styles.navArrow}>→</span>
-                  </Link>
-                )}
-              </div>
+                  {/* Update Date */}
+                  {doc.modified && (
+                    <div className={styles.updateDate}>
+                      Updated on {new Date(doc.modified).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                      })}
+                    </div>
+                  )}
+
+                  {/* Navigation */}
+                  <div className={styles.navigation}>
+                    {prevDoc && (
+                      <Link to={`/knowledgebase/docs/${prevDoc.slug}`} className={styles.navLink}>
+                        <span className={styles.navArrow}>←</span>
+                        <span>{prevDoc.title.rendered}</span>
+                      </Link>
+                    )}
+                    {nextDoc && (
+                      <Link to={`/knowledgebase/docs/${nextDoc.slug}`} className={`${styles.navLink} ${styles.navLinkRight}`}>
+                        <span>{nextDoc.title.rendered}</span>
+                        <span className={styles.navArrow}>→</span>
+                      </Link>
+                    )}
+                  </div>
+                </>
+              ) : null}
             </div>
           </div>
         )}

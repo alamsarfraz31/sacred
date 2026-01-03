@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { SEO } from '@/components/common/SEO'
 import { AlignedWithUNSDGs } from '@/components/common/CommonSections'
 import styles from './MediaCentre.module.css'
@@ -15,23 +15,32 @@ import videCoedLeft from '@/assets/video_coed_left.svg'
 import videCoedRight from '@/assets/vide_coed_right.svg'
 import crVideo from '@/assets/OS.mov'
 import playIcon from '@/assets/play.svg'
+import { fetchMediaCenter, type MediaCenterArticle } from '@/utils/api'
 
 interface MediaCard {
   id: number
   title: string
   source: string
   date: string
-  imageId: number
+  image: string
+  sourceLogo: string
+  sourceLink: string
 }
 
 export const MediaCentre: React.FC = () => {
+  const [mediaCards, setMediaCards] = useState<MediaCard[]>([])
+  const [loading, setLoading] = useState<boolean>(true)
+  const [error, setError] = useState<string | null>(null)
   const [visibleRows, setVisibleRows] = useState(1) // Start with 1 page (3 rows)
   const [searchQuery, setSearchQuery] = useState('')
   const [isSearchOpen, setIsSearchOpen] = useState(false)
-  const [selectedTag, setSelectedTag] = useState('All tags')
   const [selectedFilter, setSelectedFilter] = useState('Most recent')
   const [isVideoPlaying, setIsVideoPlaying] = useState<boolean>(false)
   const videoRef = useRef<HTMLVideoElement>(null)
+
+  // Local state for filters (not applied until search button is clicked)
+  const [localSearchQuery, setLocalSearchQuery] = useState('')
+  const [localSelectedFilter, setLocalSelectedFilter] = useState('Most recent')
 
   // Array of story icons
   const storyIcons = [storyIcon1, storyIcon2, storyIcon3, storyIcon4, storyIcon5, storyIcon6, storyIcon7]
@@ -41,35 +50,95 @@ export const MediaCentre: React.FC = () => {
     return storyIcons[(cardId - 1) % 7]
   }
 
-  // Mock data for media articles based on Figma screenshots
-  const mockMediaCards: MediaCard[] = [
-    { id: 1, title: 'Sacred Groves CIC in talks for 10-year investment for restoration of forest lands near Kaziranga', source: 'THE ECONOMIC TIMES', date: 'Aug 14 2021', imageId: 301 },
-    { id: 2, title: 'What now for climate change?', source: 'DWF Group', date: 'Jul 17 2020', imageId: 302 },
-    { id: 3, title: 'We are proud to officially be a part of the initiative as a guardian and support its innovative sustainability goals.', source: 'Revemax', date: 'Aug 14 2021', imageId: 303 },
-    { id: 4, title: 'Dentsu MENA Partners with Sacred Groves to Turn E-waste into Flourishing Forests', source: 'NORTHLADDER Communicate', date: '16 Nov 2022', imageId: 304 },
-    { id: 5, title: "Meet the Indian couple saving Wales' ancient woodlands", source: 'Nation Cymru', date: 'Mar 29 2022', imageId: 305 },
-    { id: 6, title: "This Dubai couple is buying forests around the world. Here's why", source: 'Khaleej Times', date: 'Mar 13 2022', imageId: 306 },
-    { id: 7, title: 'DSA is now officially a proud Guardian of many a Sacred Grove Cluster.', source: 'linkedin', date: 'Sep 7 2021', imageId: 307 },
-    { id: 8, title: 'Sacred groves Appoints merkle for performance media Brief', source: 'Campaignme', date: 'Oct 3 2021', imageId: 308 },
-    { id: 9, title: 'Movius Corp', source: 'Movius Corp', date: 'Feb 24 2022', imageId: 309 },
-    { id: 10, title: "Save the planet on Valentine's Day with Eco-friendly gift Sacred Groves", source: 'THE UAE NEWS', date: 'Feb 13 2022', imageId: 310 },
-    { id: 11, title: 'Sacred Groves Expands Conservation Efforts Across Three Continents', source: 'Environmental News Network', date: 'Jan 15 2023', imageId: 311 },
-    { id: 12, title: 'New Technology Helps Track Forest Restoration Progress in Real-Time', source: 'Tech for Good', date: 'Dec 8 2022', imageId: 312 },
-    { id: 13, title: 'Community-Led Conservation Model Gains International Recognition', source: 'Conservation Today', date: 'Nov 22 2022', imageId: 313 },
-    { id: 14, title: 'Sacred Groves Partners with Universities for Research Initiatives', source: 'Academic Press', date: 'Oct 18 2022', imageId: 314 },
-    { id: 15, title: 'Blockchain Technology Ensures Transparency in Conservation Funding', source: 'Crypto News', date: 'Sep 12 2022', imageId: 315 },
-    { id: 16, title: 'Wildlife Corridors Restored Through Strategic Land Acquisition', source: 'Wildlife Conservation', date: 'Aug 5 2022', imageId: 316 },
-    { id: 17, title: 'Indigenous Communities Collaborate on Habitat Protection', source: 'Indigenous Rights', date: 'Jul 20 2022', imageId: 317 },
-    { id: 18, title: 'Carbon Sequestration Project Exceeds Targets in First Year', source: 'Climate Action', date: 'Jun 14 2022', imageId: 318 },
-    { id: 19, title: 'Corporate Partnerships Drive Sustainable Business Practices', source: 'Business Green', date: 'May 9 2022', imageId: 319 },
-    { id: 20, title: 'Youth Engagement Program Inspires Next Generation of Conservationists', source: 'Education Weekly', date: 'Apr 3 2022', imageId: 320 },
-  ]
+  // Fetch media center data from API
+  useEffect(() => {
+    const loadMediaCenter = async () => {
+      try {
+        setLoading(true)
+        setError(null)
+        const articles = await fetchMediaCenter()
+        
+        // Transform API data to MediaCard format
+        const transformedCards: MediaCard[] = articles.map((article: MediaCenterArticle) => ({
+          id: article.id,
+          title: article.news_title,
+          source: article.source_name,
+          date: article.date,
+          image: article.image,
+          sourceLogo: article.source_logo,
+          sourceLink: article.source_link,
+        }))
+        
+        setMediaCards(transformedCards)
+      } catch (err) {
+        console.error('Error loading media center:', err)
+        setError('Failed to load media center articles. Please try again later.')
+        setMediaCards([])
+      } finally {
+        setLoading(false)
+      }
+    }
+    
+    loadMediaCenter()
+  }, [])
 
-  // Filter media cards based on search query
-  const filteredCards = mockMediaCards.filter(card =>
-    card.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    card.source.toLowerCase().includes(searchQuery.toLowerCase())
-  )
+  // Filter and sort media cards
+  const filteredCards = React.useMemo(() => {
+    let filtered = mediaCards.filter(card =>
+      card.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      card.source.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+
+    // Apply sorting
+    switch (selectedFilter) {
+      case 'Most recent':
+        filtered = [...filtered].sort((a, b) => {
+          const dateA = new Date(a.date).getTime()
+          const dateB = new Date(b.date).getTime()
+          return dateB - dateA // Descending (newest first)
+        })
+        break
+      case 'Oldest first':
+        filtered = [...filtered].sort((a, b) => {
+          const dateA = new Date(a.date).getTime()
+          const dateB = new Date(b.date).getTime()
+          return dateA - dateB // Ascending (oldest first)
+        })
+        break
+      case 'A-Z':
+        filtered = [...filtered].sort((a, b) => 
+          a.title.localeCompare(b.title)
+        )
+        break
+      case 'Z-A':
+        filtered = [...filtered].sort((a, b) => 
+          b.title.localeCompare(a.title)
+        )
+        break
+    }
+
+    return filtered
+  }, [mediaCards, searchQuery, selectedFilter])
+
+  // Check if any filters are active
+  const hasActiveFilters = searchQuery.trim() !== '' || selectedFilter !== 'Most recent'
+
+  // Handle search submit - apply filters (keep modal open)
+  const handleSearch = () => {
+    setSearchQuery(localSearchQuery)
+    setSelectedFilter(localSelectedFilter)
+    setVisibleRows(1)
+    // Don't close the modal - let user close it manually with × button
+  }
+
+  // Handle clear filters
+  const handleClearFilters = () => {
+    setLocalSearchQuery('')
+    setLocalSelectedFilter('Most recent')
+    setSearchQuery('')
+    setSelectedFilter('Most recent')
+    setVisibleRows(1)
+  }
 
   // Cards per page: 4 columns × 3 rows = 12 cards
   const cardsPerPage = 12
@@ -91,6 +160,19 @@ export const MediaCentre: React.FC = () => {
   }
 
   const hasMore = visibleRows < totalPages && visibleCards.length < filteredCards.length
+
+  // Reset visible rows when search query or filter changes
+  useEffect(() => {
+    setVisibleRows(1)
+  }, [searchQuery, selectedFilter])
+
+  // Sync local state with applied state when modal opens
+  useEffect(() => {
+    if (isSearchOpen) {
+      setLocalSearchQuery(searchQuery)
+      setLocalSelectedFilter(selectedFilter)
+    }
+  }, [isSearchOpen, searchQuery, selectedFilter])
 
   // Toggle video play/pause
   const handleToggleVideo = () => {
@@ -171,93 +253,147 @@ export const MediaCentre: React.FC = () => {
                 ×
               </button>
 
-              {/* Search our journal */}
-              <div className={styles.searchColumn}>
-                <label className={styles.searchLabel}>Search our journal</label>
-                <div className={styles.searchInputWrapper}>
-                  <input
-                    type="text"
-                    placeholder="Search by keyword"
-                    value={searchQuery}
-                    onChange={(e) => {
-                      setSearchQuery(e.target.value)
-                      setVisibleRows(1)
+              <div className={styles.searchBubbleRow}>
+                {/* Search our journal */}
+                <div className={styles.searchColumn}>
+                  <label className={styles.searchLabel}>Search our journal</label>
+                  <div className={styles.searchInputWrapper}>
+                    <input
+                      type="text"
+                      placeholder="Search by keyword"
+                      value={localSearchQuery}
+                      onChange={(e) => {
+                        setLocalSearchQuery(e.target.value)
+                      }}
+                      onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                        if (e.key === 'Enter') {
+                          handleSearch()
+                        }
+                      }}
+                      className={styles.searchInput}
+                    />
+                    <img src={searchIcon} alt="" className={styles.searchInputIcon} />
+                  </div>
+                </div>
+
+                {/* Filter by */}
+                <div className={styles.searchColumn}>
+                  <label className={styles.searchLabel}>Filter by</label>
+                  <select
+                    className={styles.searchSelect}
+                    value={localSelectedFilter}
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                      setLocalSelectedFilter(e.target.value)
                     }}
-                    className={styles.searchInput}
-                  />
-                  <img src={searchIcon} alt="" className={styles.searchInputIcon} />
+                  >
+                    <option value="Most recent">Most recent</option>
+                    <option value="Oldest first">Oldest first</option>
+                    <option value="A-Z">A-Z</option>
+                    <option value="Z-A">Z-A</option>
+                  </select>
+                </div>
+
+                {/* Search Button and Clear Button Row */}
+                <div className={styles.searchButtonsRow}>
+                  <button
+                    className={styles.searchSubmitButton}
+                    onClick={handleSearch}
+                    aria-label="Search"
+                  >
+                    <img src={searchIcon} alt="Search" className={styles.searchSubmitIcon} />
+                  </button>
+                  {/* Clear Filters Button - Icon only, same row */}
+                  {hasActiveFilters && (
+                    <button
+                      className={styles.clearFiltersButtonIcon}
+                      onClick={handleClearFilters}
+                      aria-label="Clear filters"
+                    >
+                      ×
+                    </button>
+                  )}
                 </div>
               </div>
-
-              {/* Tags */}
-              <div className={styles.searchColumn}>
-                <label className={styles.searchLabel}>Tags</label>
-                <select
-                  className={styles.searchSelect}
-                  value={selectedTag}
-                  onChange={(e) => setSelectedTag(e.target.value)}
-                >
-                  <option value="All tags">All tags</option>
-                  <option value="Conservation">Conservation</option>
-                  <option value="Wildlife">Wildlife</option>
-                  <option value="Climate">Climate</option>
-                  <option value="Community">Community</option>
-                </select>
-              </div>
-
-              {/* Filter by */}
-              <div className={styles.searchColumn}>
-                <label className={styles.searchLabel}>Filter by</label>
-                <select
-                  className={styles.searchSelect}
-                  value={selectedFilter}
-                  onChange={(e) => setSelectedFilter(e.target.value)}
-                >
-                  <option value="Most recent">Most recent</option>
-                  <option value="Oldest first">Oldest first</option>
-                  <option value="A-Z">A-Z</option>
-                  <option value="Z-A">Z-A</option>
-                </select>
-              </div>
-
-              {/* Search Button */}
-              <button
-                className={styles.searchSubmitButton}
-                onClick={() => setIsSearchOpen(false)}
-                aria-label="Search"
-              >
-                <img src={searchIcon} alt="Search" className={styles.searchSubmitIcon} />
-              </button>
             </div>
           )}
 
-          <div className={styles.mediaGrid}>
-            {visibleCards.map((card) => (
-              <div key={card.id} className={styles.mediaCard}>
-                <div className={styles.mediaCardImageWrapper}>
-                  <img
-                    src={`https://picsum.photos/204/257?random=${card.imageId}`}
-                    alt={card.title}
-                    className={styles.mediaCardImage}
-                  />
-                </div>
-                <div className={styles.mediaCardContent}>
-                  <div className={styles.mediaCardSource}>{card.source}</div>
-                  <div className={styles.mediaCardTitleWrapper}>
-                    <h3 className={styles.mediaCardTitle}>{card.title}</h3>
-                    <div className={styles.mediaCardIcon}>
-                      <img
-                        src={getStoryIcon(card.id)}
-                        alt="Media icon"
-                        className={styles.mediaCardIconImage}
-                      />
-                    </div>
+          {/* Loading State - Inline in listing section */}
+          {loading && (
+            <div className={styles.inlineLoader}>
+              <img 
+                src="/assets/img/elephantgif.gif" 
+                alt="Loading..." 
+                className={styles.loaderGif}
+              />
+            </div>
+          )}
+
+          {error && (
+            <div style={{ textAlign: 'center', padding: '2rem', color: 'red' }}>
+              <p>{error}</p>
+            </div>
+          )}
+
+          {!loading && !error && visibleCards.length === 0 && (
+            <div style={{ textAlign: 'center', padding: '2rem' }}>
+              <p>No media articles found. Try adjusting your search.</p>
+            </div>
+          )}
+
+          {!loading && !error && visibleCards.length > 0 && (
+            <div className={styles.mediaGrid}>
+              {visibleCards.map((card) => (
+                <a
+                  key={card.id}
+                  href={card.sourceLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.mediaCard}
+                >
+                  <div className={styles.mediaCardImageWrapper}>
+                    <img
+                      src={card.image}
+                      alt={card.title}
+                      className={styles.mediaCardImage}
+                      onError={(e) => {
+                        // Fallback to placeholder if image fails to load
+                        const target = e.target as HTMLImageElement
+                        target.src = `https://picsum.photos/204/257?random=${card.id}`
+                      }}
+                    />
                   </div>
-                  <div className={styles.mediaCardDate}>{card.date}</div>
-                </div>
-              </div>
-            ))}
-          </div>
+                  <div className={styles.mediaCardContent}>
+                    <div className={styles.mediaCardSourceWrapper}>
+                      {card.sourceLogo && (
+                        <img
+                          src={card.sourceLogo}
+                          alt={card.source}
+                          className={styles.mediaCardSourceLogo}
+                          onError={(e) => {
+                            // Hide logo if it fails to load
+                            const target = e.target as HTMLImageElement
+                            target.style.display = 'none'
+                          }}
+                        />
+                      )}
+                      <div className={styles.mediaCardSource}>{card.source}</div>
+                    </div>
+                    <div className={styles.mediaCardTitleWrapper}>
+                      <h3 className={styles.mediaCardTitle}>{card.title}</h3>
+                      <div className={styles.mediaCardIcon}>
+                        <img
+                          src={getStoryIcon(card.id)}
+                          alt="Media icon"
+                          className={styles.mediaCardIconImage}
+                        />
+                      </div>
+                    </div>
+                    <div className={styles.mediaCardDate}>{card.date}</div>
+                  </div>
+                </a>
+              ))}
+            </div>
+          )}
 
           {/* Find Out More Button - Show when there are more cards to load */}
           {hasMore && (

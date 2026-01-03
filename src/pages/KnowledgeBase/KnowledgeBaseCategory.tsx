@@ -5,7 +5,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { SEO } from '@/components/common/SEO'
-import { Loading } from '@/components/common/Loading/Loading'
 import { AlignedWithUNSDGs } from '@/components/common/CommonSections'
 import { fetchDocsByCategorySlug, fetchCategories, fetchAllDocs } from '@/utils/knowledgeBaseApi'
 import type { KnowledgeBaseCategoryType, KnowledgeBaseDoc } from '@/utils/knowledgeBaseApi'
@@ -119,11 +118,7 @@ export const KnowledgeBaseCategory = () => {
     return <img src={group1Icon} alt={categoryName} />
   }
 
-  if (loading) {
-    return <Loading />
-  }
-
-  if (!category) {
+  if (!loading && !category) {
     return (
       <div className={styles.errorContainer}>
         <h1>Category not found</h1>
@@ -137,8 +132,8 @@ export const KnowledgeBaseCategory = () => {
   return (
     <>
       <SEO
-        title={`${category.name} - Sacred Groves Knowledge Centre`}
-        description={category.description || `Browse articles in ${category.name}`}
+        title={category ? `${category.name} - Sacred Groves Knowledge Centre` : 'Knowledge Centre - Sacred Groves'}
+        description={category?.description || 'Browse articles in Knowledge Centre'}
       />
       <div className={styles.categoryPageContainer}>
         {/* Header Section */}
@@ -242,8 +237,8 @@ export const KnowledgeBaseCategory = () => {
             {/* Sidebar */}
             <div className={styles.sidebar}>
               <div className={styles.sidebarSection}>
-                {allCategories.map((cat) => {
-                  const isActive = cat.id === category.id
+                {allCategories.filter(cat => cat.count > 0).map((cat) => {
+                  const isActive = category && cat.id === category.id
                   const categorySlug = cat.slug || cat.name.toLowerCase().replace(/\s+/g, '-')
                   return (
                     <Link
@@ -262,26 +257,41 @@ export const KnowledgeBaseCategory = () => {
 
             {/* Main Content */}
             <div className={styles.mainContent}>
-              <h2 className={styles.categoryTitle}>{category.name}</h2>
-              <div className={styles.docsList}>
-                {docs.length === 0 ? (
-                  <p className={styles.noDocs}>No articles found in this category.</p>
-                ) : (
-                  docs.map((doc) => (
-                    <Link
-                      key={doc.id}
-                      to={`/knowledgebase/docs/${doc.slug}`}
-                      className={styles.docItem}
-                    >
-                      <svg className={styles.docIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                        <polyline points="14 2 14 8 20 8" />
-                      </svg>
-                      <span>{doc.title.rendered}</span>
-                    </Link>
-                  ))
-                )}
-              </div>
+              {loading ? (
+                <div className={styles.loadingContainer}>
+                  <div className={styles.loaderWrapper}>
+                    <img 
+                      src="/assets/img/elephantgif.gif" 
+                      className={styles.elephantGif} 
+                      alt="Loading..." 
+                    />
+                    <p className={styles.loadingText}>Please wait...</p>
+                  </div>
+                </div>
+              ) : category ? (
+                <>
+                  <h2 className={styles.categoryTitle}>{category.name}</h2>
+                  <div className={styles.docsList}>
+                    {docs.length === 0 ? (
+                      <p className={styles.noDocs}>No articles found in this category.</p>
+                    ) : (
+                      docs.map((doc) => (
+                        <Link
+                          key={doc.id}
+                          to={`/knowledgebase/docs/${doc.slug}`}
+                          className={styles.docItem}
+                        >
+                          <svg className={styles.docIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                            <polyline points="14 2 14 8 20 8" />
+                          </svg>
+                          <span>{doc.title.rendered}</span>
+                        </Link>
+                      ))
+                    )}
+                  </div>
+                </>
+              ) : null}
             </div>
           </div>
         )}

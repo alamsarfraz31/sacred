@@ -9,9 +9,10 @@ import { PAGE_SEO, BREADCRUMBS, FAQ_DATA } from '@/constants'
 import { RecognizedGlobally } from '../RecognizedGlobally/RecognizedGlobally'
 import { FadeInSection } from '@/components/common/FadeInSection/FadeInSection'
 import { useTypewriter } from '@/hooks/useTypewriter'
+import earth_video from '@/assets/earth.mp4'
 import styles from './Home.module.css'
 // import earth_video from '@/assets/earth.mp4'
-import earth_image from '@/assets/earth.png'
+// import earth_image from '@/assets/earth.png'
 import Alexandrelogo from '@/assets/Alexandrelogo.svg'
 import guardian_button_arrow from '@/assets/gaurdian_button_arrow.svg'
 import guardian_bg_video from '@/assets/guardian_bg_video.mp4'
@@ -176,7 +177,7 @@ export const Home: React.FC = () => {
         <section className={styles.heroSection}>
           {/* Background Earth Video */}
           <div className={styles.earthBackground}>
-            {/* <video
+            <video
               src={earth_video}
               autoPlay
               loop
@@ -184,8 +185,8 @@ export const Home: React.FC = () => {
               playsInline
               preload="auto"
               className={styles.earthVideo}
-            /> */}
-            <img src={earth_image} alt="Earth Background" className={styles.earthImageBg} />
+            />
+            {/* <img src={earth_image} alt="Earth Background" className={styles.earthImageBg} /> */}
             <img src={mobileHeroBg} alt="Earth Mobile" className={styles.mobileEarthImage} />
           </div>
 

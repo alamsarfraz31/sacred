@@ -33,9 +33,11 @@ import crVideo from '@/assets/OS.mov'
 import playIcon from '@/assets/play.svg'
 import { AlignedWithUNSDGs } from '@/components/common/CommonSections/CommonSections'
 import { ImageModal } from '@/components/common/ImageModal'
+import { fetchForestImages } from '@/utils/api'
+import type { ForestImage } from '@/utils/api'
 
-// Slot widths based on Figma design - vertical stripes in gallery bar
-const SLOT_WIDTHS = [12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42]
+// Slot widths based on Figma design - vertical stripes in gallery bar (doubled widths)
+const SLOT_WIDTHS = [36, 42, 48, 54, 60, 66, 72, 78, 84, 90, 96, 102, 108, 114, 120, 126]
 
 export const CoedRhyal: React.FC = () => {
     // Story icons array
@@ -44,8 +46,8 @@ export const CoedRhyal: React.FC = () => {
     // Generate random icons for each card
     const getRandomIcon = () => storyIcons[Math.floor(Math.random() * 5)]
 
-    // Carousel cards - only 5 cards, no repetition
-    const carouselCards = [
+    // Fallback static images
+    const fallbackCarouselCards = [
         { image: sec5CarouselCard1, text: 'Acorns', icon: getRandomIcon() },
         { image: sec5CarouselCard2, text: 'Veteran Oak', icon: getRandomIcon() },
         { image: sec5CarouselCard3, text: 'Ferns growing on oak', icon: getRandomIcon() },
@@ -53,34 +55,204 @@ export const CoedRhyal: React.FC = () => {
         { image: sec5CarouselCard5, text: 'Yellow Fairy Cups fungus', icon: getRandomIcon() }
     ]
 
-    // Use the same 5 carousel images for the gallery
-    const GALLERY_IMAGES = carouselCards.map(card => card.image)
+    // State for dynamic images
+    const [imagesByYear, setImagesByYear] = useState<Record<number, ForestImage[]>>({})
+    const [heroImages, setHeroImages] = useState<string[]>([])
+    const [heroImagesData, setHeroImagesData] = useState<Array<{ url: string; name: string }>>([]) // Store image URLs with names
+    
+    // Carousel cards - dynamic based on selected year
+    const [carouselCards, setCarouselCards] = useState(fallbackCarouselCards)
+    
+    // Create a mapping of all gallery images with their names (for both dynamic and fallback)
+    const GALLERY_IMAGES_MAP = React.useMemo(() => {
+        const map = new Map<string, string>()
+        
+        // Add dynamic images
+        heroImagesData.forEach(img => {
+            map.set(img.url, img.name)
+        })
+        
+        // Add fallback images
+        fallbackCarouselCards.forEach(card => {
+            map.set(card.image, card.text)
+        })
+        
+        return map
+    }, [heroImagesData])
+    
+    // Use dynamic images for gallery, fallback to static if no images
+    const GALLERY_IMAGES = heroImages.length > 0 ? heroImages : fallbackCarouselCards.map(card => card.image)
 
     // Initialize each slot with a different starting image index
-    const initializeSlotImages = () => {
+    const initializeSlotImages = (images: string[]) => {
         const numSlots = 6
-        const numImages = GALLERY_IMAGES.length
+        const numImages = images.length || 5 // Fallback to 5 if empty
         return Array.from({ length: numSlots }, (_, index) => index % numImages)
     }
 
-    const [slotImages, setSlotImages] = useState<number[]>(initializeSlotImages())
+    const [slotImages, setSlotImages] = useState<number[]>(() => initializeSlotImages(fallbackCarouselCards.map(card => card.image)))
     const [activeYear, setActiveYear] = useState<number>(2025)
-    const [currentSlide, setCurrentSlide] = useState(0) // Carousel state
+    const [currentSlide, setCurrentSlide] = useState(0) // Carousel state - represents which group of 5 we're showing
     const [isVideoPlaying, setIsVideoPlaying] = useState<boolean>(false)
     const videoRef = React.useRef<HTMLVideoElement>(null)
     const carouselContainerRef = React.useRef<HTMLDivElement>(null)
+    const carouselTrackRef = React.useRef<HTMLDivElement>(null)
     const [selectedImage, setSelectedImage] = useState<{ src: string; title: string } | null>(null)
     const [heroBackgroundImage, setHeroBackgroundImage] = useState<string>(coedBg) // Default to initial background
+    const [isHeroImageClicked, setIsHeroImageClicked] = useState<boolean>(false) // Track if user clicked an image
+    const [heroImageName, setHeroImageName] = useState<string>('Coed Rhyal') // Name to show in strip, initially "Coed Rhyal"
 
     const years = [2025, 2024, 2023, 2022, 2021]
 
-    // Carousel navigation logic
+    // Group images by year
+    const groupImagesByYear = (images: ForestImage[]): Record<number, ForestImage[]> => {
+        const grouped: Record<number, ForestImage[]> = {}
+        
+        images.forEach((image) => {
+            try {
+                const date = new Date(image.post_date)
+                const year = date.getFullYear()
+                if (!grouped[year]) {
+                    grouped[year] = []
+                }
+                grouped[year].push(image)
+            } catch (error) {
+                console.error('Error parsing date:', image.post_date, error)
+            }
+        })
+        
+        return grouped
+    }
+
+    // Extract plain text from HTML
+    const extractPlainText = (html: string): string => {
+        if (!html) return ''
+        // Remove HTML tags and decode entities
+        const div = document.createElement('div')
+        div.innerHTML = html
+        return div.textContent || div.innerText || ''
+    }
+
+    // Get random 5 images from all images for hero section
+    const getRandomHeroImages = (images: ForestImage[], count: number = 5): Array<{ url: string; name: string }> => {
+        if (images.length === 0) return []
+        
+        // Sort by date (most recent first)
+        const sorted = [...images].sort((a, b) => {
+            try {
+                return new Date(b.post_date).getTime() - new Date(a.post_date).getTime()
+            } catch {
+                return 0
+            }
+        })
+        
+        // Get first 5 (most recent) or random if we want randomness
+        const recent = sorted.slice(0, Math.min(count, sorted.length))
+        
+        // Shuffle to get random selection
+        const shuffled = [...recent].sort(() => Math.random() - 0.5)
+        return shuffled.slice(0, count).map(img => {
+            // Extract plain text from post_content or post_excerpt
+            const name = extractPlainText(img.post_content || img.post_excerpt || '').trim()
+            return {
+                url: img.guid,
+                name: name || 'Coed Rhyal'
+            }
+        })
+    }
+
+    // Fetch images from CMS
+    useEffect(() => {
+        const loadImages = async () => {
+            try {
+                const images = await fetchForestImages('coed-rhyal')
+                
+                if (images.length > 0) {
+                    const grouped = groupImagesByYear(images)
+                    setImagesByYear(grouped)
+                    
+                    // Set hero images (5 random from recent)
+                    const heroImgsData = getRandomHeroImages(images, 5)
+                    setHeroImagesData(heroImgsData)
+                    setHeroImages(heroImgsData.map(img => img.url))
+                    
+                    // Don't set hero background automatically - wait for user click
+                    // Only set if user hasn't clicked yet and we want to show default
+                } else {
+                    // Use fallback if no images
+                    setHeroImages([])
+                    setHeroImagesData([])
+                }
+            } catch (error) {
+                console.error('Error loading images:', error)
+                setHeroImages([])
+            }
+        }
+        
+        loadImages()
+    }, [])
+
+    // Update carousel cards when year changes
+    useEffect(() => {
+        const yearImages = imagesByYear[activeYear] || []
+        
+        if (yearImages.length > 0) {
+            // Create carousel cards from images for selected year
+            const newCarouselCards = yearImages.slice(0, 10).map((img) => ({
+                image: img.guid,
+                text: img.post_content || img.post_excerpt || 'Coed Rhyal',
+                icon: getRandomIcon()
+            }))
+            
+            setCarouselCards(newCarouselCards)
+            setCurrentSlide(0) // Reset carousel position when year changes
+        } else {
+            // Use fallback if no images for selected year
+            setCarouselCards(fallbackCarouselCards)
+            setCurrentSlide(0)
+        }
+    }, [activeYear, imagesByYear])
+
+    // Update gallery images when hero images change
+    useEffect(() => {
+        if (GALLERY_IMAGES.length > 0) {
+            setSlotImages(initializeSlotImages(GALLERY_IMAGES))
+        }
+    }, [heroImages.length])
+
+    // Constants for carousel
+    const CARDS_PER_VIEW_DESKTOP = 5
+    
+    // Calculate how many groups of 5 we can show
+    const totalGroups = Math.ceil(carouselCards.length / CARDS_PER_VIEW_DESKTOP)
+    const canGoNext = currentSlide < totalGroups - 1
+    const canGoPrev = currentSlide > 0
+
+    // Calculate slide offset - each slide moves by 5 cards (185.88px each + 20px gaps)
+    const getSlideOffset = () => {
+        if (carouselCards.length === 0) return '0px'
+        
+        const cardWidth = 185.88
+        const gap = 20
+        const cardsPerView = 5
+        // Calculate width of 5 cards: 5 cards + 4 gaps between them
+        const slideWidth = (cardWidth * cardsPerView) + (gap * (cardsPerView - 1))
+        
+        // Move by slideWidth * currentSlide
+        return `-${currentSlide * slideWidth}px`
+    }
+
+    // Carousel navigation logic - move by 5 cards (or remaining if less than 5)
     const nextCarousel = () => {
-        setCurrentSlide((prev) => (prev + 1) % carouselCards.length)
+        if (canGoNext) {
+            setCurrentSlide((prev) => Math.min(prev + 1, totalGroups - 1))
+        }
     }
 
     const prevCarousel = () => {
-        setCurrentSlide((prev) => (prev - 1 + carouselCards.length) % carouselCards.length)
+        if (canGoPrev) {
+            setCurrentSlide((prev) => Math.max(prev - 1, 0))
+        }
     }
 
     // Reset slide on resize if needed (optional, but good practice to avoid stuck slides on desktop if switch)
@@ -122,13 +294,46 @@ export const CoedRhyal: React.FC = () => {
         }
     }
 
-    // Handle slot click - set the clicked image as hero background
+    // Normalize URL for comparison (remove query params, trailing slashes, etc.)
+    const normalizeUrl = (url: string): string => {
+        try {
+            const urlObj = new URL(url)
+            return urlObj.origin + urlObj.pathname
+        } catch {
+            // If URL parsing fails, return as is
+            return url.split('?')[0].split('#')[0]
+        }
+    }
+
+    // Handle slot click - set the clicked image as hero background and update name
     const handleSlotClick = (imageIndex: number) => {
-        setHeroBackgroundImage(GALLERY_IMAGES[imageIndex])
+        setIsHeroImageClicked(true)
+        const imageUrl = GALLERY_IMAGES[imageIndex]
+        setHeroBackgroundImage(imageUrl)
+        
+        // Try to find the image name from the mapping
+        // First try exact match
+        let imageName = GALLERY_IMAGES_MAP.get(imageUrl)
+        
+        // If not found, try normalized URL match
+        if (!imageName) {
+            const normalizedUrl = normalizeUrl(imageUrl)
+            for (const [url, name] of GALLERY_IMAGES_MAP.entries()) {
+                if (normalizeUrl(url) === normalizedUrl) {
+                    imageName = name
+                    break
+                }
+            }
+        }
+        
+        // Fallback to 'Coed Rhyal' if still not found
+        setHeroImageName(imageName || 'Coed Rhyal')
     }
 
     // Auto-cycle all slots together every 4 seconds
     useEffect(() => {
+        if (GALLERY_IMAGES.length === 0) return
+        
         const interval = setInterval(() => {
             setSlotImages((prev) => {
                 // Cycle all slots to the next image at the same time
@@ -141,12 +346,12 @@ export const CoedRhyal: React.FC = () => {
         }
     }, [GALLERY_IMAGES.length])
 
-    // Reset carousel scroll position on mount (mobile fix)
+    // Reset carousel scroll position on mount and when carousel changes (mobile fix)
     useEffect(() => {
         if (carouselContainerRef.current) {
             carouselContainerRef.current.scrollLeft = 0
         }
-    }, [])
+    }, [carouselCards])
 
     return (
         <>
@@ -159,12 +364,12 @@ export const CoedRhyal: React.FC = () => {
             />
 
             <div className={styles.pageWrapper}>
-                <section className={styles.heroSection} style={{ backgroundImage: `url(${heroBackgroundImage})` }}>
+                <section className={styles.heroSection} style={{ backgroundImage: `url(${isHeroImageClicked ? heroBackgroundImage : coedBg})` }}>
                     <div className={styles.heroContainer}>
                         {/* Motion Gallery Bar - Bottom aligned */}
                         <div className={styles.galleryBar}>
                             <div className={styles.galleryBarLeft}>
-                                <span className={styles.galleryBarLabel}>Veteran Oak</span>
+                                <span className={styles.galleryBarLabel}>{heroImageName}</span>
                             </div>
                             <div className={styles.galleryBarCenter}>
                                 {slotImages.map((imageIndex, slotIndex) => (
@@ -219,7 +424,7 @@ export const CoedRhyal: React.FC = () => {
                             {/* Right Section - Map */}
                             <div className={styles.section2Right}>
                                 <iframe
-                                    src={`${(import.meta.env.VITE_API_URL || 'https://outshade.sacredgroves.earth').replace(/\/$/, '')}/api/sutra/map/forest?forest_id=UNI_COED_00002&iframe_height=820&iframe_width=708&zoom_start=3`}
+                                    src={`${(import.meta.env.VITE_API_URL || 'https://outshade.sacredgroves.earth').replace(/\/$/, '')}/api/sutra/map/forest?forest_id=UNI_COED_00002&iframe_height=820&iframe_width=708&zoom_start=3&font_size_head=13&font_size_body=9&font_weight_head=600&font_weight_body=400`}
                                     frameBorder="0"
                                     className={styles.section2Map}
                                     allowFullScreen
@@ -363,38 +568,67 @@ export const CoedRhyal: React.FC = () => {
 
                                 {/* Carousel */}
                                 <div className={styles.carouselWrapper}>
-                                    <button className={styles.carouselArrow} onClick={prevCarousel}>
-                                        <img src={sec5CarouselLeftArrow} alt="Previous" />
-                                    </button>
+                                    {canGoPrev && (
+                                        <button className={styles.carouselArrow} onClick={prevCarousel}>
+                                            <img src={sec5CarouselLeftArrow} alt="Previous" />
+                                        </button>
+                                    )}
+                                    {!canGoPrev && <div className={styles.carouselArrowPlaceholder} />}
 
                                     <div className={styles.carouselContainer} ref={carouselContainerRef}>
                                         <div
+                                            ref={carouselTrackRef}
                                             className={styles.carouselTrack}
                                             style={{
-                                                '--slide-offset': `-${currentSlide * 100}%`
+                                                '--slide-offset': getSlideOffset()
                                             } as React.CSSProperties}
                                         >
-                                            {carouselCards.map((card, index) => (
-                                                <div key={index} className={styles.carouselCard}>
+                                            {carouselCards.length > 0 ? (
+                                                carouselCards.map((card, index) => (
+                                                    <div key={index} className={styles.carouselCard}>
+                                                        <img
+                                                            src={card.image}
+                                                            alt={card.text}
+                                                            className={styles.carouselCardImage}
+                                                            onClick={() => setSelectedImage({ src: card.image, title: card.text })}
+                                                            style={{ cursor: 'pointer' }}
+                                                            onError={(e) => {
+                                                                // Fallback to default image on error
+                                                                const target = e.target as HTMLImageElement
+                                                                if (target.src !== sec5CarouselCard1) {
+                                                                    target.src = sec5CarouselCard1
+                                                                }
+                                                            }}
+                                                        />
+                                                        <div className={styles.carouselCardContent}>
+                                                            <p className={styles.carouselCardText}>{card.text}</p>
+                                                            <img src={card.icon} alt="Icon" className={styles.carouselCardIcon} />
+                                                        </div>
+                                                    </div>
+                                                ))
+                                            ) : (
+                                                // Show loading or fallback
+                                                <div className={styles.carouselCard}>
                                                     <img
-                                                        src={card.image}
-                                                        alt={card.text}
+                                                        src={sec5CarouselCard1}
+                                                        alt="Loading"
                                                         className={styles.carouselCardImage}
-                                                        onClick={() => setSelectedImage({ src: card.image, title: card.text })}
-                                                        style={{ cursor: 'pointer' }}
                                                     />
                                                     <div className={styles.carouselCardContent}>
-                                                        <p className={styles.carouselCardText}>{card.text}</p>
-                                                        <img src={card.icon} alt="Icon" className={styles.carouselCardIcon} />
+                                                        <p className={styles.carouselCardText}>Loading...</p>
+                                                        <img src={storyIcon1} alt="Icon" className={styles.carouselCardIcon} />
                                                     </div>
                                                 </div>
-                                            ))}
+                                            )}
                                         </div>
                                     </div>
 
-                                    <button className={styles.carouselArrow} onClick={nextCarousel}>
-                                        <img src={sec5CarouselRightArrow} alt="Next" />
-                                    </button>
+                                    {canGoNext && (
+                                        <button className={styles.carouselArrow} onClick={nextCarousel}>
+                                            <img src={sec5CarouselRightArrow} alt="Next" />
+                                        </button>
+                                    )}
+                                    {!canGoNext && <div className={styles.carouselArrowPlaceholder} />}
                                 </div>
                             </div>
                         </div>

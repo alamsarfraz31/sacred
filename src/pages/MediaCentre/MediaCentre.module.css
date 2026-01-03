@@ -88,12 +88,21 @@
   border-radius: 24px;
   padding: 16px 40px;
   display: flex;
+  flex-direction: column;
   align-items: flex-end;
-  justify-content: center;
-  gap: 40px;
+  justify-content: flex-start;
+  gap: 20px;
   z-index: 100;
   box-sizing: border-box;
   margin: 0 auto 40px auto;
+}
+
+.searchBubbleRow {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 40px;
+  width: 100%;
 }
 
 .searchCloseButton {
@@ -131,8 +140,6 @@
   font-size: 15.88px;
   line-height: 19.16px;
   color: #03303D;
-  text-align: left;
-  margin-left: 8px;
 }
 
 .searchInputWrapper {
@@ -216,6 +223,37 @@
   object-fit: contain;
 }
 
+/* Search Buttons Row */
+.searchButtonsRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+/* Clear Filters Button - Icon only, same row as search */
+.clearFiltersButtonIcon {
+  width: 52px;
+  height: 52px;
+  border-radius: 10px;
+  border: 1px solid #44D09F;
+  background-color: #FFFFFF;
+  color: #03303D;
+  font-size: 24px;
+  font-weight: 700;
+  cursor: pointer !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.clearFiltersButtonIcon:hover {
+  background-color: #44D09F;
+  color: #FFFFFF;
+}
+
 .mediaGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -243,6 +281,7 @@
   cursor: pointer;
   margin: 0 auto;
   padding: 0;
+  color: inherit;
 }
 
 .mediaCard:hover {
@@ -281,6 +320,19 @@
   position: relative;
 }
 
+.mediaCardSourceWrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.mediaCardSourceLogo {
+  max-height: 32px;
+  max-width: 100px;
+  object-fit: contain;
+}
+
 .mediaCardSource {
   font-family: 'Montserrat';
   font-weight: 500;
@@ -288,7 +340,6 @@
   line-height: 130%;
   letter-spacing: 0%;
   color: #03303D;
-  margin-bottom: 8px;
 }
 
 .mediaCardTitleWrapper {
@@ -419,6 +470,27 @@
   height: 20px;
   object-fit: contain;
   filter: brightness(0) invert(1);
+}
+
+/* Loading State - Inline in listing section */
+.inlineLoader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  width: 100%;
+}
+
+.loaderGif {
+  width: 150px;
+  height: auto;
+  max-width: 200px;
+}
+
+@media (max-width: 768px) {
+  .loaderGif {
+    width: 120px;
+  }
 }
 
 /* Video Section */

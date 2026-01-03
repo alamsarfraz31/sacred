@@ -280,7 +280,7 @@ const About: React.FC = () => {
             </a>
 
             <a
-              href="https://www.sacredgroves.earth/assets/img/Financial%20Statement%202024.pdf"
+              href="/src/assets/Financial%20Statement%202024.pdf"
               target="_blank"
               rel="noopener noreferrer"
               className={styles.disclosureItem}
@@ -290,7 +290,7 @@ const About: React.FC = () => {
             </a>
 
             <a
-              href="https://www.sacredgroves.earth/assets/img/Certificate-of-Incorporation.pdf"
+              href="/src/assets/Certificate-of-Incorporation.pdf"
               target="_blank"
               rel="noopener noreferrer"
               className={styles.disclosureItem}
@@ -310,7 +310,7 @@ const About: React.FC = () => {
             </a>
 
             <a
-              href="https://www.sacredgroves.earth/assets/img/Financial%20Statement%202023.pdf"
+              href="/src/assets/Financial%20Statement%202023.pdf"
               target="_blank"
               rel="noopener noreferrer"
               className={styles.disclosureItem}
@@ -320,7 +320,7 @@ const About: React.FC = () => {
             </a>
 
             <a
-              href="https://www.sacredgroves.earth/assets/img/The%20Sacred%20Groves%20-%20Technology%20&%20Analytics.pdf"
+              href="/src/assets/The%20Sacred%20Groves%20-%20Technology%20&%20Analytics.pdf"
               target="_blank"
               rel="noopener noreferrer"
               className={styles.disclosureItem}
@@ -340,7 +340,7 @@ const About: React.FC = () => {
             </a>
 
             <a
-              href="https://www.sacredgroves.earth/assets/img/Financial%20Statement%202022.pdf"
+              href="/src/assets/Financial%20Statement%202022.pdf"
               target="_blank"
               rel="noopener noreferrer"
               className={styles.disclosureItem}

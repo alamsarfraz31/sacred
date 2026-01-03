@@ -59,26 +59,25 @@
 }
 
 .heroCenterImage {
-  width: 100%;
-  /* max-width: 600px; */
-  width: 855.02px !important;
-  max-width: 855.02px !important;
+  width: 855.02px;
+  max-width: 855.02px;
   height: auto;
   object-fit: contain;
   position: relative;
-  top: 20vh;
-  left: 13vw;
+  top: 21vh;
+  left: 170px;
   z-index: 2;
 }
 
 .heroIcon {
-  width: 100%;
+  width: 443px;
   max-width: 443px;
-  height: 80px;
+  height: auto;
+  aspect-ratio: 443 / 80;
   object-fit: contain;
   position: relative;
   top: 16vh;
-  left: 16vw;
+  left: 230px;
   z-index: 2;
 }
 
@@ -97,7 +96,6 @@
   .heroIcon {
     top: 16vh;
     left: 230px;
-    /* Fixed position matching 1440px layout (16vw at 1440px) */
     position: relative;
     max-width: 443px;
   }
@@ -129,50 +127,68 @@
   white-space: pre-line;
 }
 
-/* Responsive Design */
-@media (max-width: 1400px) {
+/* Responsive Design - Maintain same layout as 1440px+ for all desktop screens */
+/* Scale proportionally for screens between 769px and 1439px */
+@media (max-width: 1439px) and (min-width: 1301px) {
   .heroContainer {
-    padding: 0 60px;
-    gap: 60px;
-  }
-
-  .heroText {
-    font-size: 48px;
+    padding: 0 max(40px, calc(80px * (100vw / 1440)));
+    gap: max(40px, calc(80px * (100vw / 1440)));
   }
 
   .heroCenterImage {
-    max-width: 500px;
+    width: max(500px, calc(855.02px * (100vw / 1440)));
+    max-width: max(500px, calc(855.02px * (100vw / 1440)));
+    left: max(80px, calc(170px * (100vw / 1440)));
+    top: 21vh;
   }
 
   .heroIcon {
-    max-width: 350px;
-  }
-}
-
-@media (max-width: 1200px) {
-  .heroContainer {
-    flex-direction: column;
-    padding: 0 40px;
-    gap: 40px;
-    height: 100%;
-  }
-
-  .heroLeft {
-    width: 100%;
-    height: 50%;
-    min-height: 300px;
+    width: max(260px, calc(443px * (100vw / 1440)));
+    max-width: max(260px, calc(443px * (100vw / 1440)));
+    height: auto;
+    left: max(120px, calc(230px * (100vw / 1440)));
+    top: 16vh;
   }
 
   .heroRight {
-    width: 100%;
-    max-width: 100%;
-    align-items: center;
-    padding-left: 0;
+    padding-left: max(20px, calc(40px * (100vw / 1440)));
+    max-width: max(400px, calc(600px * (100vw / 1440)));
   }
 
   .heroText {
-    text-align: center;
     font-size: 42px;
+  }
+}
+
+/* Decrease font size below 1300px while maintaining layout */
+@media (max-width: 1300px) and (min-width: 769px) {
+  .heroContainer {
+    padding: 0 max(40px, calc(80px * (100vw / 1440)));
+    gap: max(40px, calc(80px * (100vw / 1440)));
+  }
+
+  .heroCenterImage {
+    width: max(500px, calc(855.02px * (100vw / 1440)));
+    max-width: max(500px, calc(855.02px * (100vw / 1440)));
+    left: max(80px, calc(170px * (100vw / 1440)));
+    top: 21vh;
+  }
+
+  .heroIcon {
+    width: max(260px, calc(443px * (100vw / 1440)));
+    max-width: max(260px, calc(443px * (100vw / 1440)));
+    height: auto;
+    left: max(120px, calc(230px * (100vw / 1440)));
+    top: 16vh;
+  }
+
+  .heroRight {
+    padding-left: max(20px, calc(40px * (100vw / 1440)));
+    max-width: max(400px, calc(600px * (100vw / 1440)));
+  }
+
+  .heroText {
+    font-size: max(28px, calc(42px * (100vw / 1440)));
   }
 }
 
@@ -282,12 +298,21 @@
   border-radius: 24px;
   padding: 16px 40px;
   display: flex;
+  flex-direction: column;
   align-items: flex-end;
-  justify-content: center;
-  gap: 40px;
+  justify-content: flex-start;
+  gap: 20px;
   z-index: 100;
   box-sizing: border-box;
   margin: 0 auto 40px auto;
+}
+
+.searchBubbleRow {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 40px;
+  width: 100%;
 }
 
 .searchCloseButton {
@@ -311,6 +336,14 @@
 
 .searchCloseButton:hover {
   background-color: #03303D;
+}
+
+.searchBubbleRow {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 40px;
+  width: 100%;
 }
 
 .searchColumn {
@@ -393,7 +426,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  cursor: pointer !important;
   transition: all 0.3s ease;
   flex-shrink: 0;
 }
@@ -406,6 +439,58 @@
   width: 24px;
   height: 24px;
   object-fit: contain;
+}
+
+/* Search Buttons Row */
+.searchButtonsRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+/* Clear Filters Button - Icon only, same row as search */
+.clearFiltersButtonIcon {
+  width: 52px;
+  height: 52px;
+  border-radius: 10px;
+  border: 1px solid #44D09F;
+  background-color: #FFFFFF;
+  color: #03303D;
+  font-size: 24px;
+  font-weight: 700;
+  cursor: pointer !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.clearFiltersButtonIcon:hover {
+  background-color: #44D09F;
+  color: #FFFFFF;
+}
+
+/* Inline Loader for Listing Section */
+.inlineLoader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  width: 100%;
+}
+
+.loaderGif {
+  width: 150px;
+  height: auto;
+  max-width: 200px;
+}
+
+@media (max-width: 768px) {
+  .loaderGif {
+    width: 120px;
+  }
 }
 
 .storiesGrid {
@@ -698,7 +783,8 @@
   position: relative;
   display: flex;
   align-items: center;
-  overflow: visible;
+  overflow-x: visible;
+  overflow-y: visible;
   z-index: 10;
 }
 
@@ -706,7 +792,7 @@
   max-width: 1440px;
   width: 100%;
   margin: 0 auto;
-  /* padding: 0 80px; */
+  padding: 0 80px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 0;
@@ -721,6 +807,16 @@
   .aboutContainer {
     max-width: 1440px;
     margin: 0 auto;
+    padding: 0 80px;
+  }
+  
+  .aboutSection {
+    padding: 0;
+    overflow-x: visible;
+  }
+  
+  .aboutLeft {
+    padding-left: 120px;
   }
 }
 
@@ -732,6 +828,10 @@
   position: relative;
   align-items: flex-start;
   overflow: visible;
+  padding-left: 0;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .aboutLeftText {
@@ -747,6 +847,8 @@
   margin-top: 40px;
   text-align: left;
   position: relative;
+  white-space: normal;
+  word-wrap: break-word;
 }
 
 .aboutLeftIcons {
@@ -798,7 +900,7 @@
 @media (min-width: 1441px) {
   .aboutLeftLineWrapper {
     bottom: -85px !important;
-    left: -200px !important;
+    left: -260px !important;
   }
 }
 
@@ -820,7 +922,7 @@
 
   .aboutLeftLogo {
     top: 43px !important;
-    left: 88px !important;
+    left: 30px !important;
   }
 }
 
@@ -910,15 +1012,44 @@
 }
 
 /* Responsive Styles for About Section */
+@media (max-width: 1439px) and (min-width: 769px) {
+  .aboutContainer {
+    gap: 40px;
+    padding: 0 max(60px, calc(80px * (100vw / 1440)));
+  }
+
+  .aboutLeft {
+    padding-left: 0;
+    min-width: 0;
+  }
+
+  .aboutLeftText {
+    font-size: clamp(36px, 3.82vw, 55px);
+    line-height: clamp(36px, 3.82vw, 55px);
+    margin-left: max(20px, calc(117px * (100vw / 1440)));
+  }
+
+  .aboutLeftLine {
+    width: 500px;
+    height: 900px;
+    left: -80px;
+  }
+}
+
 @media (max-width: 1400px) {
   .aboutContainer {
     gap: 40px;
     padding: 0 60px;
   }
 
+  .aboutLeft {
+    padding-left: 0;
+  }
+
   .aboutLeftText {
     font-size: 48px;
     line-height: 48px;
+    margin-left: max(20px, calc(117px * (100vw / 1440)));
   }
 
   .aboutLeftLine {

@@ -1,10 +1,11 @@
 /**
  * App Component
- * Main application component with HelmetProvider
+ * Main application component with HelmetProvider and ErrorBoundary
  */
 
 import { HelmetProvider } from 'react-helmet-async'
 import { Routes } from '@/routes'
+import { ErrorBoundary } from '@/components/common/ErrorBoundary'
 
 /**
  * Root application component
@@ -12,9 +13,11 @@ import { Routes } from '@/routes'
  */
 function App() {
   return (
-    <HelmetProvider>
-      <Routes />
-    </HelmetProvider>
+    <ErrorBoundary>
+      <HelmetProvider>
+        <Routes />
+      </HelmetProvider>
+    </ErrorBoundary>
   )
 }
 

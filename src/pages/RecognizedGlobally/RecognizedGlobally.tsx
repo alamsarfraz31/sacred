@@ -50,9 +50,9 @@ import InvestforthePlanet_1 from '@/assets/InvestforthePlanet_1.svg'
 // LinkedIn carousel images (keep separate)
 
 // Action Cards images (separate from LinkedIn carousel)
-import ShopforthePlanetActionCard1 from '@/assets/2nd_row_first_image.png'
-import ShopforthePlanetActionCard2 from '@/assets/2nd_row_2nd_image.png'
-import LearnforthePlanetActionCard1 from '@/assets/3rd_row_1st_image.png'
+import ShopforthePlanetActionCard1 from '@/assets/Businessesreimagined_5.svg'
+import ShopforthePlanetActionCard2 from '@/assets/2nd_row_2nd_image.svg'
+import LearnforthePlanetActionCard1 from '@/assets/Businessesreimagined_7.svg'
 import LearnforthePlanet_1 from '@/assets/LearnforthePlanet_1.svg'
 import JoyforthePlanet from '@/assets/JoyforthePlanet.svg'
 import JoyforthePlanet_1 from '@/assets/JoyforthePlanet_1.svg'

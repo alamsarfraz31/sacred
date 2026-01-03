@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { SEO } from '@/components/common/SEO'
 import { PAGE_SEO, BREADCRUMBS } from '@/constants'
 import { FadeInSection } from '@/components/common/FadeInSection/FadeInSection'
 import styles from './OceanSanctuary.module.css'
 import oceanBg from '@/assets/ocean_bg.svg'
+import { fetchForestImages } from '@/utils/api'
+import type { ForestImage } from '@/utils/api'
 import coedSec2IconLeft from '@/assets/coed_sec_2_icon_left.svg'
 // import oceanSec2Right from '@/assets/ocean_sec_2_right.svg' // Replaced with map iframe
 import coedSection3Bg from '@/assets/coed_section_3_bg.svg'
@@ -15,36 +17,7 @@ import oceanGridLeft2 from '@/assets/ocean_grid_left_2.svg'
 // import gridRight2 from '@/assets/grid_right_2.svg'
 // import sec5Left1 from '@/assets/sec_5_left_1.svg'
 // import sec5Left2 from '@/assets/sec_5_left_2.svg'
-// Ocean Zone images
-import oceanZone1_1 from '@/assets/ocean_zone_1_1.svg'
-import oceanZone1_2 from '@/assets/ocean_zone_1_2.svg'
-import oceanZone1_3 from '@/assets/ocean_zone_1_3.svg'
-import oceanZone1_4 from '@/assets/ocean_zone_1_4.svg'
-import oceanZone1_5 from '@/assets/ocean_zone_1_5.svg'
-
-import oceanZone2_1 from '@/assets/ocean_zone_2_1.svg'
-import oceanZone2_2 from '@/assets/ocean_zone_2_2.svg'
-import oceanZone2_3 from '@/assets/ocean_zone_2_3.svg'
-import oceanZone2_4 from '@/assets/ocean_zone_2_4.svg'
-import oceanZone2_5 from '@/assets/ocean_zone_2_5.svg'
-
-import oceanZone3_1 from '@/assets/ocean_zone_3_1.svg'
-import oceanZone3_2 from '@/assets/ocean_zone_3_2.svg'
-import oceanZone3_3 from '@/assets/ocean_zone_3_3.svg'
-import oceanZone3_4 from '@/assets/ocean_zone_3_4.svg'
-import oceanZone3_5 from '@/assets/ocean_zone_3_5.svg'
-
-import oceanZone4_1 from '@/assets/ocean_zone_4_1.svg'
-import oceanZone4_2 from '@/assets/ocean_zone_4_2.svg'
-import oceanZone4_3 from '@/assets/ocean_zone_4_3.svg'
-import oceanZone4_4 from '@/assets/ocean_zone_4_4.svg'
-import oceanZone4_5 from '@/assets/ocean_zone_4_5.svg'
-
-import oceanZone5_1 from '@/assets/ocean_zone_5_1.svg'
-import oceanZone5_2 from '@/assets/ocean_zone_5_2.svg'
-import oceanZone5_3 from '@/assets/ocean_zone_5_3.svg'
-import oceanZone5_4 from '@/assets/ocean_zone_5_4.svg'
-import oceanZone5_5 from '@/assets/ocean_zone_5_5.svg'
+// Static zone images removed - now using dynamic images from CMS
 import sec5CarouselLeftArrow from '@/assets/sec_5_corousel_left_arrow.svg'
 import sec5CarouselRightArrow from '@/assets/sec_5_corousel_right_arrow.svg'
 import storyIcon1 from '@/assets/story_icon_1.svg'
@@ -67,8 +40,8 @@ import ecologicalIcon from '@/assets/ecological.svg'
 import { AlignedWithUNSDGs } from '@/components/common/CommonSections/CommonSections'
 import { ImageModal } from '@/components/common/ImageModal'
 
-// Slot widths based on Figma design - vertical stripes in gallery bar
-const SLOT_WIDTHS = [12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42]
+// Slot widths based on Figma design - vertical stripes in gallery bar (doubled widths)
+const SLOT_WIDTHS = [36, 42, 48, 54, 60, 66, 72, 78, 84, 90, 96, 102, 108, 114, 120, 126]
 
 export const OceanSanctuary: React.FC = () => {
     // Story icons array
@@ -77,90 +50,270 @@ export const OceanSanctuary: React.FC = () => {
     // Generate random icons for each card
     const getRandomIcon = () => storyIcons[Math.floor(Math.random() * 5)]
 
-    // Carousel cards for each zone
-    const zone1Cards = [
-        { image: oceanZone1_1, text: 'Our neighbourhood', icon: getRandomIcon() },
-        { image: oceanZone1_2, text: 'Aerial overview', icon: getRandomIcon() },
-        { image: oceanZone1_3, text: 'Bear pug marks', icon: getRandomIcon() },
-        { image: oceanZone1_4, text: 'Lakeside vegetation', icon: getRandomIcon() },
-        { image: oceanZone1_5, text: 'Aerial overview', icon: getRandomIcon() }
-    ]
+    // Zone categories for CMS
+    const ZONE_CATEGORIES = ['ocean-sanctuary-z1', 'ocean-sanctuary-z2', 'ocean-sanctuary-z3', 'ocean-sanctuary-z4', 'ocean-sanctuary-z5']
 
-    const zone2Cards = [
-        { image: oceanZone2_1, text: 'Standing deadwood', icon: getRandomIcon() },
-        { image: oceanZone2_2, text: 'Eastern White Pine', icon: getRandomIcon() },
-        { image: oceanZone2_3, text: 'Dense Foliage', icon: getRandomIcon() },
-        { image: oceanZone2_4, text: 'Creeping dogwood & Sphagnum Moss', icon: getRandomIcon() },
-        { image: oceanZone2_5, text: 'Aerial overview', icon: getRandomIcon() }
-    ]
+    // State for dynamic images by zone and year
+    const [imagesByZoneAndYear, setImagesByZoneAndYear] = useState<Record<number, Record<number, ForestImage[]>>>({})
+    const [heroImages, setHeroImages] = useState<string[]>([])
+    const [heroImagesData, setHeroImagesData] = useState<Array<{ url: string; name: string }>>([])
+    
+    // Carousel cards for each zone - dynamic based on selected year
+    const [zone1Cards, setZone1Cards] = useState<Array<{ image: string; text: string; icon: string }>>([])
+    const [zone2Cards, setZone2Cards] = useState<Array<{ image: string; text: string; icon: string }>>([])
+    const [zone3Cards, setZone3Cards] = useState<Array<{ image: string; text: string; icon: string }>>([])
+    const [zone4Cards, setZone4Cards] = useState<Array<{ image: string; text: string; icon: string }>>([])
+    const [zone5Cards, setZone5Cards] = useState<Array<{ image: string; text: string; icon: string }>>([])
 
-    const zone3Cards = [
-        { image: oceanZone3_1, text: 'Standing deadwood hollows', icon: getRandomIcon() },
-        { image: oceanZone3_2, text: "Pink Lady's Slipper Orchid", icon: getRandomIcon() },
-        { image: oceanZone3_3, text: 'Dense foliage', icon: getRandomIcon() },
-        { image: oceanZone3_4, text: 'Aerial overview', icon: getRandomIcon() },
-        { image: oceanZone3_5, text: 'Wrinkle mushroom', icon: getRandomIcon() }
-    ]
+    // Create a mapping of all gallery images with their names
+    const GALLERY_IMAGES_MAP = React.useMemo(() => {
+        const map = new Map<string, string>()
+        heroImagesData.forEach(img => {
+            map.set(img.url, img.name)
+        })
+        return map
+    }, [heroImagesData])
 
-    const zone4Cards = [
-        { image: oceanZone4_1, text: 'Wetland stream', icon: getRandomIcon() },
-        { image: oceanZone4_2, text: 'Aerial overview', icon: getRandomIcon() },
-        { image: oceanZone4_3, text: 'Aerial overview', icon: getRandomIcon() },
-        { image: oceanZone4_4, text: 'White fringed orchid', icon: getRandomIcon() },
-        { image: oceanZone4_5, text: 'Wetland vegetation', icon: getRandomIcon() }
-    ]
-
-    const zone5Cards = [
-        { image: oceanZone5_1, text: 'Aerial overview', icon: getRandomIcon() },
-        { image: oceanZone5_2, text: 'Aerial overview', icon: getRandomIcon() },
-        { image: oceanZone5_3, text: 'Aerial overview', icon: getRandomIcon() },
-        { image: oceanZone5_4, text: 'Wedge leaved Rose', icon: getRandomIcon() },
-        { image: oceanZone5_5, text: 'Rocky shore', icon: getRandomIcon() }
-    ]
-
-    // Collect all 25 images from all 5 zones for the gallery
-    const GALLERY_IMAGES = [
-        ...zone1Cards.map(card => card.image),
-        ...zone2Cards.map(card => card.image),
-        ...zone3Cards.map(card => card.image),
-        ...zone4Cards.map(card => card.image),
-        ...zone5Cards.map(card => card.image)
-    ]
+    // Use dynamic images for gallery
+    const GALLERY_IMAGES = heroImages.length > 0 ? heroImages : []
 
     // Initialize each slot with a different starting image index
-    const initializeSlotImages = () => {
+    const initializeSlotImages = (images: string[]) => {
         const numSlots = 6
-        const numImages = GALLERY_IMAGES.length
+        const numImages = images.length || 1
         return Array.from({ length: numSlots }, (_, index) => index % numImages)
     }
 
-    const [slotImages, setSlotImages] = useState<number[]>(initializeSlotImages())
+    const [slotImages, setSlotImages] = useState<number[]>(() => initializeSlotImages([]))
     const [activeYear, setActiveYear] = useState<number>(2025)
     const [activeYearZone2, setActiveYearZone2] = useState<number>(2025)
     const [activeYearZone3, setActiveYearZone3] = useState<number>(2025)
     const [activeYearZone4, setActiveYearZone4] = useState<number>(2025)
     const [activeYearZone5, setActiveYearZone5] = useState<number>(2025)
+    const [currentSlide, setCurrentSlide] = useState<Record<number, number>>({ 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 })
     const [isVideoPlaying, setIsVideoPlaying] = useState<boolean>(false)
-    const videoRef = React.useRef<HTMLVideoElement>(null)
+    const videoRef = useRef<HTMLVideoElement>(null)
+    const carouselContainerRefs = useRef<Record<number, HTMLDivElement | null>>({ 1: null, 2: null, 3: null, 4: null, 5: null })
+    const carouselTrackRefs = useRef<Record<number, HTMLDivElement | null>>({ 1: null, 2: null, 3: null, 4: null, 5: null })
     const [selectedImage, setSelectedImage] = useState<{ src: string; title: string } | null>(null)
-    const [heroBackgroundImage, setHeroBackgroundImage] = useState<string>(oceanBg) // Default to initial background
+    const [heroBackgroundImage, setHeroBackgroundImage] = useState<string>(oceanBg)
+    const [isHeroImageClicked, setIsHeroImageClicked] = useState<boolean>(false)
+    const [heroImageName, setHeroImageName] = useState<string>('Ocean Sanctuary')
 
     const years = [2025, 2024, 2023, 2022, 2021]
 
-    // Since we only have 5 cards and want to show all 5, arrows can be disabled or do nothing
-    const nextCarousel = () => {
-        // All 5 cards are always visible, so no movement needed
+    // Group images by year for a zone
+    const groupImagesByYear = (images: ForestImage[]): Record<number, ForestImage[]> => {
+        const grouped: Record<number, ForestImage[]> = {}
+        images.forEach((image) => {
+            try {
+                const date = new Date(image.post_date)
+                const year = date.getFullYear()
+                if (!grouped[year]) {
+                    grouped[year] = []
+                }
+                grouped[year].push(image)
+            } catch (error) {
+                console.error('Error parsing date:', image.post_date, error)
+            }
+        })
+        return grouped
     }
 
-    const prevCarousel = () => {
-        // All 5 cards are always visible, so no movement needed
+    // Extract plain text from HTML
+    const extractPlainText = (html: string): string => {
+        if (!html) return ''
+        const div = document.createElement('div')
+        div.innerHTML = html
+        return div.textContent || div.innerText || ''
+    }
+
+    // Get random 5 images from all zones for hero section
+    const getRandomHeroImages = (allImages: ForestImage[], count: number = 5): Array<{ url: string; name: string }> => {
+        if (allImages.length === 0) return []
+        const sorted = [...allImages].sort((a, b) => {
+            try {
+                return new Date(b.post_date).getTime() - new Date(a.post_date).getTime()
+            } catch {
+                return 0
+            }
+        })
+        const recent = sorted.slice(0, Math.min(count, sorted.length))
+        const shuffled = [...recent].sort(() => Math.random() - 0.5)
+        return shuffled.slice(0, count).map(img => {
+            const name = extractPlainText(img.post_content || img.post_excerpt || '').trim()
+            return {
+                url: img.guid,
+                name: name || 'Ocean Sanctuary'
+            }
+        })
+    }
+
+    // Fetch images from CMS for all zones
+    useEffect(() => {
+        const loadImages = async () => {
+            try {
+                const allImages: ForestImage[] = []
+                const zoneYearMap: Record<number, Record<number, ForestImage[]>> = {}
+
+                // Fetch images for each zone
+                for (let zoneIndex = 0; zoneIndex < ZONE_CATEGORIES.length; zoneIndex++) {
+                    const zoneNum = zoneIndex + 1
+                    const category = ZONE_CATEGORIES[zoneIndex]
+                    const images = await fetchForestImages(category)
+                    
+                    if (images.length > 0) {
+                        const grouped = groupImagesByYear(images)
+                        zoneYearMap[zoneNum] = grouped
+                        allImages.push(...images)
+                    }
+                }
+
+                setImagesByZoneAndYear(zoneYearMap)
+
+                // Set hero images (5 random from all zones)
+                if (allImages.length > 0) {
+                    const heroImgsData = getRandomHeroImages(allImages, 5)
+                    setHeroImagesData(heroImgsData)
+                    setHeroImages(heroImgsData.map(img => img.url))
+                } else {
+                    setHeroImages([])
+                    setHeroImagesData([])
+                }
+            } catch (error) {
+                console.error('Error loading images:', error)
+                setHeroImages([])
+            }
+        }
+        
+        loadImages()
+    }, [])
+
+    // Update carousel cards when year changes for each zone
+    useEffect(() => {
+        const updateZoneCards = (zoneNum: number, activeYear: number, setCards: React.Dispatch<React.SetStateAction<Array<{ image: string; text: string; icon: string }>>>) => {
+            const yearImages = imagesByZoneAndYear[zoneNum]?.[activeYear] || []
+            if (yearImages.length > 0) {
+                const newCards = yearImages.slice(0, 10).map((img) => ({
+                    image: img.guid,
+                    text: extractPlainText(img.post_content || img.post_excerpt || 'Ocean Sanctuary'),
+                    icon: getRandomIcon()
+                }))
+                setCards(newCards)
+                setCurrentSlide(prev => ({ ...prev, [zoneNum]: 0 }))
+            } else {
+                setCards([])
+                setCurrentSlide(prev => ({ ...prev, [zoneNum]: 0 }))
+            }
+        }
+
+        updateZoneCards(1, activeYear, setZone1Cards)
+        updateZoneCards(2, activeYearZone2, setZone2Cards)
+        updateZoneCards(3, activeYearZone3, setZone3Cards)
+        updateZoneCards(4, activeYearZone4, setZone4Cards)
+        updateZoneCards(5, activeYearZone5, setZone5Cards)
+    }, [activeYear, activeYearZone2, activeYearZone3, activeYearZone4, activeYearZone5, imagesByZoneAndYear])
+
+    // Update gallery images when hero images change
+    useEffect(() => {
+        if (GALLERY_IMAGES.length > 0) {
+            setSlotImages(initializeSlotImages(GALLERY_IMAGES))
+        }
+    }, [heroImages.length])
+
+    // Carousel navigation logic for each zone
+    const getCarouselCards = (zoneNum: number) => {
+        switch (zoneNum) {
+            case 1: return zone1Cards
+            case 2: return zone2Cards
+            case 3: return zone3Cards
+            case 4: return zone4Cards
+            case 5: return zone5Cards
+            default: return []
+        }
+    }
+
+    const CARDS_PER_VIEW_DESKTOP = 5
+
+    const getTotalGroups = (zoneNum: number) => {
+        const cards = getCarouselCards(zoneNum)
+        return Math.ceil(cards.length / CARDS_PER_VIEW_DESKTOP)
+    }
+
+    const canGoNext = (zoneNum: number) => {
+        const totalGroups = getTotalGroups(zoneNum)
+        return currentSlide[zoneNum] < totalGroups - 1
+    }
+
+    const canGoPrev = (zoneNum: number) => {
+        return currentSlide[zoneNum] > 0
+    }
+
+    const getSlideOffset = (zoneNum: number) => {
+        const cards = getCarouselCards(zoneNum)
+        if (cards.length === 0) return '0px'
+        const cardWidth = 185.88
+        const gap = 20
+        const cardsPerView = 5
+        const slideWidth = (cardWidth * cardsPerView) + (gap * (cardsPerView - 1))
+        return `-${currentSlide[zoneNum] * slideWidth}px`
+    }
+
+    const nextCarousel = (zoneNum: number) => {
+        if (canGoNext(zoneNum)) {
+            setCurrentSlide(prev => ({
+                ...prev,
+                [zoneNum]: Math.min(prev[zoneNum] + 1, getTotalGroups(zoneNum) - 1)
+            }))
+        }
+    }
+
+    const prevCarousel = (zoneNum: number) => {
+        if (canGoPrev(zoneNum)) {
+            setCurrentSlide(prev => ({
+                ...prev,
+                [zoneNum]: Math.max(prev[zoneNum] - 1, 0)
+            }))
+        }
+    }
+
+    // Normalize URL for comparison
+    const normalizeUrl = (url: string): string => {
+        try {
+            const urlObj = new URL(url)
+            return urlObj.origin + urlObj.pathname
+        } catch {
+            return url.split('?')[0].split('#')[0]
+        }
+    }
+
+    // Handle slot click - set the clicked image as hero background and update name
+    const handleSlotClick = (imageIndex: number) => {
+        if (GALLERY_IMAGES.length === 0) return
+        
+        setIsHeroImageClicked(true)
+        const imageUrl = GALLERY_IMAGES[imageIndex]
+        setHeroBackgroundImage(imageUrl)
+        
+        let imageName = GALLERY_IMAGES_MAP.get(imageUrl)
+        if (!imageName) {
+            const normalizedUrl = normalizeUrl(imageUrl)
+            for (const [url, name] of GALLERY_IMAGES_MAP.entries()) {
+                if (normalizeUrl(url) === normalizedUrl) {
+                    imageName = name
+                    break
+                }
+            }
+        }
+        setHeroImageName(imageName || 'Ocean Sanctuary')
     }
 
     // Auto-cycle all slots together every 4 seconds
     useEffect(() => {
+        if (GALLERY_IMAGES.length === 0) return
+        
         const interval = setInterval(() => {
             setSlotImages((prev) => {
-                // Cycle all slots to the next image at the same time
                 return prev.map((imageIndex) => (imageIndex + 1) % GALLERY_IMAGES.length)
             })
         }, 4000)
@@ -169,6 +322,15 @@ export const OceanSanctuary: React.FC = () => {
             clearInterval(interval)
         }
     }, [GALLERY_IMAGES.length])
+
+    // Reset carousel scroll positions
+    useEffect(() => {
+        Object.values(carouselContainerRefs.current).forEach(ref => {
+            if (ref) {
+                ref.scrollLeft = 0
+            }
+        })
+    }, [zone1Cards, zone2Cards, zone3Cards, zone4Cards, zone5Cards])
 
     // Toggle video play/pause
     const handleToggleVideo = () => {
@@ -205,10 +367,6 @@ export const OceanSanctuary: React.FC = () => {
         }
     }
 
-    // Handle slot click - set the clicked image as hero background
-    const handleSlotClick = (imageIndex: number) => {
-        setHeroBackgroundImage(GALLERY_IMAGES[imageIndex])
-    }
 
     return (
         <>
@@ -221,15 +379,16 @@ export const OceanSanctuary: React.FC = () => {
             />
 
             <div className={styles.pageWrapper}>
-                <section className={styles.heroSection} style={{ backgroundImage: `url(${heroBackgroundImage})` }}>
+                <section className={styles.heroSection} style={{ backgroundImage: `url(${isHeroImageClicked ? heroBackgroundImage : oceanBg})` }}>
                     <div className={styles.heroContainer}>
                         {/* Motion Gallery Bar - Bottom aligned */}
                         <div className={styles.galleryBar}>
                             <div className={styles.galleryBarLeft}>
-                                <span className={styles.galleryBarLabel}>Our neighbourhood</span>
+                                <span className={styles.galleryBarLabel}>{heroImageName}</span>
                             </div>
                             <div className={styles.galleryBarCenter}>
-                                {slotImages.map((imageIndex, slotIndex) => (
+                                {GALLERY_IMAGES.length > 0 ? (
+                                    slotImages.map((imageIndex, slotIndex) => (
                                     <div
                                         key={slotIndex}
                                         className={styles.gallerySlot}
@@ -241,7 +400,20 @@ export const OceanSanctuary: React.FC = () => {
                                         }}
                                         onClick={() => handleSlotClick(imageIndex)}
                                     />
-                                ))}
+                                    ))
+                                ) : (
+                                    // Show placeholder slots when no images are available
+                                    Array.from({ length: 6 }).map((_, slotIndex) => (
+                                        <div
+                                            key={slotIndex}
+                                            className={styles.gallerySlot}
+                                            style={{
+                                                width: `${SLOT_WIDTHS[slotIndex % SLOT_WIDTHS.length]}px`,
+                                                backgroundColor: 'rgba(255, 255, 255, 0.1)'
+                                            }}
+                                        />
+                                    ))
+                                )}
                             </div>
                             <div className={styles.galleryBarRight}>
                                 <span className={styles.galleryBarArrow}>→</span>
@@ -283,7 +455,7 @@ export const OceanSanctuary: React.FC = () => {
                             {/* Right Section - Map */}
                             <div className={styles.section2Right}>
                                 <iframe
-                                    src={`${(import.meta.env.VITE_API_URL || 'https://outshade.sacredgroves.earth').replace(/\/$/, '')}/api/sutra/map/forest?forest_id=CAN_OCEA_00003&iframe_height=820&iframe_width=708&zoom_start=3`}
+                                    src={`${(import.meta.env.VITE_API_URL || 'https://outshade.sacredgroves.earth').replace(/\/$/, '')}/api/sutra/map/forest?forest_id=CAN_OCEA_00003&iframe_height=820&iframe_width=900&zoom_start=3&font_size_head=13&font_size_body=9&font_weight_head=600&font_weight_body=400`}
                                     frameBorder="0"
                                     className={styles.section2Map}
                                     allowFullScreen
@@ -382,13 +554,23 @@ export const OceanSanctuary: React.FC = () => {
                                 </div>
 
                                 <div className={styles.carouselWrapper}>
-                                    <button className={styles.carouselArrow} onClick={prevCarousel}>
+                                    {canGoPrev(1) && (
+                                        <button className={styles.carouselArrow} onClick={() => prevCarousel(1)}>
                                         <img src={sec5CarouselLeftArrow} alt="Previous" />
                                     </button>
+                                    )}
+                                    {!canGoPrev(1) && <div className={styles.carouselArrowPlaceholder} />}
 
-                                    <div className={styles.carouselContainer}>
-                                        <div className={styles.carouselTrack}>
-                                            {zone1Cards.map((card, index) => (
+                                    <div className={styles.carouselContainer} ref={el => { carouselContainerRefs.current[1] = el }}>
+                                        <div
+                                            ref={el => { carouselTrackRefs.current[1] = el }}
+                                            className={styles.carouselTrack}
+                                            style={{
+                                                '--slide-offset': getSlideOffset(1)
+                                            } as React.CSSProperties}
+                                        >
+                                            {zone1Cards.length > 0 ? (
+                                                zone1Cards.map((card, index) => (
                                                 <div key={index} className={styles.carouselCard}>
                                                     <img
                                                         src={card.image}
@@ -396,19 +578,29 @@ export const OceanSanctuary: React.FC = () => {
                                                         className={styles.carouselCardImage}
                                                         onClick={() => setSelectedImage({ src: card.image, title: card.text })}
                                                         style={{ cursor: 'pointer' }}
+                                                            onError={(e) => {
+                                                                const target = e.target as HTMLImageElement
+                                                                target.style.display = 'none'
+                                                            }}
                                                     />
                                                     <div className={styles.carouselCardContent}>
                                                         <p className={styles.carouselCardText}>{card.text}</p>
                                                         <img src={card.icon} alt="Icon" className={styles.carouselCardIcon} />
                                                     </div>
                                                 </div>
-                                            ))}
+                                                ))
+                                            ) : (
+                                                <p>No images available</p>
+                                            )}
                                         </div>
                                     </div>
 
-                                    <button className={styles.carouselArrow} onClick={nextCarousel}>
+                                    {canGoNext(1) && (
+                                        <button className={styles.carouselArrow} onClick={() => nextCarousel(1)}>
                                         <img src={sec5CarouselRightArrow} alt="Next" />
                                     </button>
+                                    )}
+                                    {!canGoNext(1) && <div className={styles.carouselArrowPlaceholder} />}
                                 </div>
                             </div>
                         </div>
@@ -462,13 +654,23 @@ export const OceanSanctuary: React.FC = () => {
                                 </div>
 
                                 <div className={styles.carouselWrapper}>
-                                    <button className={styles.carouselArrow} onClick={prevCarousel}>
+                                    {canGoPrev(2) && (
+                                        <button className={styles.carouselArrow} onClick={() => prevCarousel(2)}>
                                         <img src={sec5CarouselLeftArrow} alt="Previous" />
                                     </button>
+                                    )}
+                                    {!canGoPrev(2) && <div className={styles.carouselArrowPlaceholder} />}
 
-                                    <div className={styles.carouselContainer}>
-                                        <div className={styles.carouselTrack}>
-                                            {zone2Cards.map((card, index) => (
+                                    <div className={styles.carouselContainer} ref={el => { carouselContainerRefs.current[2] = el }}>
+                                        <div
+                                            ref={el => { carouselTrackRefs.current[2] = el }}
+                                            className={styles.carouselTrack}
+                                            style={{
+                                                '--slide-offset': getSlideOffset(2)
+                                            } as React.CSSProperties}
+                                        >
+                                            {zone2Cards.length > 0 ? (
+                                                zone2Cards.map((card, index) => (
                                                 <div key={index} className={`${styles.carouselCard} ${styles.carouselCardWhite}`}>
                                                     <img
                                                         src={card.image}
@@ -476,19 +678,29 @@ export const OceanSanctuary: React.FC = () => {
                                                         className={styles.carouselCardImage}
                                                         onClick={() => setSelectedImage({ src: card.image, title: card.text })}
                                                         style={{ cursor: 'pointer' }}
+                                                            onError={(e) => {
+                                                                const target = e.target as HTMLImageElement
+                                                                target.style.display = 'none'
+                                                            }}
                                                     />
                                                     <div className={styles.carouselCardContent}>
                                                         <p className={styles.carouselCardText}>{card.text}</p>
                                                         <img src={card.icon} alt="Icon" className={styles.carouselCardIcon} />
                                                     </div>
                                                 </div>
-                                            ))}
+                                                ))
+                                            ) : (
+                                                <p>No images available</p>
+                                            )}
                                         </div>
                                     </div>
 
-                                    <button className={styles.carouselArrow} onClick={nextCarousel}>
+                                    {canGoNext(2) && (
+                                        <button className={styles.carouselArrow} onClick={() => nextCarousel(2)}>
                                         <img src={sec5CarouselRightArrow} alt="Next" />
                                     </button>
+                                    )}
+                                    {!canGoNext(2) && <div className={styles.carouselArrowPlaceholder} />}
                                 </div>
                             </div>
                         </div>
@@ -542,13 +754,23 @@ export const OceanSanctuary: React.FC = () => {
                                 </div>
 
                                 <div className={styles.carouselWrapper}>
-                                    <button className={styles.carouselArrow} onClick={prevCarousel}>
+                                    {canGoPrev(3) && (
+                                        <button className={styles.carouselArrow} onClick={() => prevCarousel(3)}>
                                         <img src={sec5CarouselLeftArrow} alt="Previous" />
                                     </button>
+                                    )}
+                                    {!canGoPrev(3) && <div className={styles.carouselArrowPlaceholder} />}
 
-                                    <div className={styles.carouselContainer}>
-                                        <div className={styles.carouselTrack}>
-                                            {zone3Cards.map((card, index) => (
+                                    <div className={styles.carouselContainer} ref={el => { carouselContainerRefs.current[3] = el }}>
+                                        <div
+                                            ref={el => { carouselTrackRefs.current[3] = el }}
+                                            className={styles.carouselTrack}
+                                            style={{
+                                                '--slide-offset': getSlideOffset(3)
+                                            } as React.CSSProperties}
+                                        >
+                                            {zone3Cards.length > 0 ? (
+                                                zone3Cards.map((card, index) => (
                                                 <div key={index} className={styles.carouselCard}>
                                                     <img
                                                         src={card.image}
@@ -556,19 +778,29 @@ export const OceanSanctuary: React.FC = () => {
                                                         className={styles.carouselCardImage}
                                                         onClick={() => setSelectedImage({ src: card.image, title: card.text })}
                                                         style={{ cursor: 'pointer' }}
+                                                            onError={(e) => {
+                                                                const target = e.target as HTMLImageElement
+                                                                target.style.display = 'none'
+                                                            }}
                                                     />
                                                     <div className={styles.carouselCardContent}>
                                                         <p className={styles.carouselCardText}>{card.text}</p>
                                                         <img src={card.icon} alt="Icon" className={styles.carouselCardIcon} />
                                                     </div>
                                                 </div>
-                                            ))}
+                                                ))
+                                            ) : (
+                                                <p>No images available</p>
+                                            )}
                                         </div>
                                     </div>
 
-                                    <button className={styles.carouselArrow} onClick={nextCarousel}>
+                                    {canGoNext(3) && (
+                                        <button className={styles.carouselArrow} onClick={() => nextCarousel(3)}>
                                         <img src={sec5CarouselRightArrow} alt="Next" />
                                     </button>
+                                    )}
+                                    {!canGoNext(3) && <div className={styles.carouselArrowPlaceholder} />}
                                 </div>
                             </div>
                         </div>
@@ -622,13 +854,23 @@ export const OceanSanctuary: React.FC = () => {
                                 </div>
 
                                 <div className={styles.carouselWrapper}>
-                                    <button className={styles.carouselArrow} onClick={prevCarousel}>
+                                    {canGoPrev(4) && (
+                                        <button className={styles.carouselArrow} onClick={() => prevCarousel(4)}>
                                         <img src={sec5CarouselLeftArrow} alt="Previous" />
                                     </button>
+                                    )}
+                                    {!canGoPrev(4) && <div className={styles.carouselArrowPlaceholder} />}
 
-                                    <div className={styles.carouselContainer}>
-                                        <div className={styles.carouselTrack}>
-                                            {zone4Cards.map((card, index) => (
+                                    <div className={styles.carouselContainer} ref={el => { carouselContainerRefs.current[4] = el }}>
+                                        <div
+                                            ref={el => { carouselTrackRefs.current[4] = el }}
+                                            className={styles.carouselTrack}
+                                            style={{
+                                                '--slide-offset': getSlideOffset(4)
+                                            } as React.CSSProperties}
+                                        >
+                                            {zone4Cards.length > 0 ? (
+                                                zone4Cards.map((card, index) => (
                                                 <div key={index} className={`${styles.carouselCard} ${styles.carouselCardWhite}`}>
                                                     <img
                                                         src={card.image}
@@ -636,19 +878,29 @@ export const OceanSanctuary: React.FC = () => {
                                                         className={styles.carouselCardImage}
                                                         onClick={() => setSelectedImage({ src: card.image, title: card.text })}
                                                         style={{ cursor: 'pointer' }}
+                                                            onError={(e) => {
+                                                                const target = e.target as HTMLImageElement
+                                                                target.style.display = 'none'
+                                                            }}
                                                     />
                                                     <div className={styles.carouselCardContent}>
                                                         <p className={styles.carouselCardText}>{card.text}</p>
                                                         <img src={card.icon} alt="Icon" className={styles.carouselCardIcon} />
                                                     </div>
                                                 </div>
-                                            ))}
+                                                ))
+                                            ) : (
+                                                <p>No images available</p>
+                                            )}
                                         </div>
                                     </div>
 
-                                    <button className={styles.carouselArrow} onClick={nextCarousel}>
+                                    {canGoNext(4) && (
+                                        <button className={styles.carouselArrow} onClick={() => nextCarousel(4)}>
                                         <img src={sec5CarouselRightArrow} alt="Next" />
                                     </button>
+                                    )}
+                                    {!canGoNext(4) && <div className={styles.carouselArrowPlaceholder} />}
                                 </div>
                             </div>
                         </div>
@@ -702,13 +954,23 @@ export const OceanSanctuary: React.FC = () => {
                                 </div>
 
                                 <div className={styles.carouselWrapper}>
-                                    <button className={styles.carouselArrow} onClick={prevCarousel}>
+                                    {canGoPrev(5) && (
+                                        <button className={styles.carouselArrow} onClick={() => prevCarousel(5)}>
                                         <img src={sec5CarouselLeftArrow} alt="Previous" />
                                     </button>
+                                    )}
+                                    {!canGoPrev(5) && <div className={styles.carouselArrowPlaceholder} />}
 
-                                    <div className={styles.carouselContainer}>
-                                        <div className={styles.carouselTrack}>
-                                            {zone5Cards.map((card, index) => (
+                                    <div className={styles.carouselContainer} ref={el => { carouselContainerRefs.current[5] = el }}>
+                                        <div
+                                            ref={el => { carouselTrackRefs.current[5] = el }}
+                                            className={styles.carouselTrack}
+                                            style={{
+                                                '--slide-offset': getSlideOffset(5)
+                                            } as React.CSSProperties}
+                                        >
+                                            {zone5Cards.length > 0 ? (
+                                                zone5Cards.map((card, index) => (
                                                 <div key={index} className={styles.carouselCard}>
                                                     <img
                                                         src={card.image}
@@ -716,19 +978,29 @@ export const OceanSanctuary: React.FC = () => {
                                                         className={styles.carouselCardImage}
                                                         onClick={() => setSelectedImage({ src: card.image, title: card.text })}
                                                         style={{ cursor: 'pointer' }}
+                                                            onError={(e) => {
+                                                                const target = e.target as HTMLImageElement
+                                                                target.style.display = 'none'
+                                                            }}
                                                     />
                                                     <div className={styles.carouselCardContent}>
                                                         <p className={styles.carouselCardText}>{card.text}</p>
                                                         <img src={card.icon} alt="Icon" className={styles.carouselCardIcon} />
                                                     </div>
                                                 </div>
-                                            ))}
+                                                ))
+                                            ) : (
+                                                <p>No images available</p>
+                                            )}
                                         </div>
                                     </div>
 
-                                    <button className={styles.carouselArrow} onClick={nextCarousel}>
+                                    {canGoNext(5) && (
+                                        <button className={styles.carouselArrow} onClick={() => nextCarousel(5)}>
                                         <img src={sec5CarouselRightArrow} alt="Next" />
                                     </button>
+                                    )}
+                                    {!canGoNext(5) && <div className={styles.carouselArrowPlaceholder} />}
                                 </div>
                             </div>
                         </div>

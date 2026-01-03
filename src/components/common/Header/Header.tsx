@@ -8,7 +8,10 @@ import logo from '@/assets/logo.png'
 // Icons
 import arrowSidebar from '@/assets/arrow-sidebar.svg'
 import activeArrowSidebar from '@/assets/active-arrow-sidebar.svg'
-import flowerIcon from '@/assets/BusinesforthePlanet.svg' // Placeholder for flower icon
+import flowerIcon from '@/assets/BusinesforthePlanet.svg' // Default icon
+import peopleForPlanetIcon from '@/assets/people_for_the_planet.png'
+import businessForPlanetIcon from '@/assets/bussiness_for_the_planet.png'
+import ourSacredGrovesIcon from '@/assets/our_sacred_groves.png'
 
 interface SubmenuItem {
   title: string;
@@ -148,6 +151,24 @@ export const Header: React.FC = () => {
     'Business for the Planet',
     'Stories that inspire us'
   ]
+
+  // Determine which footer icon to display based on active submenu
+  const getFooterIcon = () => {
+    if (!sidebarOpen || !activeSubmenu) {
+      return flowerIcon // Default icon when sidebar is closed or no submenu is active
+    }
+
+    switch (activeSubmenu) {
+      case 'PEOPLE FOR THE PLANET':
+        return peopleForPlanetIcon
+      case 'BUSINESS FOR THE PLANET':
+        return businessForPlanetIcon
+      case 'OUR SACRED GROVES':
+        return ourSacredGrovesIcon
+      default:
+        return flowerIcon
+    }
+  }
 
   return (
     <header className={`${styles.header} ${sidebarOpen ? styles.headerHidden : ''} ${searchOpen ? styles.searchExpanded : ''}`} role="banner">
@@ -404,7 +425,7 @@ export const Header: React.FC = () => {
 
         <div className={styles.sidebarFooter}>
           <div className={styles.footerIcons}>
-            <img src={flowerIcon} alt="Business for the Planet" className={styles.footerIcon} />
+            <img src={getFooterIcon()} alt={activeSubmenu || "Sacred Groves"} className={styles.footerIcon} />
           </div>
         </div>
       </div>

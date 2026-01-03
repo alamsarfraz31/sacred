@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import { SEO } from '@/components/common/SEO'
 import { AlignedWithUNSDGs } from '@/components/common/CommonSections'
+import { Loading } from '@/components/common/Loading'
 import styles from './BlogDetail.module.css'
 import storyLeftLine from '@/assets/story_left_line.svg'
 import storyLeftLogo from '@/assets/story_left_logo.svg'
@@ -11,116 +12,127 @@ import storyRightIcon from '@/assets/story_right_icon.svg'
 import playIcon from '@/assets/play_icon.svg'
 import downloadIcon from '@/assets/download.svg'
 import shareIcon from '@/assets/share.svg'
+import {
+  fetchBlogById,
+  fetchAllBlogs,
+  fetchTags,
+  getFeaturedImageUrl,
+  // getBlogTags,
+  extractPlainText,
+  type BlogPost
+} from '@/utils/blogApi'
 
-interface BlogPost {
-  id: number
-  title: string
-  imageId: number
-  views: number
-  content: string[]
-  tags: string[]
-  date: string
-}
+// Helper function to parse HTML content into paragraphs
+function parseContent(html: string): string[] {
+  const div = document.createElement('div')
+  div.innerHTML = html
 
-// Mock data for blog posts
-const mockBlogPosts: BlogPost[] = [
-  {
-    id: 1,
-    title: 'Local Efforts to Save Endangered Animals in UK: What Can You Learn From Them',
-    imageId: 201,
-    views: 1234,
-    date: 'Jan 15, 2024',
-    tags: ['Wildlife', 'Conservation', 'UK', 'Endangered Species', 'Community'],
-    content: [
-      'Every six seconds the world loses a soccer field equivalent (1.76 acres) of primary forests. This is no surprise since almost 50% of the world\'s economic activity is involved in natural destruction activities according to a study by the World Economic Forum. Direct causes of deforestation include unsustainable agricultural expansion, wood extraction (e.g., logging or wood harvest for domestic fuel or charcoal), and infrastructure expansion such as road building and urbanization.',
-      'Rarely is there a single direct cause for deforestation. Most often, multiple processes work simultaneously or sequentially to cause deforestation. The impact of deforestation is now becoming widespread with a rise in global temperatures resulting in the accelerated change of weather patterns that are causing floods, droughts, storms, etc. all over the world.',
-      'Agricultural reforms are a big part of the solution. It is estimated that we waste a third of the food that we produce. That\'s about 1.3 billion tons a year. In addition, a third of our agricultural land is used for animal feed. As the world gets more \'modernized\' the land devoted to animal feed is expected to rise to cater to the growing demand of the dairy and meat industry.',
-      'The answers to resolve this complex issue are not straightforward and require a combination of public policy, awareness, capital, human behaviour change, etc. However, one of the important aspects for the policy makers to consider is our legislative reforms and furthering environmentally friendly agricultural practices such as agroforestry. Agroforestry is the intentional integration of trees and shrubs into crop and animal farming systems to create environmental, economic, and social benefits. There is a lot of work happening all over the world in advancing agroforestry-based solutions.',
-      '1. Alley Cropping: Alley cropping involves planting crops between rows of trees. This system allows farmers to produce fruits, vegetables, grains, and other crops while also growing trees for timber, fruit, or nuts.',
-      '2. Multi-story Cropping: This system creates a complementary ecosystem of trees and shrubs at different heights. The upper canopy might include tall trees, while lower levels could have smaller trees, shrubs, and ground-level crops. This approach maximizes the use of vertical space and can produce food, herbal, botanical, or decorative crops.',
-      '3. Silvo Pasture: Silvo pasture combines trees with livestock and forage on one piece of land. The trees provide timber, fruit, fodder, or nuts as well as shade and shelter for livestock and their forages, reducing stress on the animals from the hot summer sun, cold winter winds, or a downpour.',
-      '4. Riparian Forest Buffers: These are natural or re-established areas along streams, rivers, lakes and ponds to prevent erosion. These areas can also support wildlife and provide another source of income.',
-      '5. Windbreaks: Windbreaks shelter crops, animals, buildings, and soil from wind, snow, dust, and odours. These areas can also support wildlife and provide another source of income. They are also called shelterbelts, hedgerows, vegetated environmental buffers, or living snow fences.',
-      'So, if you are wondering how can you influence this change towards more widespread agroforestry practices, here are a few suggestions:',
-      '1. Become a lot more aware and conscious of your consumption choices. Start reading food labels of the products that you buy and make a deliberate shift towards products that are more upfront about their production and sources of origin.',
-      '2. Start asking your elected representatives about how agroforestry in your region is being encouraged. Often change begins when you ask for it!',
-      '3. If you happen to be directly involved in agriculture and food production start developing and implementing agroforestry practices and set an example!'
-    ]
-  },
-  {
-    id: 7,
-    title: '5 ways How Traditional Agroforestry Systems Help in Nature Conservation',
-    imageId: 207,
-    views: 2277,
-    date: 'Mar 10, 2024',
-    tags: ['Agroforestry', 'Conservation', 'Climate Change', 'Deforestation', 'India', 'Europe', 'Biodiversity'],
-    content: [
-      'Every six seconds the world loses a soccer field equivalent (1.76 acres) of primary forests. This is no surprise since almost 50% of the world\'s economic activity is involved in natural destruction activities according to a study by the World Economic Forum. Direct causes of deforestation include unsustainable agricultural expansion, wood extraction (e.g., logging or wood harvest for domestic fuel or charcoal), and infrastructure expansion such as road building and urbanization.',
-      'Rarely is there a single direct cause for deforestation. Most often, multiple processes work simultaneously or sequentially to cause deforestation. The impact of deforestation is now becoming widespread with a rise in global temperatures resulting in the accelerated change of weather patterns that are causing floods, droughts, storms, etc. all over the world.',
-      'Agricultural reforms are a big part of the solution. It is estimated that we waste a third of the food that we produce. That\'s about 1.3 billion tons a year. In addition, a third of our agricultural land is used for animal feed. As the world gets more \'modernized\' the land devoted to animal feed is expected to rise to cater to the growing demand of the dairy and meat industry.',
-      'The answers to resolve this complex issue are not straightforward and require a combination of public policy, awareness, capital, human behaviour change, etc. However, one of the important aspects for the policy makers to consider is our legislative reforms and furthering environmentally friendly agricultural practices such as agroforestry. Agroforestry is the intentional integration of trees and shrubs into crop and animal farming systems to create environmental, economic, and social benefits. There is a lot of work happening all over the world in advancing agroforestry-based solutions.',
-      '1. Alley Cropping: Alley cropping involves planting crops between rows of trees. The system can be designed to produce fruits, vegetables, grains, flowers, herbs, bioenergy feedstocks, and more.',
-      '2. Multi-story Cropping: The practice of multi-story cropping is based on creating a complimentary ecosystem of trees and shrubs under a forest canopy at different heights to grow food, herbal, botanical, or decorative crops.',
-      '3. Silvo Pasture: Silvo pasture combines trees with livestock and forage on one piece of land. The trees provide timber, fruit, fodder, or nuts as well as shade and shelter for livestock and their forages, reducing stress on the animals from the hot summer sun, cold winter winds, or a downpour.',
-      '4. Riparian Forest Buffers: Riparian forest buffers are natural or re-established areas along streams, rivers, lakes and ponds with trees, shrubs, and grasses. These areas filter runoff, stabilize banks, prevent erosion, and support wildlife. They can also provide another source of income.',
-      '5. Windbreaks: Windbreaks shelter crops, animals, buildings, and soil from wind, snow, dust, and odours. These areas can also support wildlife and provide another source of income. They are also called shelterbelts, hedgerows, vegetated environmental buffers, or living snow fences.',
-      'So, if you are wondering how can you influence this change towards more widespread agroforestry practices, here are a few suggestions:',
-      '1. Become a lot more aware and conscious of your consumption choices. Start reading food labels of the products that you buy and make a deliberate shift towards products that are more upfront about their production and sources of origin.',
-      '2. Start asking your elected representatives about how agroforestry in your region is being encouraged. Often change begins when you ask for it!',
-      '3. If you happen to be directly involved in agriculture and food production start developing and implementing agroforestry practices and set an example!'
-    ]
+  // Extract text from paragraphs
+  const paragraphs: string[] = []
+  const pElements = div.querySelectorAll('p')
+
+  pElements.forEach(p => {
+    const text = p.textContent?.trim()
+    if (text && text.length > 0) {
+      paragraphs.push(text)
+    }
+  })
+
+  // If no paragraphs found, extract all text
+  if (paragraphs.length === 0) {
+    const text = div.textContent?.trim()
+    if (text) {
+      // Split by double newlines or periods followed by space
+      const parts = text.split(/\n\n+|\.\s+(?=[A-Z])/).filter(p => p.trim().length > 0)
+      paragraphs.push(...parts)
+    }
   }
-]
+
+  return paragraphs.length > 0 ? paragraphs : [html]
+}
 
 
 export const BlogDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>()
+  const navigate = useNavigate()
   const [isAudioPlaying, setIsAudioPlaying] = useState(false)
+  const [isDownloading, setIsDownloading] = useState(false)
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const speechSynthesisRef = useRef<SpeechSynthesisUtterance | null>(null)
+  const [blog, setBlog] = useState<BlogPost | null>(null)
+  const [allBlogs, setAllBlogs] = useState<BlogPost[]>([])
+  const [allTags, setAllTags] = useState<Array<{ name: string; count: number }>>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  const blogId = id ? parseInt(id, 10) : 1
-  const blog = mockBlogPosts.find(b => b.id === blogId) || mockBlogPosts[0] || {
-    id: 7,
-    title: '5 ways How Traditional Agroforestry Systems Help in Nature Conservation',
-    imageId: 207,
-    views: 2277,
-    date: 'Mar 10, 2024',
-    tags: ['Agroforestry', 'Conservation', 'Climate Change', 'Deforestation', 'India', 'Europe', 'Biodiversity'],
-    content: [
-      'Every six seconds the world loses a soccer field equivalent (1.76 acres) of primary forests. This is no surprise since almost 50% of the world\'s economic activity is involved in natural destruction activities according to a study by the World Economic Forum. Direct causes of deforestation include unsustainable agricultural expansion, wood extraction (e.g., logging or wood harvest for domestic fuel or charcoal), and infrastructure expansion such as road building and urbanization.',
-      'Rarely is there a single direct cause for deforestation. Most often, multiple processes work simultaneously or sequentially to cause deforestation. The impact of deforestation is now becoming widespread with a rise in global temperatures resulting in the accelerated change of weather patterns that are causing floods, droughts, storms, etc. all over the world.',
-      'Agricultural reforms are a big part of the solution. It is estimated that we waste a third of the food that we produce. That\'s about 1.3 billion tons a year. In addition, a third of our agricultural land is used for animal feed. As the world gets more \'modernized\' the land devoted to animal feed is expected to rise to cater to the growing demand of the dairy and meat industry.',
-      'The answers to resolve this complex issue are not straightforward and require a combination of public policy, awareness, capital, human behaviour change, etc. However, one of the important aspects for the policy makers to consider is our legislative reforms and furthering environmentally friendly agricultural practices such as agroforestry. Agroforestry is the intentional integration of trees and shrubs into crop and animal farming systems to create environmental, economic, and social benefits. There is a lot of work happening all over the world in advancing agroforestry-based solutions.',
-      '1. Alley Cropping: Alley cropping involves planting crops between rows of trees. The system can be designed to produce fruits, vegetables, grains, flowers, herbs, bioenergy feedstocks, and more.',
-      '2. Multi-story Cropping: The practice of multi-story cropping is based on creating a complimentary ecosystem of trees and shrubs under a forest canopy at different heights to grow food, herbal, botanical, or decorative crops.',
-      '3. Silvo Pasture: Silvo pasture combines trees with livestock and forage on one piece of land. The trees provide timber, fruit, fodder, or nuts as well as shade and shelter for livestock and their forages, reducing stress on the animals from the hot summer sun, cold winter winds, or a downpour.',
-      '4. Riparian Forest Buffers: Riparian forest buffers are natural or re-established areas along streams, rivers, lakes and ponds with trees, shrubs, and grasses. These areas filter runoff, stabilize banks, prevent erosion, and support wildlife. They can also provide another source of income.',
-      '5. Windbreaks: Windbreaks shelter crops, animals, buildings, and soil from wind, snow, dust, and odours. These areas can also support wildlife and provide another source of income. They are also called shelterbelts, hedgerows, vegetated environmental buffers, or living snow fences.',
-      'So, if you are wondering how can you influence this change towards more widespread agroforestry practices, here are a few suggestions:',
-      '1. Become a lot more aware and conscious of your consumption choices. Start reading food labels of the products that you buy and make a deliberate shift towards products that are more upfront about their production and sources of origin.',
-      '2. Start asking your elected representatives about how agroforestry in your region is being encouraged. Often change begins when you ask for it!',
-      '3. If you happen to be directly involved in agriculture and food production start developing and implementing agroforestry practices and set an example!'
-    ]
+  const blogId = id ? parseInt(id, 10) : null
+
+  // Fetch blog and all blogs for navigation
+  useEffect(() => {
+    const loadData = async () => {
+      if (!blogId) {
+        setError('Invalid blog ID')
+        setLoading(false)
+        return
+      }
+
+      try {
+        setLoading(true)
+        setError(null)
+
+        // Fetch blog, all blogs, and tags in parallel
+        const [blogData, blogsData, tagsData] = await Promise.all([
+          fetchBlogById(blogId),
+          fetchAllBlogs({ per_page: 100, order: 'desc', orderby: 'date' }),
+          fetchTags().catch(() => [])
+        ])
+
+        if (!blogData) {
+          setError('Blog not found')
+          setLoading(false)
+          return
+        }
+
+        setBlog(blogData)
+        setAllBlogs(blogsData)
+
+        // Process tags for tags cloud
+        const tagsWithCounts = tagsData.map(tag => ({
+          name: tag.name,
+          count: tag.count
+        }))
+        setAllTags(tagsWithCounts)
+      } catch (err) {
+        console.error('Error loading blog:', err)
+        setError('Failed to load blog. Please try again later.')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadData()
+  }, [blogId])
+
+  // Get current blog index and navigation
+  const currentIndex = blog ? allBlogs.findIndex(b => b.id === blog.id) : -1
+  const prevPost = currentIndex > 0 ? allBlogs[currentIndex - 1] : null
+  const nextPost = currentIndex >= 0 && currentIndex < allBlogs.length - 1 ? allBlogs[currentIndex + 1] : null
+
+  // Format date
+  const formatDate = (dateString: string): string => {
+    try {
+      const date = new Date(dateString)
+      return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+    } catch {
+      return dateString
+    }
   }
 
-  // Get all stories for navigation
-  const allStories = [
-    { id: 1, title: 'Local Efforts to Save Endangered Animals in UK: What Can You Learn From Them', imageId: 201 },
-    { id: 2, title: 'Found in the Woods - short story inspired by Coed Rhyal', imageId: 202 },
-    { id: 3, title: 'Basics of Environmental Volunteering: How Can You Get Started?', imageId: 203 },
-    { id: 4, title: 'Efforts You Can Make to Help in Wildlife Protection in Your Area', imageId: 204 },
-    { id: 5, title: '4 Changes You Can Make in Everyday Life to Save Forests in Canada', imageId: 205 },
-    { id: 6, title: 'Why Planet-Positive Gifting Is The Future', imageId: 206 },
-    { id: 7, title: '5 ways How Traditional Agroforestry Systems Help in Nature Conservation', imageId: 207 },
-    { id: 8, title: '10 Tips About Environmental Volunteering to Teach Your Children', imageId: 208 },
-    { id: 9, title: 'Here, Money Does Grow On Trees!', imageId: 209 },
-    { id: 10, title: 'Forest Bathing at Coed Rhyal', imageId: 210 }
-  ]
+  // Get blog content as paragraphs
+  const blogContent = blog ? parseContent(blog.content.rendered) : []
 
-  const currentIndex = allStories.findIndex(s => s.id === blogId)
-  const prevPost = currentIndex > 0 ? allStories[currentIndex - 1] : null
-  const nextPost = currentIndex < allStories.length - 1 ? allStories[currentIndex + 1] : null
+  // Get blog tags
+  // const blogTags = blog ? getBlogTags(blog) : []
 
   // Cleanup speech synthesis on unmount or route change
   useEffect(() => {
@@ -132,6 +144,8 @@ export const BlogDetail: React.FC = () => {
   }, [])
 
   const handleListenToArticle = () => {
+    if (!blog) return
+
     if (isAudioPlaying) {
       // Stop speech synthesis
       if (speechSynthesisRef.current) {
@@ -143,7 +157,7 @@ export const BlogDetail: React.FC = () => {
       // Check if browser supports speech synthesis
       if ('speechSynthesis' in window) {
         // Get the full article text
-        const articleText = `${blog.title}. ${blog.content.join('. ')}`
+        const articleText = `${blog.title.rendered}. ${extractPlainText(blog.content.rendered)}`
         
         // Create speech synthesis utterance
         const utterance = new SpeechSynthesisUtterance(articleText)
@@ -184,72 +198,380 @@ export const BlogDetail: React.FC = () => {
     }
   }
 
-  const handleDownload = () => {
-    // Create a simple text file with the article content
-    const content = `${blog.title}\n\n${blog.content.join('\n\n')}`
-    const blob = new Blob([content], { type: 'text/plain' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `${blog.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.txt`
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
-    URL.revokeObjectURL(url)
+  // Helper function to fetch blob with timeout
+  const fetchWithTimeout = async (url: string, timeout: number = 10000): Promise<Response> => {
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), timeout)
+    try {
+      const response = await fetch(url, { signal: controller.signal })
+      clearTimeout(timeoutId)
+      return response
+    } catch (error) {
+      clearTimeout(timeoutId)
+      throw error
+    }
   }
 
-  // Get all tags from Figma for Tags Cloud
-  const allTags = [
-    { name: 'ancient woodland', count: 2 },
-    { name: 'Asia', count: 21 },
-    { name: 'biodiversity', count: 6 },
-    { name: 'bird conservation', count: 2 },
-    { name: 'Canada', count: 3 },
-    { name: 'carbon emissions', count: 7 },
-    { name: 'climate change', count: 15 },
-    { name: 'conservationist', count: 6 },
-    { name: 'deforestation', count: 5 },
-    { name: 'Devendra Singh', count: 2 },
-    { name: 'endangered species', count: 4 },
-    { name: 'environmental conservation', count: 3 },
-    { name: 'environmental protection', count: 4 },
-    { name: 'Europe', count: 21 },
-    { name: 'forest protection', count: 2 },
-    { name: 'Germany', count: 2 },
-    { name: 'global warming', count: 9 },
-    { name: 'habitat protection', count: 2 },
-    { name: 'India', count: 14 },
-    { name: 'marine conservation', count: 6 },
-    { name: 'marine habitat', count: 2 },
-    { name: 'Middle East', count: 2 },
-    { name: 'natural habitat', count: 6 },
-    { name: 'nature conservation', count: 2 },
-    { name: 'North America', count: 3 },
-    { name: 'oak woodland', count: 2 },
-    { name: 'plastic recycling', count: 2 },
-    { name: 'protection of ecosystems', count: 2 },
-    { name: 'recycling', count: 4 },
-    { name: 'rewilding', count: 5 },
-    { name: 'save environment', count: 4 },
-    { name: 'save forests', count: 11 },
-    { name: 'save species', count: 3 },
-    { name: 'save the ocean', count: 2 },
-    { name: 'sustainability', count: 4 },
-    { name: 'The Nature Conservancy', count: 2 },
-    { name: 'tree planting', count: 2 },
-    { name: 'United Kingdom', count: 14 },
-    { name: 'Wales', count: 3 },
-    { name: 'wildlife photography', count: 2 },
-    { name: 'wildlife protection', count: 4 },
-    { name: 'women employment', count: 3 },
-    { name: 'woodland', count: 2 }
-  ]
+  // Helper function to convert blob to base64
+  const blobToBase64 = (blob: Blob): Promise<string | null> => {
+    return new Promise((resolve) => {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        const base64 = reader.result as string
+        resolve(base64)
+      }
+      reader.onerror = () => {
+        resolve(null)
+      }
+      reader.readAsDataURL(blob)
+    })
+  }
+
+  // Helper function to convert image to base64 with multiple fallback strategies
+  const imageToBase64 = async (url: string): Promise<string | null> => {
+    // List of strategies to try in order
+    const strategies = [
+      // Strategy 1: Direct fetch (works if CORS headers are set on the image server)
+      async () => {
+        const response = await fetchWithTimeout(url, 8000)
+        if (!response.ok) throw new Error('Direct fetch failed')
+        const blob = await response.blob()
+        return await blobToBase64(blob)
+      },
+      // Strategy 2: Use corsproxy.io (more reliable than allorigins)
+      async () => {
+        const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(url)}`
+        const response = await fetchWithTimeout(proxyUrl, 10000)
+        if (!response.ok) throw new Error('corsproxy.io failed')
+        const blob = await response.blob()
+        return await blobToBase64(blob)
+      },
+      // Strategy 3: Use allorigins as last fallback
+      async () => {
+        const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`
+        const response = await fetchWithTimeout(proxyUrl, 10000)
+        if (!response.ok) throw new Error('allorigins failed')
+        const blob = await response.blob()
+        return await blobToBase64(blob)
+      }
+    ]
+
+    for (const strategy of strategies) {
+      try {
+        const result = await strategy()
+        if (result) {
+          return result
+        }
+      } catch (error) {
+        // Continue to next strategy
+        continue
+      }
+    }
+
+    console.warn('All image fetch strategies failed for:', url)
+    return null
+  }
+
+  // Helper function to convert all images in HTML to base64
+  const convertImagesToBase64 = async (html: string): Promise<string> => {
+    const parser = new DOMParser()
+    const doc = parser.parseFromString(html, 'text/html')
+    const images = doc.querySelectorAll('img')
+
+    for (const img of Array.from(images)) {
+      const src = img.getAttribute('src')
+      if (src && src.startsWith('http')) {
+        const base64 = await imageToBase64(src)
+        if (base64) {
+          img.setAttribute('src', base64)
+        } else {
+          // Remove image if conversion fails
+          img.remove()
+        }
+      }
+    }
+
+    return doc.body.innerHTML
+  }
+
+  const handleDownload = async () => {
+    if (!blog || isDownloading) return
+
+    setIsDownloading(true)
+
+    try {
+      // Dynamically import html2pdf.js
+      const html2pdf = (await import('html2pdf.js')).default
+
+      // Get featured image
+      const featuredImage = getFeaturedImageUrl(blog)
+      const formattedDate = formatDate(blog.date)
+
+      // Create a temporary div for PDF generation
+      // Position it in viewport but make it invisible to user
+      const tempDiv = document.createElement('div')
+      tempDiv.id = 'pdf-content-temp'
+      tempDiv.style.position = 'fixed'
+      tempDiv.style.left = '0'
+      tempDiv.style.top = '0'
+      tempDiv.style.width = '794px' // A4 width in pixels (210mm at 96 DPI)
+      tempDiv.style.maxWidth = '794px'
+      tempDiv.style.minHeight = '500px' // Ensure minimum height
+      tempDiv.style.padding = '40px'
+      tempDiv.style.fontFamily = 'Arial, Helvetica, sans-serif'
+      tempDiv.style.lineHeight = '1.6'
+      tempDiv.style.color = '#333333'
+      tempDiv.style.backgroundColor = '#ffffff'
+      tempDiv.style.fontSize = '14px'
+      tempDiv.style.boxSizing = 'border-box'
+      tempDiv.style.zIndex = '999999'
+      tempDiv.style.opacity = '0.01' // Almost invisible but still capturable
+      tempDiv.style.pointerEvents = 'none'
+      tempDiv.style.overflow = 'visible'
+      tempDiv.style.display = 'block'
+      tempDiv.style.visibility = 'visible'
+
+      // Build HTML content with proper structure
+      // First, create the structure with text content
+      let htmlContent = '<div style="max-width: 100%;">'
+
+      // Add featured image if available (convert to base64, but don't block if it fails)
+      if (featuredImage) {
+        try {
+          const base64Image = await imageToBase64(featuredImage)
+          if (base64Image) {
+            htmlContent += `<div style="margin-bottom: 30px; text-align: center;"><img src="${base64Image}" alt="${blog.title.rendered.replace(/"/g, '&quot;')}" style="max-width: 100%; height: auto; display: block; margin: 0 auto;" /></div>`
+          }
+        } catch (error) {
+          console.warn('Failed to convert featured image, continuing without it:', error)
+        }
+      }
+
+      htmlContent += `
+        <h1 style="color: #03303D; font-size: 28px; margin-bottom: 15px; line-height: 1.3; font-weight: bold; page-break-after: avoid;">${blog.title.rendered}</h1>
+        <div style="color: #666666; font-size: 12px; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #eeeeee;">
+          <strong>Published:</strong> ${formattedDate}
+        </div>
+        <div style="font-size: 14px; line-height: 1.8; color: #333333;">
+      `
+
+      // Convert images in content to base64 (with timeout to not block too long)
+      try {
+        const contentWithBase64Images = await Promise.race([
+          convertImagesToBase64(blog.content.rendered),
+          new Promise<string>((resolve) => {
+            setTimeout(() => {
+              // If conversion takes too long, use original content without images
+              console.warn('Image conversion timed out, using content without images')
+              resolve(blog.content.rendered.replace(/<img[^>]*>/gi, ''))
+            }, 15000) // 15 second timeout
+          })
+        ])
+        htmlContent += contentWithBase64Images
+      } catch (error) {
+        console.warn('Error converting images, using content without images:', error)
+        // Remove all img tags if conversion fails
+        htmlContent += blog.content.rendered.replace(/<img[^>]*>/gi, '')
+      }
+
+      htmlContent += `
+        </div>
+        <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #eeeeee; text-align: center; color: #666666; font-size: 11px;">
+          <p>Source: Sacred Groves - www.sacredgroves.earth</p>
+        </div>
+      </div>`
+
+      tempDiv.innerHTML = htmlContent
+      document.body.appendChild(tempDiv)
+
+      // Verify content was added
+      if (!tempDiv.innerHTML || tempDiv.innerHTML.trim() === '') {
+        throw new Error('Failed to create PDF content')
+      }
+
+      // Force multiple reflows to ensure rendering
+      void tempDiv.offsetHeight
+      void tempDiv.scrollHeight
+      void tempDiv.clientHeight
+
+      // Wait a bit for DOM to settle
+      await new Promise(resolve => setTimeout(resolve, 200))
+
+      // Wait for images to load (now all base64, so they should load quickly)
+      const images = tempDiv.querySelectorAll('img')
+      if (images.length > 0) {
+        await Promise.all(
+          Array.from(images).map((img: HTMLImageElement) => {
+            return new Promise<void>((resolve) => {
+              if (img.complete && img.naturalWidth > 0) {
+                resolve()
+              } else {
+                const timeout = setTimeout(() => {
+                  // Hide broken images but continue
+                  img.style.display = 'none'
+                  resolve()
+                }, 5000)
+                img.onload = () => {
+                  clearTimeout(timeout)
+                  resolve()
+                }
+                img.onerror = () => {
+                  clearTimeout(timeout)
+                  // Remove broken images
+                  img.style.display = 'none'
+                  resolve()
+                }
+              }
+            })
+          })
+        )
+      }
+
+      // Additional delay to ensure all content is rendered
+      await new Promise(resolve => setTimeout(resolve, 500))
+
+      // Force another reflow after images load
+      void tempDiv.offsetHeight
+      void tempDiv.scrollHeight
+      void tempDiv.clientHeight
+
+      // Get actual dimensions - ensure we have valid dimensions
+      const scrollWidth = tempDiv.scrollWidth
+      const scrollHeight = tempDiv.scrollHeight
+      const offsetWidth = tempDiv.offsetWidth
+      const offsetHeight = tempDiv.offsetHeight
+      const clientHeight = tempDiv.clientHeight
+      
+      console.log('Dimension check:', {
+        scrollWidth,
+        scrollHeight,
+        offsetWidth,
+        offsetHeight,
+        clientHeight,
+        innerHTML: tempDiv.innerHTML.length
+      })
+
+      const width = Math.max(scrollWidth || offsetWidth || 794, 794)
+      const height = Math.max(scrollHeight || offsetHeight || clientHeight || 1123, 1123)
+      
+      // If height is still 0 or very small, calculate from content
+      if (height < 100) {
+        // Try to calculate height from content
+        const contentDiv = tempDiv.querySelector('div')
+        if (contentDiv) {
+          const contentHeight = contentDiv.scrollHeight || contentDiv.offsetHeight
+          if (contentHeight > 0) {
+            console.log('Using content height:', contentHeight)
+            tempDiv.style.height = `${contentHeight + 80}px` // Add padding
+            void tempDiv.offsetHeight
+            await new Promise(resolve => setTimeout(resolve, 100))
+          }
+        }
+      }
+      
+      const finalHeight = Math.max(tempDiv.scrollHeight || tempDiv.offsetHeight || height, 1123)
+      console.log('Final dimensions:', { width, height: finalHeight })
+
+      // Verify the div has content before generating PDF
+      const textContent = tempDiv.textContent || tempDiv.innerText || ''
+      if (textContent.trim().length < 10) {
+        console.error('PDF content appears to be empty. InnerHTML length:', tempDiv.innerHTML.length)
+        console.error('Text content:', textContent.substring(0, 100))
+        throw new Error('PDF content is empty or invalid')
+      }
+
+      console.log('Generating PDF with dimensions:', { width, height })
+      console.log('Content length:', tempDiv.innerHTML.length)
+      console.log('Text content preview:', textContent.substring(0, 200))
+
+      // Generate PDF - now with base64 images, we can use useCORS: false and allowTaint: false
+      const opt = {
+        margin: [10, 10, 10, 10] as [number, number, number, number],
+        filename: `${blog.title.rendered.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.pdf`,
+        image: { type: 'jpeg' as const, quality: 0.98 },
+        html2canvas: {
+          scale: 2,
+          useCORS: false, // Not needed since we're using base64
+          allowTaint: false, // Can be false since images are base64
+          logging: true, // Enable logging to debug
+          backgroundColor: '#ffffff',
+          width: width,
+          height: finalHeight,
+          scrollX: 0,
+          scrollY: 0,
+          windowWidth: width,
+          windowHeight: finalHeight,
+          x: 0,
+          y: 0,
+          removeContainer: false,
+          onclone: ((clonedDoc: Document) => {
+            // Ensure cloned document has proper styling
+            const clonedDiv = clonedDoc.getElementById('pdf-content-temp')
+            if (clonedDiv) {
+              const htmlElement = clonedDiv as HTMLElement
+              htmlElement.style.position = 'static'
+              htmlElement.style.left = 'auto'
+              htmlElement.style.top = 'auto'
+              htmlElement.style.opacity = '1'
+              htmlElement.style.height = 'auto'
+              htmlElement.style.minHeight = 'auto'
+            }
+          }) as any
+        },
+        jsPDF: {
+          unit: 'mm' as const,
+          format: 'a4' as const,
+          orientation: 'portrait' as const,
+          compress: true
+        },
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] as any }
+      }
+
+      // Generate and save PDF
+      console.log('Starting PDF generation...')
+      await html2pdf().set(opt).from(tempDiv).save()
+      console.log('PDF generation completed successfully')
+
+      // Clean up after a short delay to ensure PDF is saved
+      setTimeout(() => {
+        if (document.body.contains(tempDiv)) {
+          document.body.removeChild(tempDiv)
+        }
+      }, 1000)
+    } catch (error) {
+      console.error('Error generating PDF:', error)
+      // Log more details about the error
+      if (error instanceof Error) {
+        console.error('Error message:', error.message)
+        console.error('Error stack:', error.stack)
+      }
+      alert(`Failed to generate PDF: ${error instanceof Error ? error.message : 'Unknown error'}. Please try again.`)
+    } finally {
+      setIsDownloading(false)
+    }
+  }
+
+  if (loading) {
+    return <Loading />
+  }
+
+  if (error || !blog) {
+    return (
+      <div style={{ textAlign: 'center', padding: '2rem' }}>
+        <p>{error || 'Blog not found'}</p>
+        <button onClick={() => navigate('/stories-that-inspire')}>Back to Stories</button>
+      </div>
+    )
+  }
+
+  const featuredImage = getFeaturedImageUrl(blog)
+  const heroImageUrl = featuredImage || `https://picsum.photos/1440/600?random=${blog.id}`
 
   return (
     <>
       <SEO
-        title={`${blog.title} - Stories that inspire us`}
-        description={blog.content[0] || 'Read inspiring stories about conservation and environmental action.'}
+        title={`${blog.title.rendered} - Stories that inspire us`}
+        description={extractPlainText(blog.excerpt.rendered) || extractPlainText(blog.content.rendered).substring(0, 160) || 'Read inspiring stories about conservation and environmental action.'}
       />
 
       {/* Hidden audio element for listen functionality */}
@@ -272,8 +594,8 @@ export const BlogDetail: React.FC = () => {
         {/* Hero Image Section */}
         <section className={styles.heroImageSection}>
           <img
-            src={`https://picsum.photos/1440/600?random=${blog.imageId}`}
-            alt={blog.title}
+            src={heroImageUrl}
+            alt={blog.title.rendered}
             className={styles.heroImage}
           />
         </section>
@@ -282,10 +604,10 @@ export const BlogDetail: React.FC = () => {
         <section className={styles.articleHeaderSection}>
           <div className={styles.articleHeaderContainer}>
             <div className={styles.articleTitleRow}>
-              <h1 className={styles.articleTitle}>{blog.title}</h1>
+              <h1 className={styles.articleTitle}>{blog.title.rendered}</h1>
               <div className={styles.viewsCount}>
                 <span className={styles.viewsIcon}>👁</span>
-                <span>{blog.views} Views</span>
+                <span>{formatDate(blog.date)}</span>
               </div>
             </div>
 
@@ -299,12 +621,22 @@ export const BlogDetail: React.FC = () => {
                 LISTEN TO THIS ARTICLE
               </button>
               <button
-                className={styles.downloadButton}
+                className={`${styles.downloadButton} ${isDownloading ? styles.downloadButtonLoading : ''}`}
                 onClick={handleDownload}
                 aria-label="Download article"
+                disabled={isDownloading}
               >
+                {isDownloading ? (
+                  <>
+                    <span className={styles.downloadSpinner}></span>
+                    DOWNLOADING...
+                  </>
+                ) : (
+                  <>
                 DOWNLOAD
                 <img src={downloadIcon} alt="Download" className={styles.downloadButtonIcon} />
+                  </>
+                )}
               </button>
             </div>
           </div>
@@ -316,7 +648,7 @@ export const BlogDetail: React.FC = () => {
             {/* Main Content */}
             <div className={styles.articleMainContent}>
               <div className={styles.articleText}>
-                {blog.content.map((paragraph, index) => {
+                {blogContent.map((paragraph, index) => {
                   // Check if paragraph starts with a number (numbered list item)
                   const isNumbered = /^\d+\./.test(paragraph)
                   const isBoldHeading = isNumbered && paragraph.includes(':')
@@ -364,14 +696,14 @@ export const BlogDetail: React.FC = () => {
                   <Link to={`/stories-that-inspire/${prevPost.id}`} className={styles.navLink}>
                     <div className={styles.navImageWrapper}>
                       <img
-                        src={`https://picsum.photos/150/150?random=${prevPost.imageId}`}
-                        alt={prevPost.title}
+                        src={getFeaturedImageUrl(prevPost) || `https://picsum.photos/150/150?random=${prevPost.id}`}
+                        alt={prevPost.title.rendered}
                         className={styles.navImage}
                       />
                     </div>
                     <div className={styles.navContent}>
                       <span className={styles.navLabel}>← Previous Post</span>
-                      <span className={styles.navTitle}>{prevPost.title}</span>
+                      <span className={styles.navTitle}>{prevPost.title.rendered}</span>
                     </div>
                   </Link>
                 )}
@@ -379,12 +711,12 @@ export const BlogDetail: React.FC = () => {
                   <Link to={`/stories-that-inspire/${nextPost.id}`} className={`${styles.navLink} ${styles.navLinkRight}`}>
                     <div className={styles.navContent}>
                       <span className={styles.navLabel}>Next Post →</span>
-                      <span className={styles.navTitle}>{nextPost.title}</span>
+                      <span className={styles.navTitle}>{nextPost.title.rendered}</span>
                     </div>
                     <div className={styles.navImageWrapper}>
                       <img
-                        src={`https://picsum.photos/150/150?random=${nextPost.imageId}`}
-                        alt={nextPost.title}
+                        src={getFeaturedImageUrl(nextPost) || `https://picsum.photos/150/150?random=${nextPost.id}`}
+                        alt={nextPost.title.rendered}
                         className={styles.navImage}
                       />
                     </div>
@@ -400,7 +732,7 @@ export const BlogDetail: React.FC = () => {
                 {allTags.map((tag, index) => (
                   <Link
                     key={index}
-                    to={`/stories-that-inspire?tag=${tag.name}`}
+                    to={`/stories-that-inspire?tag=${encodeURIComponent(tag.name)}`}
                     className={styles.tagItem}
                   >
                     {tag.name} ({tag.count})

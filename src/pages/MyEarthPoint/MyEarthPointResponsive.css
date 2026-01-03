@@ -1,5 +1,12 @@
+/* 
+ * Mobile/Tablet Responsive Styles
+ * Note: Web screen responsive styles (1200px+) are in MyEarthPoint.css
+ * These styles only apply to screens below 1200px (tablets and mobile)
+ * Mobile-specific designs will be implemented later per Figma
+ */
+
 /* Responsive Styles for Section 2 - Introducing myEarth Point */
-@media (max-width: 1439px) {
+@media (max-width: 1199px) {
     .section-two-container {
         width: 100%;
         height: auto;
@@ -93,7 +100,7 @@
 }
 
 /* Responsive Styles for Section 3 - Partner */
-@media (max-width: 1439px) {
+@media (max-width: 1199px) {
     .section-three-container {
         width: 100%;
         height: auto;
@@ -202,7 +209,7 @@
 }
 
 /* Responsive Styles for Section 4 - Customer Experience */
-@media (max-width: 1439px) {
+@media (max-width: 1199px) {
     .section-four-container {
         width: 100%;
         height: auto;
@@ -264,7 +271,7 @@
 }
 
 /* Responsive Styles for Section 5 - Customer Journey */
-@media (max-width: 1439px) {
+@media (max-width: 1199px) {
     .section-five-container {
         width: 100%;
         height: auto;
@@ -334,7 +341,7 @@
 }
 
 /* Responsive Styles for Section 6 - Nudge */
-@media (max-width: 1439px) {
+@media (max-width: 1199px) {
     .section-six-container {
         width: 100%;
         height: auto;
@@ -410,7 +417,7 @@
 }
 
 /* Responsive Styles for Section 1 - Hero */
-@media (max-width: 1439px) {
+@media (max-width: 1199px) {
     .card-box-container {
         height: auto;
         min-height: 100vh;

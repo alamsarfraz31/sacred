@@ -79,7 +79,7 @@
   position: relative;
   overflow: hidden;
   flex-shrink: 0;
-  max-width: 20px;
+  max-width: 126px; /* Increased to match doubled slot widths */
   cursor: pointer;
 }
 
@@ -141,7 +141,7 @@
   }
 
   .gallerySlot {
-    max-width: 12px;
+    max-width: 126px; /* Increased to match doubled slot widths */
   }
 
   .galleryBarRight {
@@ -918,6 +918,7 @@
   position: relative;
   overflow: hidden;
   margin-bottom: 40px;
+  margin-top: 50px;
 }
 
 .carouselArrow {
@@ -928,8 +929,15 @@
   z-index: 10;
   transition: transform 0.2s ease;
   flex-shrink: 0;
-  display: none;
-  /* Hide on desktop/tablet by default */
+  display: block;
+  width: 48px;
+  height: 48px;
+}
+
+.carouselArrowPlaceholder {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
 }
 
 .carouselArrow:hover {
@@ -948,19 +956,23 @@
   /* Changed from visible to hidden to prevent overflow */
   position: relative;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   width: 100%;
+  max-width: calc(5 * 185.88px + 4 * 20px + 20px); /* Exactly 5 cards width + 20px buffer to prevent cutting last card */
+  box-sizing: border-box;
+  padding-right: 10px; /* Add padding to ensure last card is fully visible */
 }
 
 .carouselTrack {
   display: flex;
   gap: 20px;
   width: fit-content;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  transition: none;
-  flex-wrap: wrap;
+  transition: transform 0.5s ease;
+  flex-wrap: nowrap;
+  transform: translateX(var(--slide-offset));
   /* Allow wrapping on smaller screens if needed, or handle via JS */
 }
 
@@ -1177,6 +1189,14 @@
 
   .carouselArrow {
     display: none;
+  }
+
+  .carouselArrowPlaceholder {
+    display: none;
+  }
+
+  .galleryBarLabel {
+    display: none; /* Hide on mobile */
   }
 }
 

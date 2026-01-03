@@ -6,6 +6,8 @@
   z-index: 1000;
   width: 100%;
   transition: all 0.3s ease;
+  flex-shrink: 0;
+  /* Prevent header from shrinking */
 }
 
 .headerContent {
@@ -44,6 +46,21 @@
   box-sizing: border-box;
 }
 
+/* Adjust padding on shorter screens to prevent excessive spacing */
+@media (max-height: 800px) {
+  .nav {
+    padding: 24px 0;
+    min-height: 100px;
+  }
+}
+
+@media (max-height: 600px) {
+  .nav {
+    padding: 16px 0;
+    min-height: 80px;
+  }
+}
+
 .container {
   max-width: 1380px;
   margin: 0 auto;
@@ -74,6 +91,11 @@
   padding: 0;
   text-align: center;
   margin-left: -200px;
+}
+@media (max-width: 1300px) {
+  .pageTitle {
+    font-size: 26px;
+  }
 }
 
 .pageTitleItalic {
@@ -114,6 +136,12 @@
     overflow: visible;
     text-overflow: clip;
     margin-left: -160px;
+  }
+}
+
+@media (max-width: 1300px) {
+  .pageTitle {
+    margin-left: -210px;
   }
 }
 
@@ -493,6 +521,8 @@
   width: 100%;
   max-width: 400px;
   height: 100%;
+  max-height: 100vh;
+  /* Prevent overflow on short screens */
   background-color: #ffffff;
   z-index: 2001;
   transition: right 0.3s ease;
@@ -501,6 +531,8 @@
   flex-direction: column;
   box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
   /* Shadow on left side */
+  overflow: hidden;
+  /* Prevent sidebar itself from scrolling */
 }
 
 .sidebar.open {
@@ -515,6 +547,9 @@
   justify-content: flex-end;
   align-items: center;
   /* border-bottom: 1px solid #f0f0f0; */
+  flex-shrink: 0;
+  /* Prevent header from shrinking */
+  min-height: fit-content;
 }
 
 .closeSidebarButton {
@@ -543,8 +578,13 @@
   flex: 1;
   padding: 16.25px 45px 16.25px 38px;
   overflow-y: auto;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
+  min-height: 0;
+  /* Enable flexbox scrolling */
+  -webkit-overflow-scrolling: touch;
+  /* Smooth scrolling on iOS */
 }
 
 .menuList {
@@ -712,6 +752,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-shrink: 0;
+  /* Prevent footer from shrinking */
+  min-height: fit-content;
 }
 
 .footerIcons {
@@ -726,14 +769,21 @@
   height: auto;
   width: auto;
   max-width: 100%;
+  max-height: 120px;
+  /* Prevent icon from being too large */
   margin: 0 auto;
   opacity: 1;
   /* Ensure full visibility */
+  object-fit: contain;
+  /* Maintain aspect ratio */
+  display: block;
 }
 
 @media (max-width: 1024px) {
   .nav {
     padding: 1rem 0;
+    min-height: 90px;
+    /* Reduce min-height on tablets */
   }
 
   .container {
@@ -892,6 +942,18 @@
 
   .closeSidebarButton {
     display: flex;
+  }
+
+  /* Fix scroll issues on small screens */
+  .sidebarContent {
+    padding: 16.25px 20px 16.25px 20px;
+    /* Reduce padding on mobile for better scroll */
+  }
+
+  .nav {
+    padding: 20px 0;
+    min-height: 80px;
+    /* Reduce nav height on mobile */
   }
 }
 
