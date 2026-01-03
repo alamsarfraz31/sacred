@@ -825,24 +825,28 @@
 
   .habitatMapFull {
     width: 100% !important;
-    height: 100% !important;
+    height: 70% !important;
     max-width: clamp(550px, 45vw, 650px) !important;
     aspect-ratio: 741 / 564;
     object-fit: contain;
+    margin-right: 4rem;
     /* Maintain aspect ratio and scale proportionally */
   }
 
   /* Percentage-based positioning for arrows on larger screens (scales with map) */
   .mapArrowOcean {
-    left: calc(33.33% - 20.26px) !important;
+    left: calc(32.33% - 20.26px) !important;
+    margin-top: 3rem;
   }
 
   .mapArrowCoed {
-    left: calc(66.66% - 51.26px) !important;
+    left: calc(59.66% - 51.26px) !important;
+    margin-top: 3rem;
   }
 
   .mapArrowGigrin {
-    left: calc(100% - 83.26px) !important;
+    left: calc(88% - 83.26px) !important;
+    margin-top: 3rem;
   }
 }
 
@@ -2891,6 +2895,7 @@
     max-width: 650px;
     aspect-ratio: 741 / 564;
     object-fit: contain;
+    margin-right: -2rem;
   }
 
   /* Arrow positioning for 1200px - 1440px screens */
@@ -4761,6 +4766,8 @@
     max-width: 650px;
     aspect-ratio: 741 / 564;
     object-fit: contain;
+    margin-right: 0rem;
+  
   }
 
   
@@ -4795,15 +4802,18 @@
   }
 
   div.habitatMapWrapper a.mapArrowOcean img {
-    margin-right: 3rem;
+    margin-top: 0rem;
+    margin-right: -1rem;
   }
 
   div.habitatMapWrapper a.mapArrowCoed img {
-    margin-right: -1.5rem;
+    margin-top: 0rem;
+    margin-right: -4rem;
   }
 
   div.habitatMapWrapper a.mapArrowGigrin img {
-    margin-right: -5rem;
+    margin-top: 0rem;
+    margin-right: -7rem;
   }
 
   .darkSection {
